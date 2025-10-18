@@ -8,8 +8,8 @@ classDiagram
         handleRequest()*
     }
     class Server {
-        + getUserRequest(JSON request)
-        + sendUserResponse()
+        + getUserRequest() : String
+        + sendUserResponse(JSON request)
     }
     class VoluntaryEngine {
     }
