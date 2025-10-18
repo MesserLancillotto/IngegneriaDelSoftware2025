@@ -4,7 +4,18 @@
 EXTENSION=""
 SCALE=1
 
-if [ "$1" = "" ]
+if [ $1 = "-h" ] || [ $1 = "--help" ]
+then
+    printf "Uso\n"
+    printf "\nabsolute_compiler.sh ESTENSIONE SCALA\n\n"
+    printf "Se ESTENSIONE è tra [png, svg, jpg, jpeg] allora compila con quell'estensione\n"
+    printf "Se ESTENSIONE è lasciata vuota o è '*', compila come png\n"
+    printf "Se SCALA non è lasciata vuota compila usando il flag -s SCALA\n"
+    printf "altrimenti SCALA=1 per gli svg e SCALA=3 per gli altri formati\n"
+    exit 0
+fi
+
+if [ -z $1 ] || [ $1 -eq "*" ]
 then
     EXTENSION="png"
 elif [ "$1" = "svg" ] || [ "$1" = "png" ] || [ "$1" = "jpg" ] || [ "$1" = "jpeg" ]
@@ -21,6 +32,11 @@ case $1 in
     *)
         SCALE=3
 esac
+
+if [ $2 != "" ]
+then
+    SCALE=$2
+fi
 
 for i in $(ls | grep mermaid | grep -v png); 
 do
