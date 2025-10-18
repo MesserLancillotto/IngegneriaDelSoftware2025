@@ -1,0 +1,33 @@
+ classDiagram
+    RequestJSON <|-- NewUserRequest
+    RequestJSON <|-- LoginRequest
+    RequestJSON <|-- PasswordChangeRequest
+    RequestJSON <|-- NewOrganizationRequest
+    RequestJSON <|-- GetVoluntariesForVisit
+
+    class LoginRequest {
+        String userID
+        String userPassword
+    }
+    class RequestJSON {
+        String : requestType
+    }
+    class NewUserRequest {
+        + userName 
+        + cityOfResidence
+        + birthYear
+        + roleTitle
+        + userPassword
+    }
+    class PasswordChangeRequest {
+        String oldPassword
+        String newPassword
+    }
+    class NewOrganizationRequest {
+        String organizationName
+        ArrayList < String > territoriesOfCompetence
+    }
+
+    class GetVoluntariesForVisit {
+        String AssociationName
+    }

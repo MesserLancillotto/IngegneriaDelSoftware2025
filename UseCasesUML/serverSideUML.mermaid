@@ -1,0 +1,15 @@
+classDiagram
+    Server "1" -- "*" Engine
+    Engine "1" <|-- "1" VoluntaryEngine
+    Engine "1" <|-- "1" ConfiguratorEngine
+    Engine "1" <|-- "1" ConsumerEngine
+    <<interface>> Engine
+    class Engine {
+        handleRequest()*
+    }
+    class Server {
+        + getUserRequest(JSON request)
+        + sendUserResponse()
+    }
+    class VoluntaryEngine {
+    }

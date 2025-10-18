@@ -1,0 +1,26 @@
+ classDiagram
+    ReplyJSON <|-- NewUserRequest
+    ReplyJSON <|-- LoginRequest
+    ReplyJSON <|-- PasswordChangeRequest
+    ReplyJSON <|-- NewOrganizationRequest
+    ReplyJSON <|-- GetVoluntariesForVisit
+
+    class ReplyJSON {
+        valid : bool
+    }
+
+    class NewUserRequest {
+        userID : String
+    }
+    class LoginRequest {
+
+    }
+    class PasswordChangeRequest {
+
+    }
+    class NewOrganizationRequest {
+
+    }
+    class GetVoluntariesForVisit {
+        user ArrayList < Dictionary [] >
+    }

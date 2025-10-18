@@ -1,0 +1,47 @@
+classDiagram
+    Client <|-- User
+    User <|-- Configurator
+    User <|-- Voluntary
+    User <|-- Consumer
+    Association -- Visit
+    Voluntary --Visit
+    Configurator "1" -- "*" Association
+    class Client {
+        + JSON makeServerRequest(String IP, int port, JSON request)
+    }
+    class User {
+        + userName 
+        + cityOfResidence
+        + birthYear
+        + roleTitle
+        + / userID
+        + first_access(String password)
+        + set_user_credentials(String userName, String userID, String password)
+        + access(String userID, String password)
+    }
+    class Association {
+        + String name
+        + ArrayList < String > terriroriesOfCompetence
+    }
+    class Configurator {
+        + Association association 
+        + make_new_organization(String name, ArrayList < String > territoryOfCompetence)
+        + ArrayList < String [] > get_voluntaries()
+    }
+    class Visit {
+        + ArrayList < Voluntary > voluntaries
+        + Association association
+        + int date
+        + int visitorUpperBound
+        + int visitorLowerBound
+        + String place
+        + String visitType
+        + Enum stateOfVisit
+    }
+    class Voluntary {
+        + ArrayList < String > allowed_event_type
+        + give_disponibility(int date, String event)
+    }
+    class Consumer {
+
+    }
