@@ -1,6 +1,6 @@
-// javac -d bin src/Server/Server.java; java -cp bin Server.Server
-// javac -d bin src/Server/Server.java
-// java -cp bin Server.Server
+// javac -d bin src/Server/ServerAPI.java; java -cp bin Server.ServerAPI
+// javac -d bin src/Server/ServerAPI.java
+// java -cp bin Server.ServerAPI
 
 package Server;
 
@@ -8,24 +8,6 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
-import Server.*;
-
-public class Server
-{
-    public static void main(String [] args) 
-    {
-        while(true) 
-        {
-            ServerAPI api = new ServerAPI();
-            api.start(); 
-            try {
-                api.join();
-            } catch (Exception e) {
-            System.out.println("An error occurred: " + e);
-            }
-        }
-    }
-}
 
 class ServerAPI extends Thread
 {
@@ -57,7 +39,6 @@ class ServerAPI extends Thread
             dataOutputStream.flush();
             dataInputStream.close();
             dataOutputStream.close();
-            serverSocket.close();
             socket.close();
         }
         catch(Exception e)
@@ -71,9 +52,8 @@ class ServerAPI extends Thread
         return "Something stringy something linky";
     }
 
-    public synchronized void run()
+    public void run()
     {
         handleUserRequest();
     }
 }
-
