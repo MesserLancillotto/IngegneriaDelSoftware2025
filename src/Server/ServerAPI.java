@@ -1,7 +1,3 @@
-// javac -d bin src/Server/ServerAPI.java; java -cp bin Server.ServerAPI
-// javac -d bin src/Server/ServerAPI.java
-// java -cp bin Server.ServerAPI
-
 package Server;
 
 import java.io.*;
@@ -39,6 +35,7 @@ class ServerAPI extends Thread
             dataOutputStream.flush();
             dataInputStream.close();
             dataOutputStream.close();
+            serverSocket.close();
             socket.close();
         }
         catch(Exception e)
@@ -52,8 +49,9 @@ class ServerAPI extends Thread
         return "Something stringy something linky";
     }
 
-    public void run()
+    public synchronized void run()
     {
         handleUserRequest();
     }
 }
+

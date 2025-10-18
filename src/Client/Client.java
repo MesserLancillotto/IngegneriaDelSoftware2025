@@ -1,7 +1,3 @@
-// javac -d bin src/Client/Client.java; java -cp bin Client.Client
-// javac -d bin src/Client/Client.java
-// java -cp bin Client.Client
-
 package Client;
 
 import java.io.*;
@@ -17,10 +13,6 @@ public class Client
     public static final int PORT = 8000;
     public static final String SERVER_ADDR = "127.0.0.1";
 
-    public static void main(String [] args) {
-        System.out.println(makeServerRequest(SERVER_ADDR, PORT, "LOREM IPSUM"));
-    }
-    
     public static String makeServerRequest(String server_addr, int port, String request) 
     {
         String response;
