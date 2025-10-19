@@ -12,7 +12,7 @@ class ServerAPI extends Thread
     private static DataInputStream dataInputStream = null;
     private static DataOutputStream dataOutputStream = null;
 
-    public static final int PORT = 8000;
+    private static final int PORT = 8000;
 
     public static final void handleUserRequest() 
     {
