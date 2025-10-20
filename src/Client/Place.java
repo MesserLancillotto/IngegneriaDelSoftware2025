@@ -13,7 +13,6 @@ public class Place
 	public Place (String placeName, String voluntaryName, String visitType)
 	{
 		this.placeName = placeName;
-		
 	}
 	
 	public Set <String> get_type_visit_list ()
@@ -25,9 +24,5 @@ public class Place
 		}
 		return typeVisitList;
 	}
-	
-	public Set <String> get_voluntary_name_and_visit_type ()
-	{
-		return new HashSet<>();	// da implementare
-	}    
+	   
 }

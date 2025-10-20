@@ -13,8 +13,10 @@ public class Visit
 	String visitType;
 	enum stateOfVisit {PROPOSTA, COMPLETA, CONFERMATA, CANCELLATA, EFFETTUATA};	
 	
-	public Visit ()
+	public Visit (int date, String place, String visitType)
 	{
-		
+		this.date = date;
+        this.place = place;
+        this.visitType = visitType;
 	}
 }
