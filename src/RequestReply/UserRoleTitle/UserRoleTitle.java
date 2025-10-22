@@ -1,4 +1,4 @@
-package UserRoleTitle;
+package RequestReply.UserRoleTitle;
 
 public enum UserRoleTitle
 {
@@ -6,3 +6,4 @@ public enum UserRoleTitle
     USER,
     VOLUNTARY
 }
+

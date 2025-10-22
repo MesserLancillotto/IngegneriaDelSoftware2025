@@ -1,4 +1,6 @@
-package Request;
+package RequestReply.Request;
+
+import RequestReply.UserRoleTitle.*;
 
 public class Request 
 {
@@ -9,10 +11,10 @@ public class Request
 
     public Request
     (
-        CommunicationType requestType;
-        String userID;
-        String userPassword;
-        RequestType request; 
+        CommunicationType requestType,
+        String userID,
+        String userPassword,
+        RequestType request
     ) {
         this.requestType = requestType;
         this.userID = userID;

@@ -1,4 +1,6 @@
-package Request;
+package  RequestReply.Request;
+
+import RequestReply.UserRoleTitle.*;
 
 public class NewUserRequest implements RequestType
 {
@@ -9,10 +11,10 @@ public class NewUserRequest implements RequestType
 
     public NewUserRequest
     (
-        String userName;
-        String cityOfResidence;
-        Integer birthYear;
-        UserRoleTitle role;
+        String userName,
+        String cityOfResidence,
+        Integer birthYear,
+        UserRoleTitle role
     ) {
         this.userName = userName;
         this.cityOfResidence = cityOfResidence;

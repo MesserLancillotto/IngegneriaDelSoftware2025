@@ -1,6 +1,6 @@
-package CommunicationType;
+package ComunicationType;
 
-public enum CommunicationType
+public enum ComunicationType
 {
     NEW_USER,
     LOGIN,
@@ -8,3 +8,4 @@ public enum CommunicationType
     NEW_ORGANIZATION, 
     GET_VOLUNTARIES_FOR_VISIT
 }
+

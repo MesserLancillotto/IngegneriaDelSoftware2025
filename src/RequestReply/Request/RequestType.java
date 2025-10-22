@@ -1,6 +1,6 @@
-package Request;
+package  RequestReply.Request;
 
-protected interface RequestType
+interface RequestType
 {
     abstract String toJSONString();
 }
