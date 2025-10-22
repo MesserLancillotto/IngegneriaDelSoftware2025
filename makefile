@@ -38,3 +38,10 @@ all:
 	rm -rf bin/*
 	javac -d bin src/**/*.java
 	javac -d bin src/**/**/*.java
+
+install_h2:
+	wget -P lib/ https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/h2-2.2.224.jar
+
+admin_db:
+	javac -cp "lib/h2-2.2.224.jar" -d bin/ src/Server/Engine/Engine.java 
+	java -cp "bin:lib/h2-2.2.224.jar" Server.Engine.Engine
