@@ -20,5 +20,5 @@ public class Request
         this.userID = userID;
         this.userPassword = userPassword;
         this.requestBody = request.toJSONString();
-    }
+    }    
 }
