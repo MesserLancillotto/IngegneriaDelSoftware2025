@@ -1,6 +1,4 @@
-package  RequestReply.Request;
-
-import RequestReply.UserRoleTitle.*;
+package RequestReply.Request;
 
 public class LoginRequest implements RequestType
 {

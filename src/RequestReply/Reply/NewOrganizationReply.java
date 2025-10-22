@@ -1,13 +1,12 @@
-package  RequestReply.Reply;
+package RequestReply.Reply;
 
-import RequestReply.UserRoleTitle.*;
 import java.util.*;
 
 public class NewOrganizationReply implements ReplyType
 {
     private boolean registrationSuccessful;
 
-    public NewOrganizationRequest
+    public NewOrganizationReply
     (
         boolean registrationSuccessful  
     ) {

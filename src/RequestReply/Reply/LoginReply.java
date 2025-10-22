@@ -1,8 +1,6 @@
-package  RequestReply.Reply;
+package RequestReply.Reply;
 
-import RequestReply.UserRoleTitle.*;
-
-public class LoginReply implements RequestType
+public class LoginReply implements ReplyType
 {
     private boolean loginSuccessful;
 
@@ -20,5 +18,4 @@ public class LoginReply implements RequestType
             .append("\"\n}")
             .toString();
     }
-}
 }

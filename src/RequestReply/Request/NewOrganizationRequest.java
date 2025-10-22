@@ -1,6 +1,5 @@
-package  RequestReply.Request;
+package RequestReply.Request;
 
-import RequestReply.UserRoleTitle.*;
 import java.util.*;
 
 public class NewOrganizationRequest implements RequestType

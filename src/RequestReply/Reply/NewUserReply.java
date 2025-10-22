@@ -1,14 +1,12 @@
-package  RequestReply.Request;
+package RequestReply.Reply;
 
-import RequestReply.UserRoleTitle.*;
-
-public class NewUserReply implements RequestType
+public class NewUserReply implements ReplyType
 {
     private String userID;
 
-    public LoginRequest
+    public NewUserReply
     (
-        String userID;
+        String userID
     ) { 
         this.userID = userID;
     }

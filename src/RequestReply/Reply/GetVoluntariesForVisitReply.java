@@ -1,16 +1,16 @@
-package  RequestReply.Reqply;
+package RequestReply.Reply;
 
 import java.util.*;
 
-public class GetVoluntariesForVisit implements RequestType
+public class GetVoluntariesForVisitReply implements ReplyType
 {
     private String event;
     private ArrayList<String> voluntaries;
 
-    public GetVoluntariesForVisit
+    public GetVoluntariesForVisitReply
     (
-        String event;
-        ArrayList<String> voluntaries; 
+        String event,
+        ArrayList<String> voluntaries
     ) {
         this.event = event;
         this.voluntaries = voluntaries;

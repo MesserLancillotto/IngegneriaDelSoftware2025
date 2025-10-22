@@ -2,7 +2,7 @@ package RequestReply.ComunicationType;
 
 import java.util.*;
 
-public final class ComunicationTypeStringConverter
+public class ComunicationTypeStringConverter
 {
     public ComunicationType stringToComunicationType(String type)
     {

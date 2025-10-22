@@ -1,4 +1,4 @@
-package  RequestReply.Request;
+package RequestReply.Request;
 
 interface RequestType
 {

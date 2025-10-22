@@ -1,7 +1,5 @@
 package RequestReply.Request;
 
-import RequestReply.ComunicationType.*;
-
 public class PasswordChangeRequest implements RequestType 
 {
 

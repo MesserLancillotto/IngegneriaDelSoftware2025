@@ -1,6 +1,6 @@
 package  RequestReply.Reply;
 
-interface ReplyType
+public interface ReplyType
 {
     abstract String toJSONString();
 }
