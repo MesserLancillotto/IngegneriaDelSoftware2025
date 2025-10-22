@@ -2,11 +2,12 @@ package  RequestReply.Request;
 
 import RequestReply.UserRoleTitle.*;
 
-public class GetVoluntariesForVisit implements RequestType
+public class GetVoluntariesForVisitRequest implements RequestType
 {
     private String organizationName;
 
-    public GetVoluntariesForVisit
+    public public class GetVoluntariesForVisitRequest implements RequestType
+
     (
         String organizationName
     ) {
