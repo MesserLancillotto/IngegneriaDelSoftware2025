@@ -1,17 +1,17 @@
 package RequestReply.Request;
 
-import RequestReply.UserRoleTitle.*;
+import RequestReply.ComunicationType.*;
 
 public class Request 
 {
-    CommunicationType requestType;
+    ComunicationType requestType;
     String userID;
     String userPassword;
     String requestBody;
 
     public Request
     (
-        CommunicationType requestType,
+        ComunicationType requestType,
         String userID,
         String userPassword,
         RequestType request

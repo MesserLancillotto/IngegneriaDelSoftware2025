@@ -4,12 +4,12 @@ import java.util.*;
 
 public final class UserRoleTitleStringConverter
 {
-    public UserRoleTitle stringToRole(String type)
+    public static UserRoleTitle stringToRole(String type)
     {
         return UserRoleTitle.valueOf(type);
     }
 
-    public String roleToString(UserRoleTitle type)
+    public static String roleToString(UserRoleTitle type)
     {
         return type.name();
     }

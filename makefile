@@ -13,6 +13,4 @@ clean:
 	rm -rf bin/*
 all:
 	javac -d bin src/Server/*.java
-	javac -d bin src/RequestReply/*.java
-	javac -d bin src/RequestReply/Request/*.java
-	javac -d bin src/Client/*.java
+	javac -d bin src/RequestReply/**/*.java

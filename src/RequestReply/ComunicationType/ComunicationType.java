@@ -1,4 +1,4 @@
-package ComunicationType;
+package RequestReply.ComunicationType;
 
 public enum ComunicationType
 {
