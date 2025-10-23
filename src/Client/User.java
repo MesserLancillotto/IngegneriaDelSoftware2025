@@ -3,6 +3,7 @@ package Client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.*;
 
 public class User 
 {
@@ -14,8 +15,30 @@ public class User
     String password;
 	
 	Client client;
-	
-	
+    static HashMap <String, Runnable> roleTitleChooser = new HashMap <>();     //uso hashmap al posto di uno switch
+    //in prova implementazione con supplier
+    public static void initialize_role_title_chooser ()
+    {
+        roleTitleChooser.put ("C", () -> access_configurator());
+        roleTitleChooser.put ("V", () -> access_configurator());
+        roleTitleChooser.put ("T", () -> access_configurator());
+    }
+    
+    public static void access_configurator()
+    {
+
+    }
+
+    public static void access_voluntary ()
+    {
+
+    }
+
+    public static void access_consumer ()
+    {
+
+    }
+
 	public static void main (String[] args)
 	{
 		BufferedReader consoleIn = new BufferedReader (new InputStreamReader (System.in));
@@ -32,6 +55,22 @@ public class User
 			String userName = consoleIn.readLine();
 			System.out.printf ("Inserisci password: ");
 			String password = consoleIn.readLine();
+
+            //client.makeServerRequest();
+            //controllo che siano giusti con una chiamata al server
+
+            //da introdurre discriminante per verificare se è primo accesso o meno
+            if (true)
+            {
+                first_access(consoleIn);    // se primo accesso
+            }
+            else
+            {
+                //client.makeServerRequest();
+                //carico da server i dati che mi servono dell'utente
+            }
+
+            //qui andrebbe l'apertura di un thread per gestire più accessi 
 		}
 		catch (IOException errorDuringDigitation)
 		{
@@ -39,23 +78,23 @@ public class User
 		}
 	}
 	
-	public void first_access (BufferedReader consoleIn)
+	public static void first_access (BufferedReader consoleIn)
 	{
 		try
 		{
-			set_new_username (consoleIn);
-			set_new_password(consoleIn);
+			String tmpUsername = set_new_username (consoleIn);
+			String tmpPassword = set_new_password(consoleIn);
 			System.out.printf("Inserisci la città di residenza: ");
 			String cityOfResidence = consoleIn.readLine();
 			
 			System.out.printf("Inserisci l'anno di nascita: ");
 			int birthYear = Integer.parseInt(consoleIn.readLine()); // da implementare controlli o interfaccia grafica per evitare errori
 			
-			roleTitle = "C"; // al momento Consumer unica classe attiva, da implementare le altre due nelle iterazioni successive
+			String tmpRoleTitle = "C"; // al momento Consumer unica classe attiva, da implementare le altre due nelle iterazioni successive
 			
 			
 			
-			Configurator configurator = new Configurator (userName, cityOfResidence, birthYear);
+			Configurator configurator = new Configurator (tmpUsername, cityOfResidence, birthYear, tmpPassword);
 		}
 		catch (IOException errorDuringDigitation)
 		{
@@ -64,17 +103,18 @@ public class User
 	}
 	
 	// metodo per creare nuovo username
-	public String set_new_username (BufferedReader consoleIn)
+	public static String set_new_username (BufferedReader consoleIn)
 	{
 		String tmpUserName = "";
+        Boolean usernameIsNotAlreadyTaken = true;   
 		try
 		{
 			do 
 			{
 				System.out.printf("Inserisci il nuovo username: ");
 			    tmpUserName = consoleIn.readLine();
-			} while (!client.makeServerRequest (tmpUserName) && tmpUserName != null && tmpUserName != " "); 
-			// controllo che non esista già lo userName
+			} while (usernameIsNotAlreadyTaken && tmpUserName != null && tmpUserName.isBlank()); 
+			// controllo che non esista già lo userName con una chiamata al server
 		}
 		catch (IOException errorDuringDigitation)
 		{
@@ -85,14 +125,15 @@ public class User
 		
 	}
 	// metodo per creare nuova password
-	public String set_new_password (BufferedReader consoleIn)
+	public static String set_new_password (BufferedReader consoleIn)
 	{
 		String tmpPassword = " ";
 		try
 		{
 			System.out.printf("Inserisci la nuova password: ");
 			tmpPassword = consoleIn.readLine();
-			client.makeServerRequest(userName); // gli passo userName e password per caricarli nel database
+			//client.makeServerRequest(userName); 
+            // gli passo userName e password per caricarli nel database
 		}
 		catch (IOException errorDuringDigitation)
 		{
@@ -101,4 +142,6 @@ public class User
 		
 		return tmpPassword;
 	}    
+
+    
 }
