@@ -42,6 +42,9 @@ all:
 install_h2:
 	wget -P lib/ https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/h2-2.2.224.jar
 
+h2_debug:
+	java -cp systemTest/h2-2.2.224.jar org.h2.tools.Console
+
 install_json:
 	wget -O lib/json-20231013.jar https://repo1.maven.org/maven2/org/json/json/20231013/json-20231013.jar
 
@@ -56,3 +59,7 @@ engine_run:
 	rm -rf bin/Server/Engine/*
 	javac -cp "bin:lib/h2-2.2.224.jar:lib/json-20231013.jar" -d bin src/Server/Engine/Engine.java
 	java -cp "bin:lib/h2-2.2.224.jar:lib/json-20231013.jar" Server.Engine.Engine
+
+api_run:
+	javac -d bin src/RequestReply/ComunicationType/*.java
+	java -cp "bin:lib/h2-2.2.224.jar:lib/json-20231013.jar" Server.ServerAPI

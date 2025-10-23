@@ -6,6 +6,8 @@ import java.util.*;
 import java.util.concurrent.*;
 import org.json.JSONObject;
 
+import RequestReply.ComunicationType.*;
+
 class ServerAPI extends Thread
 {
     private static Socket socket = null;
@@ -14,11 +16,6 @@ class ServerAPI extends Thread
     private static DataOutputStream dataOutputStream = null;
 
     private static final int PORT = 8000;
-
-    public static void main(String [] args) 
-    {
-        System.out.println(userResponse("{\"name\":\"Pippo\"}"));
-    }
 
     public static final void handleUserRequest() 
     {
@@ -53,8 +50,11 @@ class ServerAPI extends Thread
     public static final String userResponse(String request) 
     {
         JSONObject jsonObject = new JSONObject(request);
-        System.out.println(jsonObject);
-        return "Something stringy something linky";
+        String requestType = jsonObject.get("requestType");
+        String userID = jsonObject.get("userID");
+        String userPassword = jsonObject.get("userPassword");
+        String requestBody = jsonObject.get("requestBody");
+        return requestType;
     }
 
     public synchronized void run()

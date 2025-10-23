@@ -1,35 +1,34 @@
 package Server.Engine;
 
 import java.sql.*;
+import java.util.*;
+import java.util.function.*;
 
-public class Engine 
+public class Engine throws SQLException
 {
-    public static String usersDbUrl = "jdbc:h2:~/documents/IngegneriaDelSoftware2025/databases/USERS";
-    public static String organizationDbUrl = "jdbc:h2:~/documents/IngegneriaDelSoftware2025/databases/ORGANIZATIONS";
-    public static String eventDbUrl = "jdbc:h2:~/documents/IngegneriaDelSoftware2025/databases/EVENTS";
+    protected static String dbUrl = "jdbc:h2:~/documents/IngegneriaDelSoftware2025/databases/MAIN_DB";
 
     public static void main(String[] args) {
         // MEMENTO args[0] -> prima flag passata
-        boolean x = terraform();
-
+        if(args[0].equals("--terraform"))
+        {
+            boolean x = terraform();
+        }
     }
 
     private static boolean terraform()
     {
-
-        
-        for(String url : new String[]{usersDbUrl, organizationDbUrl, eventDbUrl})
+        try
+        (
+            Connection connection = connectDB(dbUrl, "sa", "");
+        )
         {
-            try
-            (
-                Connection connection = connectDB(url, "sa", "");
-            )
-            {
-                createUsersTable(connection);
-            } catch(Exception e) 
-            {
-                e.printStackTrace();
-            }
+            createUsersTable(connection);
+            createOrganizationsTable(connection);
+            createEventsTable(connection);
+        } catch(Exception e) 
+        {
+            e.printStackTrace();
         }
         return false;
     }
@@ -55,7 +54,18 @@ public class Engine
     private static void createUsersTable(
             Connection connection
                 ) throws SQLException {
-        String sql = "CREATE TABLE IF NOT EXISTS users (userID VARCHAR(32) PRIMARY KEY, userPassword VARCHAR(64), Role VARCHAR(16))";
+        String sql = "CREATE TABLE IF NOT EXISTS users (userID VARCHAR(32) UNIQUE, userPassword VARCHAR(64), role VARCHAR(16))";
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    private static void createOrganizationsTable(
+            Connection connection
+                ) throws SQLException {
+        String sql = "CREATE TABLE IF NOT EXISTS organizations (organizationName VARCHAR(32) UNIQUE, territory VARCHAR(64))";
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
         } catch (SQLException e) {
@@ -63,25 +73,17 @@ public class Engine
         }
     }
  
-    protected static boolean insertUser(
-            Connection conn, 
-            String userID, 
-            String userPassword, 
-            String role
+    private static void createEventsTable(
+            Connection connection
                 ) throws SQLException {
-        String sql = "INSERT INTO users (userID, userPassword, Role) VALUES (?, ?, ?)";
-        try 
-        (
-            PreparedStatement statement = conn.prepareStatement(sql)
-        ) {
-            statement.setString(1, userID);
-            statement.setString(2, userPassword);
-            statement.setString(3, role);
-            int rowsAffected = statement.executeUpdate();
-            return (rowsAffected > 0);
-        } catch(Exception e )
-        {
-            return false;
+        String eventTableSqlQuery = "CREATE TABLE IF NOT EXISTS events (eventName VARCHAR(64) PRIMARY KEY, address VARCHAR(64), date INT)";
+        String eventParticipantsSqlQuery = "CREATE TABLE IF NOT EXISTS eventsVoluntaries (eventName VARCHAR(64), userID VARCHAR(32))";
+        
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(eventTableSqlQuery);
+            statement.execute(eventParticipantsSqlQuery);
+        } catch (SQLException e) {
+            throw e;
         }
     }
 }
