@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
+import org.json.JSONObject;
 
 class ServerAPI extends Thread
 {
@@ -13,6 +14,11 @@ class ServerAPI extends Thread
     private static DataOutputStream dataOutputStream = null;
 
     private static final int PORT = 8000;
+
+    public static void main(String [] args) 
+    {
+        System.out.println(userResponse("{\"name\":\"Pippo\"}"));
+    }
 
     public static final void handleUserRequest() 
     {
@@ -46,6 +52,8 @@ class ServerAPI extends Thread
 
     public static final String userResponse(String request) 
     {
+        JSONObject jsonObject = new JSONObject(request);
+        System.out.println(jsonObject);
         return "Something stringy something linky";
     }
 

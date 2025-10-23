@@ -1,7 +1,7 @@
 
 package Server.Engine;
 
-class PasswordChangeEngine.java implements Engine
+class PasswordChangeEngine implements Engine
 {
     void handleRequest()
     {

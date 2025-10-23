@@ -1,7 +1,7 @@
 
 package Server.Engine;
 
-class NewOrganizationEngine.java implements Engine
+class NewOrganizationEngine implements Engine
 {
     void handleRequest()
     {

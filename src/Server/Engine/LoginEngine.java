@@ -1,7 +1,7 @@
 
 package Server.Engine;
 
-class LoginEngine.java implements Engine
+class LoginEngine implements Engine
 {
     void handleRequest()
     {

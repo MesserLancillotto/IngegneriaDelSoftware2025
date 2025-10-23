@@ -1,7 +1,7 @@
 
 package Server.Engine;
 
-class NewUserEngine.java implements Engine
+class NewUserEngine implements Engine
 {
     void handleRequest()
     {

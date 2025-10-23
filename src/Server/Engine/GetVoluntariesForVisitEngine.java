@@ -1,7 +1,7 @@
 
 package Server.Engine;
 
-class GetVoluntariesForVisitEngine.java implements Engine
+class GetVoluntariesForVisitEngine implements Engine
 {
     void handleRequest()
     {

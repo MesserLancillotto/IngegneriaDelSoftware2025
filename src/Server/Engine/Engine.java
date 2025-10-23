@@ -2,78 +2,86 @@ package Server.Engine;
 
 import java.sql.*;
 
-class Engine
+public class Engine 
 {
-    public static void main(String[] args) {
-        // Database PERSISTENTE nella home directory
-        String url = "jdbc:h2:~/documents/IngegneriaDelSoftware2025/Databases/USERS";
+    public static String usersDbUrl = "jdbc:h2:~/documents/IngegneriaDelSoftware2025/databases/USERS";
+    public static String organizationDbUrl = "jdbc:h2:~/documents/IngegneriaDelSoftware2025/databases/ORGANIZATIONS";
+    public static String eventDbUrl = "jdbc:h2:~/documents/IngegneriaDelSoftware2025/databases/EVENTS";
 
+    public static void main(String[] args) {
+        // MEMENTO args[0] -> prima flag passata
+        boolean x = terraform();
+
+    }
+
+    private static boolean terraform()
+    {
+
+        
+        for(String url : new String[]{usersDbUrl, organizationDbUrl, eventDbUrl})
+        {
+            try
+            (
+                Connection connection = connectDB(url, "sa", "");
+            )
+            {
+                createUsersTable(connection);
+            } catch(Exception e) 
+            {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    protected static Connection connectDB(
+            String url, 
+            String dbUser, 
+            String dbUserPassword
+                    ) throws SQLException {
+        try 
+        {
+            Connection connection = DriverManager.getConnection(
+                url, 
+                dbUser, 
+                dbUserPassword);
+            return connection;
+        } catch (SQLException e) 
+        {
+            throw e;
+        }
+    }
+
+    private static void createUsersTable(
+            Connection connection
+                ) throws SQLException {
+        String sql = "CREATE TABLE IF NOT EXISTS users (userID VARCHAR(32) PRIMARY KEY, userPassword VARCHAR(64), Role VARCHAR(16))";
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+ 
+    protected static boolean insertUser(
+            Connection conn, 
+            String userID, 
+            String userPassword, 
+            String role
+                ) throws SQLException {
+        String sql = "INSERT INTO users (userID, userPassword, Role) VALUES (?, ?, ?)";
         try 
         (
-            Connection conn = DriverManager.getConnection(url, "sa", "password123")
+            PreparedStatement statement = conn.prepareStatement(sql)
         ) {
-            System.out.println("Connesso a database PERSISTENTE");
-            createTableIfNotExists(conn);
-            insertUsers(conn);
-            showAllUsers(conn);
-            System.out.println("\nI dati sono stati salvati su disco!");
-            System.out.println("Riesegui il programma per vedere che i dati sono ancora lì");
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private static void createTableIfNotExists(Connection conn) throws SQLException {
-        String sql = "CREATE TABLE IF NOT EXISTS users (" +
-                     "userID VARCHAR(50) PRIMARY KEY, " +
-                     "userPassword VARCHAR(100), " +
-                     "Role VARCHAR(20))";
-        
-        try (Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-            System.out.println("Tabella users verificata/creata");
-        }
-    }
-    
-    private static void insertUsers(Connection conn) throws SQLException {
-        // Inserisce solo se non esistono già
-        String sql = "MERGE INTO users (userID, userPassword, Role) KEY(userID) VALUES (?, ?, ?)";
-        
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            String[][] users = {
-                {"Pippo", "password123", "ADMIN"},
-                {"Pluto", "asdfasdf", "USER"},
-                {"Paperino", "safePassword1+", "USER"}
-            };
-            
-            for (String[] user : users) {
-                pstmt.setString(1, user[0]);
-                pstmt.setString(2, user[1]);
-                pstmt.setString(3, user[2]);
-                pstmt.executeUpdate();
-            }
-            System.out.println("Utenti inseriti/aggiornati");
-        }
-    }
-    
-    private static void showAllUsers(Connection conn) throws SQLException {
-        String sql = "SELECT userID, userPassword, Role FROM users";
-        
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
-            System.out.println("\nTutti gli utenti nel database:");
-            System.out.println("--------------------------------");
-            
-            while (rs.next()) {
-                String userID = rs.getString("userID");
-                String password = rs.getString("userPassword");
-                String role = rs.getString("Role");
-                
-                System.out.printf("ID: %-10s Password: %-15s Role: %s%n", 
-                                userID, password, role);
-            }
+            statement.setString(1, userID);
+            statement.setString(2, userPassword);
+            statement.setString(3, role);
+            int rowsAffected = statement.executeUpdate();
+            return (rowsAffected > 0);
+        } catch(Exception e )
+        {
+            return false;
         }
     }
 }
