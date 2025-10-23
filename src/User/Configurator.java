@@ -3,7 +3,7 @@ package Client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +13,19 @@ public class Configurator extends User
     BufferedReader consoleIn = new BufferedReader (new InputStreamReader (System.in));
     ArrayList <Place> placeList = new ArrayList <> ();
 	
+    //in corso di implentazione
+    HashMap <Integer, Runnable> menuSelection = new HashMap <>();
+
+    private void initializeMenuSelection ()
+    {
+        menuSelection.put(1, () -> view_voluntary_list());
+        menuSelection.put(2, () -> view_visitable_places());
+        menuSelection.put(3, () -> view_type_of_visit());
+        menuSelection.put(4, () -> view_type_of_visit());   // metodo per visualizzare le visite in stato di visita
+        menuSelection.put(5, () -> modify_max_number_per_subscription());
+        menuSelection.put(6, () -> manage_disponibilty_dates());  
+    }
+
 	public void stamp_list (String title, Collection <String>listToStamp)
 	{
 		System.out.println (title);
@@ -39,30 +52,8 @@ public class Configurator extends User
             {
                 System.out.println (optionCount+options);
             }
-                System.out.println ("Cosa vuoi fare: ");
-                String configuratorMenuDecision = consoleIn.readLine();
-
-                switch (configuratorMenuDecision)
-            {
-                case "1":
-                    view_voluntary_list();
-                    break;
-                case "2":
-                    view_visitable_places();    //posti visitabili
-                    break;
-                case "3":
-                    view_type_of_visit();
-                    break;
-                case "4":
-                    // metodo per visualizzare le visite in stato di visita
-                    break;
-                case "5":
-                    modify_max_number_per_subscription();
-                    break;
-                case "6":
-                    // metodo per gestire date
-                    break;
-            }
+            System.out.println ("Cosa vuoi fare: ");
+            menuSelection.get(consoleIn.readLine()).run();; // implementare controllo errori
         }
         catch (IOException errorDuringDigitation)
 		{
@@ -72,25 +63,29 @@ public class Configurator extends User
 	}
 	
 	// costruttore per primo accesso del configuratore
-	public Configurator (String userName, String cityOfResidence, int birthYear)
+	public Configurator (String userName, String cityOfResidence, int birthYear, String password)
 	{
 		this.userName = userName;
 		this.cityOfResidence = cityOfResidence;
 		this.birthYear = birthYear;
+        this.password = password;
 		roleTitle = "C";	// da decidere come gestire il titolo
 		
-		set_basic_app_configuration (); // indicare ambito territoriale e numero max di persone iscrivibili da un fruitore
+        initializeMenuSelection();
+		set_basic_app_configuration (); // configurazione base dell'app da fare al primo accesso del configuratore
 		manage_options ();
 	}
 
     // secondo costruttore, da decidere la discriminante per capire come decidere che non è il primo accesso -> per ora String tmp
-    public Configurator (String userName, String cityOfResidence, int birthYear, String tmp)
+    public Configurator (String userName, String cityOfResidence, int birthYear, String password, String tmp)
 	{
 		this.userName = userName;
 		this.cityOfResidence = cityOfResidence;
 		this.birthYear = birthYear;
+        this.password = password;
 		roleTitle = "C";	// da decidere come gestire il titolo
 		
+        initializeMenuSelection();
 		manage_options ();
 	}
 	
@@ -221,5 +216,10 @@ public class Configurator extends User
     {
         //client.makeServerRequest(password, birthYear, cityOfResidence);
         //chiedo al server di mandarmi i voluntary
+    }
+
+    public void manage_disponibilty_dates ()
+    {
+
     }
 }
