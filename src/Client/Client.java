@@ -13,7 +13,7 @@ public final class Client
     private static final int PORT = 8000;
     private static final String SERVER_ADDR = "127.0.0.1";
 
-    public static String makeServerRequest(String server_addr, int port, String request) 
+    public static final String makeServerRequest(String server_addr, int port, String request) 
     {
         String response;
         try

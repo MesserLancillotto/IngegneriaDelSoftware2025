@@ -4,10 +4,10 @@ import RequestReply.ComunicationType.*;
 
 public class Request 
 {
-    ComunicationType requestType;
-    String userID;
-    String userPassword;
-    String requestBody;
+    private ComunicationType requestType;
+    private String userID;
+    private String userPassword;
+    private String requestBody;
 
     public Request
     (
@@ -20,6 +20,11 @@ public class Request
         this.userID = userID;
         this.userPassword = userPassword;
         this.requestBody = request.toJSONString();
-    }    
+    } 
+
+    public String toJSONString()
+    {
+        return new StringBuilder("{\n\"\":\"").append("").toString();
+    }
 }
  

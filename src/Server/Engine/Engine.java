@@ -13,20 +13,13 @@ class Engine
             Connection conn = DriverManager.getConnection(url, "sa", "password123")
         ) {
             System.out.println("Connesso a database PERSISTENTE");
-            
-            // Crea tabella se non esiste
             createTableIfNotExists(conn);
-            
-            // Inserisce alcuni utenti
             insertUsers(conn);
-            
-            // Mostra tutti gli utenti
             showAllUsers(conn);
-            
             System.out.println("\nI dati sono stati salvati su disco!");
             System.out.println("Riesegui il programma per vedere che i dati sono ancora lì");
             
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
