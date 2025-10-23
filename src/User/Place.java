@@ -1,4 +1,4 @@
-package Client;
+package User;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,9 +10,10 @@ public class Place
     HashMap <Visit, Voluntary> visitAssociation = new HashMap <>();
 	String placeName;
 	
-	public Place (String placeName, String voluntaryName, String visitType)
+	public Place (String placeName, String visitType, String voluntaryName)
 	{
 		this.placeName = placeName;
+		//visitAssociation.put(null, null)
 	}
 	
 	public Set <String> get_type_visit_list ()
