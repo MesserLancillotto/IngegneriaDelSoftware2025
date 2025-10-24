@@ -1,14 +1,14 @@
 
 package Server.Engine;
 
-class NewUserEngine implements Engine
+class NewUserEngine extends Engine
 {
     protected static boolean insertUser(
-                Connection conn, 
                 String userID, 
                 String userPassword, 
                 String role
             ) throws SQLException {
+        
         String sql = "INSERT INTO users (userID, userPassword, Role) VALUES (?, ?, ?)";
         try 
         (

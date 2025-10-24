@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.function.*;
 
-public class Engine throws SQLException
+public class Engine
 {
     protected static String dbUrl = "jdbc:h2:~/documents/IngegneriaDelSoftware2025/databases/MAIN_DB";
 

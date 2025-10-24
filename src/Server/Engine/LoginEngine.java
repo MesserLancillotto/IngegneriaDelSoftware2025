@@ -8,6 +8,7 @@ class LoginEngine extends Engine
 {
     private String userID;
     private String userPassword;
+    private boolean ccorrectCredentials;
 
     public LoginEngine
     (
@@ -17,6 +18,7 @@ class LoginEngine extends Engine
     {
         this.userID = userID;
         this.userPassword = userPassword;
+        this.ccorrectCredentials = canLogIn();
     }
 
     boolean canLogIn()

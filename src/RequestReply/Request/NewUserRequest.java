@@ -14,7 +14,7 @@ public class NewUserRequest implements RequestType
         String userName,
         String cityOfResidence,
         Integer birthYear,
-        UserRoleTitle role
+        UserRoleTitle role 
     ) {
         this.userName = userName;
         this.cityOfResidence = cityOfResidence;
@@ -24,19 +24,17 @@ public class NewUserRequest implements RequestType
 
     public String toJSONString()
     {
-        return new StringBuilder("{\n")
-            .append("\"userName\":\"")
-            .append(userName)
-            .append("\"\n")
-            .append("\"cityOfResidence\":\"")
-            .append(cityOfResidence)
-            .append("\"\n")
-            .append("\"birthYear\":\"")
-            .append(birthYear.toString())
-            .append("\"\n")
-            .append("\"role\":\"")
-            .append(UserRoleTitleStringConverter.roleToString(role))
-            .append("\"\n}")
-            .toString();
+        String template = """
+        "userName": "%s",
+        "cityOfResidence": "%s", 
+        "birthYear": "%s",
+        "role": "%s"
+        """;
+        return String.format(
+            template, 
+            userName,
+            cityOfResidence,
+            birthYear,
+            role);
     }
 }

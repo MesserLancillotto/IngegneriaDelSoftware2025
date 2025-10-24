@@ -13,9 +13,7 @@ public class GetVoluntariesForVisitRequest implements RequestType
 
     public String toJSONString()
     {
-        return new StringBuilder("{\n\"organizationName\":\"")
-            .append(organizationName)
-            .append("\"\n}")
-            .toString();
+        String template = "\"organizationName\":\"%s\"";
+        return String.format(template, organizationName);
     }
 }

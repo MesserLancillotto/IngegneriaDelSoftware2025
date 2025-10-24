@@ -13,9 +13,9 @@ public class LoginReply implements ReplyType
 
     public String toJSONString()
     {
-        return new StringBuilder("{\n\"loginSuccessful\":\"")
+        return new StringBuilder("{\"loginSuccessful\":\"")
             .append(loginSuccessful ? "TRUE" : "FALSE")
-            .append("\"\n}")
+            .append("\"}")
             .toString();
     }
 }

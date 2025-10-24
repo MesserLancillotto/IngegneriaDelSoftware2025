@@ -24,7 +24,7 @@ public class Request
 
     public String toJSONString()
     {
-        String template = "{\n\"requestType\":\"%s\"\n\"userID\":\"%s\"\"userPassword\":\"%s\"\n%s\n}";
+        String template = "{\n\"requestType\":\"%s\"\n\"userID\":\"%s\"\"userPassword\":\"%s\"\n\"requestBody\":\"%s\"\n}";
         return String.format(template, requestType.name(), userID, userPassword, requestBody);
     }
 }

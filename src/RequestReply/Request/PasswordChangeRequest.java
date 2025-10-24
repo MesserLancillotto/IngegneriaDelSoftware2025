@@ -14,6 +14,7 @@ public class PasswordChangeRequest implements RequestType
 
     public String toJSONString()
     {
-        return new StringBuilder("{\n\"newPassword\":\"").append(this.newPassword).append("\"\n}").toString();
+        String template = "\"newPassword\":\"%s\"";
+        return String.format(template, newPassword);
     }
 }
