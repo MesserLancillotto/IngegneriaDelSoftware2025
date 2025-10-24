@@ -1,8 +1,6 @@
-package User;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.*;
 
 public class UserTui 
 {
@@ -14,11 +12,33 @@ public class UserTui
         {
             try
             {
-                System.out.printf ("\n%s: ");
+                System.out.printf ("\n%s: ", thingToSayToUser);
                 String value = consoleIn.readLine();
                 
                 if (value != null && !value.isEmpty())
                     return value.trim();
+
+                System.out.println ("Valore inserito non valido, riprova!\n");
+            }
+            catch (IOException errorDuringDigitation)
+            {
+                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("Riprova");
+            }
+        }
+    }
+
+    public static String getStringNoTrim (String thingToSayToUser)
+    {
+        while (true)
+        {
+            try
+            {
+                System.out.printf ("\n%s: ", thingToSayToUser);
+                String value = consoleIn.readLine();
+                
+                if (value != null && !value.isEmpty())
+                    return value;
 
                 System.out.println ("Valore inserito non valido, riprova!\n");
             }
@@ -95,6 +115,14 @@ public class UserTui
             }
         }
     }
-}
 
+    public static void stamp_list (String title, Collection <String>listToStamp)
+	{
+		System.out.println ("\n"+title);
+		for (String elementToStamp : listToStamp)
+		{
+			System.out.println (elementToStamp);
+		}
+	}
+}
 
