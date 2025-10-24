@@ -5,7 +5,6 @@ import java.net.*;
 
 public final class Client 
 {
-    private static Socket socket = null;
     private static ServerSocket serverSocket = null;
     private static DataInputStream dataInputStream = null;
     private static DataOutputStream dataOutputStream = null;
@@ -13,12 +12,22 @@ public final class Client
     private static final int PORT = 8000;
     private static final String SERVER_ADDR = "127.0.0.1";
 
+    public static void main(String [] args)
+    {
+        String req = """
+        {"userID":""lancillotto", "userPassword":"password"}
+        """;
+        System.out.println(makeServerRequest(SERVER_ADDR, PORT, req));
+    }
+
     public static final String makeServerRequest(String server_addr, int port, String request) 
     {
-        String response;
+        String response = "";
         try
+        (
+            Socket socket = new Socket(server_addr, port);
+        )
         {
-            socket = new Socket(server_addr, port);
             System.out.println("Connected");
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataOutputStream.writeUTF(request);
@@ -34,6 +43,6 @@ public final class Client
         {
             System.out.println("An error occurred: " + e);
         }
-        return "";
+        return response;
     }
 }

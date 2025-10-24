@@ -16,7 +16,8 @@ public class NewUserReply implements ReplyType
 
     public String toJSONString()
     {
-        String template = """{
+        String template = """
+        {
         "loginSuccessful":"%s"
         "userID":"%s"}
         """;

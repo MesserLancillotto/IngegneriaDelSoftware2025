@@ -1,7 +1,16 @@
-
 package Server.Engine;
 
-class NewUserEngine extends Engine
+import java.sql.*;
+import java.util.*;
+import java.util.function.*;
+
+class NewUserEngine 
+{
+
+}
+
+/*
+class NewUserEngine extends LoginEngine
 {
     protected static boolean insertUser(
                 String userID, 
@@ -12,7 +21,8 @@ class NewUserEngine extends Engine
         String sql = "INSERT INTO users (userID, userPassword, Role) VALUES (?, ?, ?)";
         try 
         (
-            PreparedStatement statement = conn.prepareStatement(sql)
+            Connection connection = connectDB(dbUrl, "sa", "");
+            PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, userID);
             statement.setString(2, userPassword);
@@ -25,8 +35,10 @@ class NewUserEngine extends Engine
         }
     }
 
-    void handleRequest()
+    String handleRequest()
     {
         Connection connection = connectDB(dbUrl, "sa", "");
+        return true;
     }
 }
+*/

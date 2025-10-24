@@ -4,6 +4,9 @@ client:
 
 server:
 	rm -rf bin/Server
+	make request
+	make reply
+	make engine
 	javac -cp "bin:lib/h2-2.2.224.jar:lib/json-20231013.jar" -d bin src/Server/*.java
 
 comunication_type:
@@ -29,7 +32,8 @@ reply:
 
 request_reply:
 	rm -rf bin/RequestReply
-	javac -d bin src/RequestReply/**/*.java
+	make request
+	make reply
 
 clean:
 	rm -rf bin/*
@@ -53,7 +57,7 @@ admin_db:
 	java -cp "bin:lib/h2-2.2.224.jar" Server.Engine.Engine
 
 engine:
-	javac -d bin/ src/Server/Engine/Engine.java
+	javac -cp "bin" -d bin src/Server/Engine/*.java
 
 engine_run:
 	rm -rf bin/Server/Engine/*

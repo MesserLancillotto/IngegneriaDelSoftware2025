@@ -1,10 +1,9 @@
-
 package Server.Engine;
 
 import java.sql.*;
-import RequestReply.Reply.LoginReply;
+import RequestReply.Reply.*;
 
-class LoginEngine extends Engine 
+public class LoginEngine extends Engine 
 {
     private String userID;
     private String userPassword;
@@ -21,7 +20,7 @@ class LoginEngine extends Engine
         this.ccorrectCredentials = canLogIn();
     }
 
-    boolean canLogIn()
+    public boolean canLogIn()
     {
         try
         (
@@ -30,11 +29,16 @@ class LoginEngine extends Engine
         {
             String query = "SELECT role FROM users WHERE userID='%s' AND userPassword='%s'";
             query = String.format(query, userID, userPassword);
-            Statement statement = connection.createStatement()                
+            Statement statement = connection.createStatement();
+            if(statement.executeUpdate(query) == 1)
+            {
+                return true;
+            }
         } catch(Exception e)
         {
             return false;
         }
+        return false;
     }
 
     String handleRequest() throws SQLException

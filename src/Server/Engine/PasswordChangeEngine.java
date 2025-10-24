@@ -1,7 +1,6 @@
-
 package Server.Engine;
 
-class PasswordChangeEngine implements Engine
+class PasswordChangeEngine // extends LoginEngine
 {
     void handleRequest()
     {

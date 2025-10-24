@@ -16,7 +16,8 @@ public class PasswordChangeReply implements ReplyType
 
     public String toJSONString()
     {
-        String template = """{
+        String template = """
+        {
         "loginSuccessful":"%s"
         "passwordChangeSuccessful":"%s"}
         """;

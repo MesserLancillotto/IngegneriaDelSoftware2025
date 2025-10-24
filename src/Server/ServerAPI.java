@@ -6,10 +6,11 @@ import java.util.*;
 import java.util.concurrent.*;
 import org.json.JSONObject;
 
-import RequestReply.Reply.*;
-import RequestReply.ComunicationType.*;
-import Engine.*;
 
+import RequestReply.ComunicationType.*;
+import RequestReply.Reply.*;
+import Server.Engine.*;
+import Server.Engine.LoginEngine;
 
 class ServerAPI extends Thread
 {
@@ -50,12 +51,19 @@ class ServerAPI extends Thread
         } 
     }
 
+
+    public static void main(String [] args) 
+    {
+        System.out.println(userResponse())
+    }
+
+
     public static final String userResponse(String request) 
     {
         JSONObject jsonObject = new JSONObject(request);
         String userID = (String)jsonObject.get("userID");
         String userPassword = (String)jsonObject.get("userPassword");
-        Engine login = new Engine(userID, userPassword);
+        LoginEngine login = new LoginEngine(userID, userPassword);
         if(!login.canLogIn())
         {
             return new LoginReply(false).toJSONString();

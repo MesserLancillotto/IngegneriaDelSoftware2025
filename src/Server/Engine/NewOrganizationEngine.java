@@ -1,7 +1,6 @@
-
 package Server.Engine;
 
-class NewOrganizationEngine implements Engine
+class NewOrganizationEngine // extends LoginEngine
 {
     void handleRequest()
     {

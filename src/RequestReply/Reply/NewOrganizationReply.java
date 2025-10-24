@@ -18,7 +18,8 @@ public class NewOrganizationReply implements ReplyType
 
     public String toJSONString()
     {
-        String template = """{
+        String template = """
+        {
         "loginSuccessful":"%s",
         "registrationSuccessful":"%s"
         }""";

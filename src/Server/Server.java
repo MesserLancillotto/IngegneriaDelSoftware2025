@@ -9,6 +9,9 @@ public class Server
 {
     public static void main(String [] args) 
     {
+            ServerAPI api = new ServerAPI();
+            api.start(); 
+    /*
         while(true)
         {
             ServerAPI api = new ServerAPI();
@@ -19,5 +22,6 @@ public class Server
                 System.out.println("An error occurred: " + e);
             }
         }
+    */
     }
 }
