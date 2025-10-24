@@ -5,7 +5,7 @@ public enum ComunicationType
     NEW_USER,
     LOGIN,
     PASSWORD_CHANGE,
-    NEW_ORGANIZATION, 
+    NEW_ORGANIZATION,
     GET_VOLUNTARIES_FOR_VISIT
 }
 

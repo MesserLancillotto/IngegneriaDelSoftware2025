@@ -6,6 +6,6 @@ public class LoginRequest implements RequestType
 
     public String toJSONString()
     {
-        return "{}";
+        return "\"\"";
     }
 }

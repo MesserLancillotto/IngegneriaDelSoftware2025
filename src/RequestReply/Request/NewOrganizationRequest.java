@@ -18,12 +18,12 @@ public class NewOrganizationRequest implements RequestType
 
     public String toJSONString()
     {
-        StringBuilder response = new StringBuilder("\"organizationName\":\"").append(organizationName).append("\"\n\"territoriesOfCompetence\":\n[");
+        StringBuilder response = new StringBuilder("\"organizationName\":\"").append(organizationName).append("\",\n\"territoriesOfCompetence\":\n[\n");
         for(String territory : territoriesOfCompetence)
         {
-            response.append("\"").append(territory).append("\",\n");
+            response.append("\t\"").append(territory).append("\",\n");
         }
-        response.append("]");
+        response.deleteCharAt(response.length() - 2).append("]");
         return response.toString();
     }
 }

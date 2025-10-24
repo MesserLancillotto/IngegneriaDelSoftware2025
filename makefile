@@ -1,12 +1,13 @@
+clean:
+	rm -rf bin/*
+
 client:
 	rm -rf bin/Client
-	javac -d bin src/Client/*.java
+	make request
+	javac -cp "bin" -d bin src/Client/*.java
 
 server:
 	rm -rf bin/Server
-	make request
-	make reply
-	make engine
 	javac -cp "bin:lib/h2-2.2.224.jar:lib/json-20231013.jar" -d bin src/Server/*.java
 
 comunication_type:
@@ -34,9 +35,6 @@ request_reply:
 	rm -rf bin/RequestReply
 	make request
 	make reply
-
-clean:
-	rm -rf bin/*
 
 all:
 	rm -rf bin/*

@@ -11,17 +11,5 @@ public class Server
     {
             ServerAPI api = new ServerAPI();
             api.start(); 
-    /*
-        while(true)
-        {
-            ServerAPI api = new ServerAPI();
-            api.start(); 
-            try {
-                api.join();
-            } catch (Exception e) {
-                System.out.println("An error occurred: " + e);
-            }
-        }
-    */
     }
 }

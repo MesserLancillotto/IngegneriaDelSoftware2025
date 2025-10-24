@@ -5,6 +5,7 @@ import RequestReply.UserRoleTitle.*;
 public class NewUserRequest implements RequestType
 {
     private String userName;
+    private String newPassword;
     private String cityOfResidence;
     private Integer birthYear;
     private UserRoleTitle role;
@@ -12,11 +13,13 @@ public class NewUserRequest implements RequestType
     public NewUserRequest
     (
         String userName,
+        String newPassword,
         String cityOfResidence,
         Integer birthYear,
         UserRoleTitle role 
     ) {
         this.userName = userName;
+        this.newPassword = newPassword;
         this.cityOfResidence = cityOfResidence;
         this.birthYear = birthYear;
         this.role = role;
@@ -26,6 +29,7 @@ public class NewUserRequest implements RequestType
     {
         String template = """
         "userName": "%s",
+        "newPassword":"%s",
         "cityOfResidence": "%s", 
         "birthYear": "%s",
         "role": "%s"
@@ -33,8 +37,9 @@ public class NewUserRequest implements RequestType
         return String.format(
             template, 
             userName,
+            newPassword,
             cityOfResidence,
             birthYear,
-            role);
+            role).replace("\"\n", "\"");
     }
 }

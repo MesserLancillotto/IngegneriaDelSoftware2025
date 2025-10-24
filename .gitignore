@@ -1,4 +1,5 @@
-bin/*
-lib/*
-databases/*
-systemTest/*
+bin
+lib
+databases
+systemTest
+.src

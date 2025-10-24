@@ -4,13 +4,6 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
-import org.json.JSONObject;
-
-
-import RequestReply.ComunicationType.*;
-import RequestReply.Reply.*;
-import Server.Engine.*;
-import Server.Engine.LoginEngine;
 
 class ServerAPI extends Thread
 {
@@ -37,6 +30,9 @@ class ServerAPI extends Thread
             );
             String request = dataInputStream.readUTF();
             String response = userResponse(request);
+
+            System.out.println(request);
+
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataOutputStream.writeUTF(response);
             dataOutputStream.flush();
@@ -51,26 +47,9 @@ class ServerAPI extends Thread
         } 
     }
 
-
-    public static void main(String [] args) 
+    private static String userResponse(String request)
     {
-        System.out.println(userResponse())
-    }
-
-
-    public static final String userResponse(String request) 
-    {
-        JSONObject jsonObject = new JSONObject(request);
-        String userID = (String)jsonObject.get("userID");
-        String userPassword = (String)jsonObject.get("userPassword");
-        LoginEngine login = new LoginEngine(userID, userPassword);
-        if(!login.canLogIn())
-        {
-            return new LoginReply(false).toJSONString();
-        }
-        String requestType = (String)jsonObject.get("requestType");
-        String requestBody = (String)jsonObject.get("requestBody");
-        return requestType;
+        return "lorem";
     }
 
     public synchronized void run()
