@@ -3,7 +3,11 @@ package Server;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import org.json.*;
 import java.util.concurrent.*;
+
+import RequestReply.Reply.*;
+import Server.Engine.*;
 
 class ServerAPI extends Thread
 {
@@ -49,7 +53,23 @@ class ServerAPI extends Thread
 
     private static String userResponse(String request)
     {
-        return "lorem";
+        JSONObject jsonObject = new JSONObject(request);
+        Map<String, String> dictionary = jsonToMap(jsonObject);
+        try
+        (
+            String user = dictionary.get("userID");
+            String password = dictionary.get("userPassword");
+        ) {
+            Engine engine = new LoginEngine(user, password);
+            if(engine.canLogIn())
+            {
+                System.out.println("OK");
+            }
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        
     }
 
     public synchronized void run()
