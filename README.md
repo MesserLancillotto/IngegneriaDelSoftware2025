@@ -1,17 +1,19 @@
 # IngegneriaDelSoftware2025
 ## Compilare ed eseguire il progetto
-### Lato server
+### Compilazione
 ```
-make compile_server 
-make run_server
+mvn compile
+```
+### Esecuzione lato server
+```
+java -cp bin Server.Server
 ```
 ### Lato client
-NOTA: il client non deve essere usato da se, difatti è sprovvisto di main!
-La classe Client deve essere chiamata da qualche parente che necessita di invocare le API del server! 
+NOTA: il client non deve essere usato da se, difatti è sprovvisto di main! Qualora si volesse aggiungere e testare si può chiamare con il comando di sotto.
+Normalmente la classe Client deve essere chiamata da qualche parente che necessita di invocare le API del server.
 ```
-make compile_client
+java -cp bin Client.Client
 ```
-
 ## Compilare i diagrammi UML indicativi del progetto
 Per compilare gli UseCasesUML, installare un renderer per mermaid, su ArchLinux 
 ```

@@ -7,6 +7,7 @@ import org.json.*;
 import java.util.concurrent.*;
 
 import RequestReply.Reply.*;
+import RequestReply.Request.*;
 import Server.Engine.*;
 
 class ServerAPI extends Thread
@@ -53,23 +54,20 @@ class ServerAPI extends Thread
 
     private static String userResponse(String request)
     {
-        JSONObject jsonObject = new JSONObject(request);
-        Map<String, String> dictionary = jsonToMap(jsonObject);
+        JSONObject dictionary = new JSONObject(request);
+        String user = (String)dictionary.get("userID");
+        String password = (String)dictionary.get("userPassword");
+        LoginEngine engine = new LoginEngine(user, password);
+        boolean canLogIn = false;
         try
-        (
-            String user = dictionary.get("userID");
-            String password = dictionary.get("userPassword");
-        ) {
-            Engine engine = new LoginEngine(user, password);
-            if(engine.canLogIn())
-            {
-                System.out.println("OK");
-            }
+        {
+            canLogIn = engine.canLogIn();
+            return new LoginReply(canLogIn).toJSONString();
         } catch(Exception e)
         {
-            e.printStackTrace();
+            canLogIn = false;
         }
-        
+        return "";
     }
 
     public synchronized void run()

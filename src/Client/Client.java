@@ -104,7 +104,9 @@ public final class Client
 
     public static void main(String [] args) 
     {
-        String request = newUser("user.1234", "password", "Mario Rossi", "Milano", 1927, UserRoleTitle.CONFIGURATOR);
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("Milano");
+        String request = newOrganization("user.1234", "password", "Plutis", list);
         System.out.println(makeServerRequest(SERVER_ADDR, PORT, request));
     }
 }

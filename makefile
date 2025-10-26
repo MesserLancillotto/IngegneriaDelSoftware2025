@@ -7,8 +7,13 @@ client:
 	javac -cp "bin" -d bin src/Client/*.java
 
 server:
-	rm -rf bin/Server
+	make clean
+	make request_reply
+	javac -cp "bin" -d bin src/Server/Engine/*.java
 	javac -cp "bin:lib/h2-2.2.224.jar:lib/json-20231013.jar" -d bin src/Server/*.java
+
+server_run:
+	java -cp "bin:lib/h2-2.2.224.jar:lib/json-20231013.jar" Server.Server
 
 comunication_type:
 	rm -rf bin/RequestReply/ComunicationType

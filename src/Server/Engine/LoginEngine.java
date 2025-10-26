@@ -30,7 +30,7 @@ public class LoginEngine extends Engine
             String query = "SELECT role FROM users WHERE userID='%s' AND userPassword='%s'";
             query = String.format(query, userID, userPassword);
             Statement statement = connection.createStatement();
-            if(statement.executeUpdate(query) == 1)
+            if(statement.executeQuery(query).next())
             {
                 return true;
             }
@@ -41,8 +41,17 @@ public class LoginEngine extends Engine
         return false;
     }
 
-    String handleRequest() throws SQLException
+    public String handleRequest() throws SQLException
     {
-        return new LoginReply(canLogIn()).toJSONString();
+        String fail = new LoginReply(false).toJSONString();
+        try
+        {
+            String response = new LoginReply(canLogIn()).toJSONString();
+            return response;
+        }
+        catch(Exception e)
+        {
+            return fail;
+        }
     }
 }

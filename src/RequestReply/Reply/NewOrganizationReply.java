@@ -6,26 +6,31 @@ public class NewOrganizationReply implements ReplyType
 {
     private boolean accessSuccesful;
     private boolean registrationSuccessful;
+    private int territoriesAdded;
 
     public NewOrganizationReply
     (
         boolean accessSuccesful,
-        boolean registrationSuccessful  
+        boolean registrationSuccessful,
+        Integer territoriesAdded  
     ) {
         this.accessSuccesful = accessSuccesful;
         this.registrationSuccessful = registrationSuccessful;
+        this.territoriesAdded = territoriesAdded;
     }
 
     public String toJSONString()
     {
         String template = """
         {
-        "loginSuccessful":"%s",
-        "registrationSuccessful":"%s"
+        \t"loginSuccessful":"%s",
+        \t"registrationSuccessful":"%s",
+        \t"territoriesAdded":"%s"
         }""";
         return String.format(
             template,
             accessSuccesful,
-            registrationSuccessful);
+            registrationSuccessful,
+            territoriesAdded);
     }
 }
