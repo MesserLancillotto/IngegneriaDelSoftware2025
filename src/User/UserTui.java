@@ -124,5 +124,10 @@ public class UserTui
 			System.out.println (elementToStamp);
 		}
 	}
+
+    public static int getDates ()
+    {
+        return 0;
+    } 
 }
 
