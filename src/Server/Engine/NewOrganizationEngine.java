@@ -42,7 +42,7 @@ class NewOrganizationEngine extends Engine
 
     public String handleRequest()
     {
-        boolean accessSuccesful = false;
+        boolean accessSuccesful = true;
         boolean registrationSuccessful = false;
         int territoriesAdded = 0;
 
@@ -56,6 +56,9 @@ class NewOrganizationEngine extends Engine
                 for(String territory : territoriesOfCompetence)
                 {
                     String query = "INSERT INTO organizations VALUES ('%s', '%s')";
+                    
+                    System.out.println(query);
+                    
                     query = String.format(query, organizationName, territory);
                     Statement statement = connection.createStatement();
                     territoriesAdded += statement.executeUpdate(query);

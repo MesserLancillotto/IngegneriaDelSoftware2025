@@ -105,8 +105,10 @@ public final class Client
     public static void main(String [] args) 
     {
         ArrayList<String> list = new ArrayList<String>();
-        list.add("Milano");
+        list.add("Milazzo");
+        list.add("Genova");
         String request = newOrganization("user.1234", "password", "Plutis", list);
+        System.out.println(request);
         System.out.println(makeServerRequest(SERVER_ADDR, PORT, request));
     }
 }

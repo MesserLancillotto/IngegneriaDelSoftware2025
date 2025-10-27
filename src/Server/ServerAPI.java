@@ -33,6 +33,9 @@ class ServerAPI extends Thread
                     socket.getInputStream()
                 )
             );
+
+            System.out.println(dataInputStream);
+            
             String request = dataInputStream.readUTF();
             String response = userResponse(request);
 
