@@ -1,0 +1,62 @@
+package Server.Engine;
+
+import java.io.*;
+import java.net.*;
+import java.sql.*;
+import java.util.*;
+import org.json.*;
+import java.util.concurrent.*;
+
+import RequestReply.Reply.*;
+import RequestReply.Request.*;
+import RequestReply.ComunicationType.*;
+import RequestReply.UserRoleTitle.*;
+import Server.Engine.*;
+
+public class PasswordChangeEngine extends Engine
+{
+
+    private String userID;
+    private String password;
+    private String newPassword;
+
+
+    public PasswordChangeEngine(
+        String userID,
+        String password,
+        String newPassword
+    ) {
+        this.userID = userID;
+        this.password = password;
+        this.newPassword = newPassword;   
+    }
+
+    public String handleRequest()
+    {
+        try
+        (
+            Connection connection = connectDB(dbUrl, "sa", "");
+        ) {
+            LoginEngine engine = new LoginEngine(userID, password);
+            if(!engine.canLogIn())
+            {
+               return new PasswordChangeReply(false, false).toJSONString();
+            }
+            String query = "UPDATE users SET userPassword = ? WHERE userID = ? AND userPassword = ?";
+            PreparedStatement selectStatement = connection.prepareStatement(query); 
+            selectStatement.setString(1, newPassword);
+            selectStatement.setString(2, userID);
+            selectStatement.setString(3, password);
+            int rowsUpdated = selectStatement.executeUpdate();
+            
+            if (rowsUpdated == 1) {
+               return new PasswordChangeReply(true, true).toJSONString();
+            }
+            return new PasswordChangeReply(true, false).toJSONString();
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+            return new PasswordChangeReply(true, false).toJSONString();
+        }
+    }
+}

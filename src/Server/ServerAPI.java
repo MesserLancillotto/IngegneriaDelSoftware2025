@@ -62,12 +62,6 @@ class ServerAPI extends Thread
         JSONObject dictionary = new JSONObject(request);
         String user = (String)dictionary.getString("userID");
         String password = (String)dictionary.getString("userPassword");
-
-System.out.println("ID");
-System.out.println(user);
-System.out.println("PWD");
-System.out.println(password);
-
         LoginEngine engine = new LoginEngine(user, password);
         boolean canLogIn = engine.canLogIn();
         System.out.println("CAN LOGIN: " + canLogIn);
@@ -104,6 +98,11 @@ System.out.println(password);
                             UserRoleTitleStringConverter.stringToRole(
                                 dictionary.getString("role"));
                         return new NewUserEngine(user, password, userName, newPassword, cityOfResidence, birthYear, role).handleRequest();
+                    case PASSWORD_CHANGE:
+                        String userID = dictionary.getString("userID");
+                        String oldPassword = dictionary.getString("userPassword");
+                        String changedPassword = dictionary.getString("newPassword");
+                        return new PasswordChangeEngine(userID, oldPassword, changedPassword).handleRequest();
                 }
             }
             System.out.println("Log in denied");

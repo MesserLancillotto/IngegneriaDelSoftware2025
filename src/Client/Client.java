@@ -94,7 +94,7 @@ public final class Client
         String cityOfResidence = "Como";
         int birthYear = 2000;
         UserRoleTitle role = UserRoleTitle.VOLUNTARY;
-        String request = newUser("TMP.USER01", "tmpPasswd", userName, newPassword, cityOfResidence, birthYear, role);
+        String request = passwordChange("VOLUNTARY.Lucia.Michelini.0", "sicurissimaAlQuadrato", "sicurissimaAlCubo3");
 
         System.out.println("Request: ");
         System.out.println(request);
