@@ -99,8 +99,18 @@ public class ConfiguratorMenu implements UserMenu
 
     public void manage_disponibilty_dates ()
     {
-        DataManager data = new DataManager();
+        DataManager date = new DataManager();
+        String addAnotherDate;
 
+         do
+        {
+            StringBuilder dateToRemoveFromDatabase = new StringBuilder();
+            dateToRemoveFromDatabase.append(date.getUnaviableDay());
+            dateToRemoveFromDatabase.append(date.getReferenceMonth());
+            dateToRemoveFromDatabase.append(date.getYear());
+            //invio al server dataToRemoveFromDatabase (il formato è DDMMYYYY)
+            addAnotherDate = UserTui.getYesNoAnswer("Vuoi inserire un'altra data (SI/NO): ");
+        }while (addAnotherDate.toUpperCase().equals("SI"));
     }
 
     private void view_visit_state ()

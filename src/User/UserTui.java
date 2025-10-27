@@ -82,7 +82,7 @@ public class UserTui
                 String input = consoleIn.readLine();
                 int tmpValue = Integer.parseInt(input);
 
-                if ((input == null || input.isEmpty()) && tmpValue > lowerBound && tmpValue < upperBound)
+                if ((input == null || input.isEmpty()) && tmpValue < lowerBound && tmpValue > upperBound)
                     System.out.println ("Errore, valore inserito non valido");
                 else
                     return tmpValue;
@@ -125,9 +125,5 @@ public class UserTui
 		}
 	}
 
-    public static int getDates ()
-    {
-        return 0;
-    } 
 }
 
