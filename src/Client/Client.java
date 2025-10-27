@@ -89,12 +89,12 @@ public final class Client
     public static void main(String [] args) 
     {
 
-        String userName = "Michele Valvassori";
-        String newPassword = "sicurissima";
-        String cityOfResidence = "Bergamo";
-        int birthYear = 1997;
+        String userName = "Lucia Michelini";
+        String newPassword = "sicurissimaAlQuadrato";
+        String cityOfResidence = "Como";
+        int birthYear = 2000;
         UserRoleTitle role = UserRoleTitle.VOLUNTARY;
-        String request = newUser("VOLUNTARY.Mario.Rossi.99", "nintendo", userName, newPassword, cityOfResidence, birthYear, role);
+        String request = newUser("TMP.USER01", "tmpPasswd", userName, newPassword, cityOfResidence, birthYear, role);
 
         System.out.println("Request: ");
         System.out.println(request);

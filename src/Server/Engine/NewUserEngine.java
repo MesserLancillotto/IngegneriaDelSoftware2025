@@ -42,52 +42,52 @@ public class NewUserEngine extends Engine
                 ) {
 
                         String query = "SELECT role FROM users WHERE userID = ? AND userPassword = ?";
-                        PreparedStatement statement = connection.prepareStatement(query);
-                        statement.setString(1, userID);
-                        statement.setString(2, tmpPassword);
+                        PreparedStatement selectStatement = connection.prepareStatement(query); 
+                        selectStatement.setString(1, userID);
+                        selectStatement.setString(2, tmpPassword);
 
-                        ResultSet resultSet = statement.executeQuery();
-                        String role = "";
+                        ResultSet resultSet = selectStatement.executeQuery();
+                        String currentRole = ""; 
                         if (resultSet.next()) {
-                            role = resultSet.getString("role");    
+                            currentRole = resultSet.getString("role");
                         } else {
                             throw new Exception("Exception: user not found");
                         }
                         if
                         (
-                            UserRoleTitleStringConverter.stringToComunicationType(role)
+                            UserRoleTitleStringConverter.stringToRole(currentRole) 
                             != UserRoleTitle.TEMPORARY
                         ) {
                             throw new Exception("Exception: user not temporary");
                         } 
 
                         String deleteTmpUser = "DELETE FROM users WHERE userID = ? AND userPassword = ?";
-                        PreparedStatement statement = connection.prepareStatement(query);
-                        statement.setString(1, userID);
-                        statement.setString(2, tmpPassword);
-                        String userID = String.format("%s.%s.%d", 
-                                UserRoleTitleStringConverter.roleToString(role),
+                        PreparedStatement deleteStatement = connection.prepareStatement(deleteTmpUser); 
+                        deleteStatement.setString(1, userID);
+                        deleteStatement.setString(2, tmpPassword);
+                        deleteStatement.executeUpdate(); 
+                        
+                        String newUserID = String.format("%s.%s.%d",
+                                UserRoleTitleStringConverter.roleToString(this.role),
                                 userName.replaceAll(" ", "."),
                                 birthYear % 100);
-                                String query = "INSERT INTO users VALUES ('%s', '%s', %d, '%s', '%s', '%s')";
-                                query = String.format(
-                                    query,
-                                    userName,
-                                    cityOfResidence,  
-                                    birthYear,
-                                    userID,
-                                    newPassword,
-                                    role
-                                );
-                        Statement statement = connection.createStatement();
-                        if(statement.executeUpdate(query) == 1)
+                        String insertQuery = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)"; 
+                        PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
+                        insertStatement.setString(1, userName);
+                        insertStatement.setString(2, cityOfResidence);  
+                        insertStatement.setInt(3, birthYear); 
+                        insertStatement.setString(4, newUserID); 
+                        insertStatement.setString(5, newPassword);
+                        insertStatement.setString(6, UserRoleTitleStringConverter.roleToString(this.role)); 
+                        
+                        if(insertStatement.executeUpdate() == 1)
                         {
-                                return new NewUserReply(true, userID).toJSONString();
+                                return new NewUserReply(true, newUserID).toJSONString(); 
                         }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return new NewUserReply(true, "").toJSONString();
+                return new NewUserReply(false, "").toJSONString(); //
         }
     }
