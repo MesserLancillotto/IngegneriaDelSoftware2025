@@ -2,6 +2,7 @@ package Server;
 
 import java.io.*;
 import java.net.*;
+import java.sql.*;
 import java.util.*;
 import org.json.*;
 import java.util.concurrent.*;
@@ -9,6 +10,7 @@ import java.util.concurrent.*;
 import RequestReply.Reply.*;
 import RequestReply.Request.*;
 import RequestReply.ComunicationType.*;
+import RequestReply.UserRoleTitle.*;
 import Server.Engine.*;
 
 class ServerAPI extends Thread
@@ -34,15 +36,13 @@ class ServerAPI extends Thread
                     socket.getInputStream()
                 )
             );
-
-            System.out.println(dataInputStream);
             
             String request = dataInputStream.readUTF();
             String response = userResponse(request);
 
-            System.out.println("Richiesta: ");
+            System.out.println("Request:\n-----------");
             System.out.println(request);
-
+            System.out.println("-----------");
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataOutputStream.writeUTF(response);
             dataOutputStream.flush();
@@ -62,20 +62,29 @@ class ServerAPI extends Thread
         JSONObject dictionary = new JSONObject(request);
         String user = (String)dictionary.getString("userID");
         String password = (String)dictionary.getString("userPassword");
+
+System.out.println("ID");
+System.out.println(user);
+System.out.println("PWD");
+System.out.println(password);
+
         LoginEngine engine = new LoginEngine(user, password);
-        boolean canLogIn = false;
+        boolean canLogIn = engine.canLogIn();
+        System.out.println("CAN LOGIN: " + canLogIn);
         try
         {
-            canLogIn = engine.canLogIn();
             if(canLogIn)
             {
+                System.out.println("Can log in: " + canLogIn);
                 switch(
                     ComunicationTypeStringConverter.stringToComunicationType(
                         (String)dictionary.getString("requestType"))
                 ) {
                     case LOGIN:
+                        System.out.println("LOGIN");
                         return new LoginReply(canLogIn).toJSONString();
                     case NEW_ORGANIZATION:
+                        System.out.println("NEW_ORGANIZATION");
                         String orgName = (String)dictionary.getString("organizationName");
                         ArrayList<String> list = new ArrayList<String>();
                         for(int i = 0; 
@@ -85,17 +94,26 @@ class ServerAPI extends Thread
                             String e = dictionary.getJSONArray("territoriesOfCompetence").getString(i);
                             list.add(e);
                         }
-                        String resp = new NewOrganizationEngine(orgName, list).handleRequest(); 
-                        return resp;
+                        return new NewOrganizationEngine(orgName, list).handleRequest(); 
+                    case NEW_USER:
+                        String userName = dictionary.getString("userName");
+                        String newPassword = dictionary.getString("newPassword");
+                        String cityOfResidence = dictionary.getString("cityOfResidence");
+                        int birthYear = Integer.parseInt(dictionary.getString("birthYear"));
+                        UserRoleTitle role = 
+                            UserRoleTitleStringConverter.stringToRole(
+                                dictionary.getString("role"));
+                        return new NewUserEngine(user, password, userName, newPassword, cityOfResidence, birthYear, role).handleRequest();
                 }
             }
-            // NewOrganizationEngine orgEngine = new NewOrganizationEngine();
+            System.out.println("Log in denied");
 
         } catch(Exception e)
         {
             canLogIn = false;
+            e.printStackTrace();
         }
-        return "";
+        return new NewOrganizationReply(false, false, 0).toJSONString();
     }
 
     public synchronized void run()

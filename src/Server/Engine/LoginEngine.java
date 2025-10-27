@@ -30,15 +30,12 @@ public class LoginEngine extends Engine
             String query = "SELECT role FROM users WHERE userID='%s' AND userPassword='%s'";
             query = String.format(query, userID, userPassword);
             Statement statement = connection.createStatement();
-            if(statement.executeQuery(query).next())
-            {
-                return true;
-            }
+            return true;
         } catch(Exception e)
-        {
+        {   
+            e.printStackTrace();
             return false;
         }
-        return false;
     }
 
     public String handleRequest() throws SQLException

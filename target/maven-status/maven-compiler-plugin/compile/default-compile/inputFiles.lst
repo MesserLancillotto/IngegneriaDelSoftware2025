@@ -13,6 +13,7 @@
 /home/lancillotto/documents/IngegneriaDelSoftware2025/src/RequestReply/Request/NewUserRequest.java
 /home/lancillotto/documents/IngegneriaDelSoftware2025/src/RequestReply/Reply/PasswordChangeReply.java
 /home/lancillotto/documents/IngegneriaDelSoftware2025/src/RequestReply/Reply/GetVoluntariesForVisitReply.java
+/home/lancillotto/documents/IngegneriaDelSoftware2025/src/Server/Engine/NewUserEngine.java
 /home/lancillotto/documents/IngegneriaDelSoftware2025/src/RequestReply/Request/Request.java
 /home/lancillotto/documents/IngegneriaDelSoftware2025/src/RequestReply/UserRoleTitle/UserRoleTitle.java
 /home/lancillotto/documents/IngegneriaDelSoftware2025/src/RequestReply/Request/NewOrganizationRequest.java

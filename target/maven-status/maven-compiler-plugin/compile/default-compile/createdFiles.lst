@@ -2,15 +2,11 @@ RequestReply/Request/PasswordChangeRequest.class
 RequestReply/ComunicationType/ComunicationType.class
 Server/Engine/NewOrganizationEngine.class
 Server/Engine/LoginEngine.class
-RequestReply/Request/LoginRequest.class
 RequestReply/Request/RequestType.class
 RequestReply/Reply/NewOrganizationReply.class
-RequestReply/Reply/NewUserReply.class
 Server/ServerAPI$1.class
 Server/Engine/Engine.class
-RequestReply/Request/Request.class
 RequestReply/Request/NewUserRequest.class
-RequestReply/ComunicationType/ComunicationTypeStringConverter.class
 RequestReply/Reply/ReplyType.class
 RequestReply/Reply/LoginReply.class
 Server/ServerAPI.class
@@ -20,5 +16,3 @@ RequestReply/UserRoleTitle/UserRoleTitle.class
 Client/Client.class
 RequestReply/Request/GetVoluntariesForVisitRequest.class
 Server/Server.class
-RequestReply/Request/NewOrganizationRequest.class
-RequestReply/UserRoleTitle/UserRoleTitleStringConverter.class

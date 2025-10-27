@@ -7,3 +7,6 @@ all:
 
 exec:
 	java -cp "bin:lib/*" Server.Server
+
+h2_debug:
+	java -cp lib/h2-*.jar org.h2.tools.Console

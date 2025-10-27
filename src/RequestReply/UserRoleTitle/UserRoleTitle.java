@@ -4,6 +4,7 @@ public enum UserRoleTitle
 {
     CONFIGURATOR,
     USER,
-    VOLUNTARY
+    VOLUNTARY,
+    TEMPORARY
 }
 

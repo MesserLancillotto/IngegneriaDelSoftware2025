@@ -46,7 +46,8 @@ public class NewOrganizationEngine extends Engine
         boolean registrationSuccessful = false;
         int territoriesAdded = 0;
 
-        if(!organizationAlreadyPresent())
+        boolean alreadyPresent = organizationAlreadyPresent();
+        if(!alreadyPresent)
         {
             try
             (
@@ -56,16 +57,14 @@ public class NewOrganizationEngine extends Engine
                 for(String territory : territoriesOfCompetence)
                 {
                     String query = "INSERT INTO organizations VALUES ('%s', '%s')";
-                    
-                    System.out.println(query);
-                    
                     query = String.format(query, organizationName, territory);
+                    System.out.println(query);         
                     Statement statement = connection.createStatement();
                     territoriesAdded += statement.executeUpdate(query);
                 }
             }catch(Exception e)
             {
-                
+                e.printStackTrace();
             }
         }
         return new NewOrganizationReply(

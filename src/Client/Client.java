@@ -24,23 +24,6 @@ public final class Client
         return request.toJSONString();
     }
 
-    public static final String getVoluntaries(
-        String userID, 
-        String userPassword, 
-        String organization,
-        String eventName,
-        int eventStart,
-        int eventEnd
-    ){
-        GetVoluntariesForVisitRequest requestBody = new GetVoluntariesForVisitRequest(
-            organization, 
-            eventName, 
-            eventStart, 
-            eventEnd);
-        Request request = new Request(ComunicationType.GET_VOLUNTARIES_FOR_VISIT, userID, userPassword, requestBody);
-        return request.toJSONString();
-    }
-
     public static final String passwordChange(String userID, String userPassword, String newPassword)
     {
         PasswordChangeRequest requestBody = new PasswordChangeRequest(newPassword);
@@ -60,20 +43,21 @@ public final class Client
     }
     
     public static final String newUser(
-        String userID, 
-        String userPassword, 
+        String tmpID,
+        String tmpPassword,
         String userName,
+        String userNewPassword, 
         String cityOfResidence,
         Integer birthYear,
         UserRoleTitle role 
     ) {
         NewUserRequest requestBody = new NewUserRequest(
             userName,
-            userPassword,
+            userNewPassword,
             cityOfResidence,
             birthYear,
             role);
-        Request request = new Request(ComunicationType.NEW_USER, userID, userPassword, requestBody);
+        Request request = new Request(ComunicationType.NEW_USER, tmpID, tmpPassword, requestBody);
         return request.toJSONString();
     }
 
@@ -104,11 +88,17 @@ public final class Client
 
     public static void main(String [] args) 
     {
-        ArrayList<String> list = new ArrayList<String>();
-        list.add("Milazzo");
-        list.add("Genova");
-        String request = newOrganization("user.1234", "password", "Plutis", list);
+
+        String userName = "Michele Valvassori";
+        String newPassword = "sicurissima";
+        String cityOfResidence = "Bergamo";
+        int birthYear = 1997;
+        UserRoleTitle role = UserRoleTitle.VOLUNTARY;
+        String request = newUser("VOLUNTARY.Mario.Rossi.99", "nintendo", userName, newPassword, cityOfResidence, birthYear, role);
+
+        System.out.println("Request: ");
         System.out.println(request);
+        System.out.println("Response: ");
         System.out.println(makeServerRequest(SERVER_ADDR, PORT, request));
     }
 }
