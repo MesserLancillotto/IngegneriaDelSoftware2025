@@ -6,6 +6,7 @@ RequestReply/Request/LoginRequest.class
 RequestReply/Request/RequestType.class
 RequestReply/Reply/NewOrganizationReply.class
 RequestReply/Reply/NewUserReply.class
+Server/ServerAPI$1.class
 Server/Engine/Engine.class
 RequestReply/Request/Request.class
 RequestReply/Request/NewUserRequest.class

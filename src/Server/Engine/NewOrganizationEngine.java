@@ -4,7 +4,7 @@ import java.sql.*;
 import RequestReply.Reply.*;
 import java.util.*;
 
-class NewOrganizationEngine extends Engine
+public class NewOrganizationEngine extends Engine
 {
     private String organizationName;
     private ArrayList<String> territoriesOfCompetence;

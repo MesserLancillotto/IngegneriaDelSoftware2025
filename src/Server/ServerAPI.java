@@ -8,6 +8,7 @@ import java.util.concurrent.*;
 
 import RequestReply.Reply.*;
 import RequestReply.Request.*;
+import RequestReply.ComunicationType.*;
 import Server.Engine.*;
 
 class ServerAPI extends Thread
@@ -39,6 +40,7 @@ class ServerAPI extends Thread
             String request = dataInputStream.readUTF();
             String response = userResponse(request);
 
+            System.out.println("Richiesta: ");
             System.out.println(request);
 
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -58,14 +60,37 @@ class ServerAPI extends Thread
     private static String userResponse(String request)
     {
         JSONObject dictionary = new JSONObject(request);
-        String user = (String)dictionary.get("userID");
-        String password = (String)dictionary.get("userPassword");
+        String user = (String)dictionary.getString("userID");
+        String password = (String)dictionary.getString("userPassword");
         LoginEngine engine = new LoginEngine(user, password);
         boolean canLogIn = false;
         try
         {
             canLogIn = engine.canLogIn();
-            return new LoginReply(canLogIn).toJSONString();
+            if(canLogIn)
+            {
+                switch(
+                    ComunicationTypeStringConverter.stringToComunicationType(
+                        (String)dictionary.getString("requestType"))
+                ) {
+                    case LOGIN:
+                        return new LoginReply(canLogIn).toJSONString();
+                    case NEW_ORGANIZATION:
+                        String orgName = (String)dictionary.getString("organizationName");
+                        ArrayList<String> list = new ArrayList<String>();
+                        for(int i = 0; 
+                        i < dictionary.getJSONArray("territoriesOfCompetence").length();
+                        i++
+                        ) {
+                            String e = dictionary.getJSONArray("territoriesOfCompetence").getString(i);
+                            list.add(e);
+                        }
+                        String resp = new NewOrganizationEngine(orgName, list).handleRequest(); 
+                        return resp;
+                }
+            }
+            // NewOrganizationEngine orgEngine = new NewOrganizationEngine();
+
         } catch(Exception e)
         {
             canLogIn = false;
