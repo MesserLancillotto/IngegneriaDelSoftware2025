@@ -76,7 +76,7 @@ public class Engine
     private static void createEventsTable(
             Connection connection
                 ) throws SQLException {
-        String eventTableSqlQuery = "CREATE TABLE IF NOT EXISTS events (eventName VARCHAR(64), address VARCHAR(64), date INT)";
+        String eventTableSqlQuery = "CREATE TABLE IF NOT EXISTS events (eventName VARCHAR(64), eventDescription VARCHAR(512), address VARCHAR(64), startDate INT, endDate INT, organizationName VARCHAR(32))";
         String eventParticipantsSqlQuery = "CREATE TABLE IF NOT EXISTS eventsVoluntaries (eventName VARCHAR(64), userID VARCHAR(32))";
         
         try (Statement statement = connection.createStatement()) {

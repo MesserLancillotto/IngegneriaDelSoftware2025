@@ -5,6 +5,9 @@ all:
 	mvn compile
 	# mvn dependency:copy-dependencies -DoutputDirectory=lib
 
+anew:
+	mvn clean compile -U;
+
 exec:
 	java -cp "bin:lib/*" Server.Server
 

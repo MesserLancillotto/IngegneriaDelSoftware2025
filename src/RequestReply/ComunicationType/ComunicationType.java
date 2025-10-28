@@ -3,9 +3,10 @@ package RequestReply.ComunicationType;
 public enum ComunicationType
 {
     NEW_USER,
+    NEW_ORGANIZATION,
+    NEW_EVENT,
     LOGIN,
     PASSWORD_CHANGE,
-    NEW_ORGANIZATION,
     GET_VOLUNTARIES_FOR_VISIT
 }
 

@@ -103,6 +103,21 @@ class ServerAPI extends Thread
                         String oldPassword = dictionary.getString("userPassword");
                         String changedPassword = dictionary.getString("newPassword");
                         return new PasswordChangeEngine(userID, oldPassword, changedPassword).handleRequest();
+                    case NEW_EVENT:
+                        String eventName = dictionary.getString("eventName");
+                        String description = dictionary.getString("description");
+                        String address = dictionary.getString("address");
+                        int startDate = dictionary.getInt("startDate");
+                        int endDate = dictionary.getInt("endDate");
+                        String organizationName = dictionary.getString("organizationName");
+                        return new NewEventEngine(
+                            eventName,
+                            description,
+                            address,
+                            startDate,
+                            endDate,
+                            organizationName                           
+                        ).handleRequest();
                 }
             }
             System.out.println("Log in denied");
