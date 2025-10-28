@@ -16,7 +16,7 @@ public class Place
 		Set <String> typeVisitList = new HashSet <>();
 		for (Map.Entry <Visit, Voluntary> tmpMap : visitAssociation.entrySet())
 		{
-			typeVisitList.add(tmpMap.getKey().visitType);
+			typeVisitList.add(tmpMap.getKey().getVisitType());
 		}
 		return typeVisitList;
 	}

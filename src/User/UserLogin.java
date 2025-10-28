@@ -5,7 +5,7 @@ import Client.Client;
 public class UserLogin 
 {   
     private static HashMap <String, UserCreator> userFactory = new HashMap <>();
-	private static HashMap <String, UserFirtsAccessCreator> userFirstAccessFactory = new HashMap <>();
+	private static HashMap <String, UserFirstAccessCreator> userFirstAccessFactory = new HashMap <>();
 
 	private static final String TEMPORARY_PASSWORD = "password";
 	private static final String TEMPORARY_CONFIGURATOR_ID = "configurator";
@@ -46,7 +46,6 @@ public class UserLogin
             userFactory.get(tmpUsername.substring(0,1)).create (tmpUsername, cityOfResidence, birthYear, tmpPassword);
 		}
 
-		//qui andrebbe l'apertura di un thread per gestire più accessi 
 	}    
 
 }

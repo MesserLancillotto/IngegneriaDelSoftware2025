@@ -2,19 +2,22 @@ import java.util.*;
 
 public class Visit 
 {
-    
-	ArrayList <Voluntary> voluntaries;
-	int date;
-	int visitorLowerBound;
-	int visitorUpperBound;
-	String place;
-	String visitType;
-	enum stateOfVisit {PROPOSTA, COMPLETA, CONFERMATA, CANCELLATA, EFFETTUATA};	
+	private String date;
+	private int visitorLowerBound;
+	private int visitorUpperBound;
+	private String place;
+	private String visitType;
+	private enum stateOfVisit {PROPOSTA, COMPLETA, CONFERMATA, CANCELLATA, EFFETTUATA};	
 	
-	public Visit (int date, String place, String visitType)
+	public Visit (String date, String place, String visitType)
 	{
 		this.date = date;
         this.place = place;
         this.visitType = visitType;
+	}
+
+	public String getVisitType ()
+	{
+		return visitType;
 	}
 }
