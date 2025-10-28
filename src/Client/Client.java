@@ -8,6 +8,7 @@ import RequestReply.Request.*;
 import RequestReply.ComunicationType.*;
 import RequestReply.UserRoleTitle.*;
 
+
 public final class Client 
 {
     private static ServerSocket serverSocket = null;
@@ -61,6 +62,26 @@ public final class Client
         return request.toJSONString();
     }
 
+    public static final String newEvent(
+        String userID, 
+        String userPassword,
+        String eventName,
+        String description,
+        String address,
+        int startDate,
+        int endDate,
+        String organizationName
+    ) {
+        NewEventRequest requestBody = new NewEventRequest(
+            eventName,
+            description,
+            address,
+            startDate,
+            endDate,
+            organizationName);
+        return new Request(ComunicationType.NEW_EVENT, userID, userPassword, requestBody).toJSONString();
+    }
+
     public static final String makeServerRequest(String server_addr, int port, String request) 
     {
         String response = "";
@@ -89,12 +110,16 @@ public final class Client
     public static void main(String [] args) 
     {
 
-        String userName = "Lucia Michelini";
-        String newPassword = "sicurissimaAlQuadrato";
-        String cityOfResidence = "Como";
-        int birthYear = 2000;
-        UserRoleTitle role = UserRoleTitle.VOLUNTARY;
-        String request = passwordChange("VOLUNTARY.Lucia.Michelini.0", "sicurissimaAlQuadrato", "sicurissimaAlCubo3");
+
+        String request = newEvent(
+            "VOLUNTARY.Lucia.Michelini.0", 
+            "sicurissimaAlCubo3",
+            "Futurismo in castello",
+            "Mostra futurista a Brescia",
+            "Castello di Brescia",
+            101010101,
+            111100010,
+            "Pippis");
 
         System.out.println("Request: ");
         System.out.println(request);
