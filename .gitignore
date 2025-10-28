@@ -4,4 +4,6 @@ databases
 systemTest
 .src
 .gradle
+target/*
 target
+target/**/*
