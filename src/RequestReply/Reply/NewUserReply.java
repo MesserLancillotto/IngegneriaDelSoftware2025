@@ -18,8 +18,9 @@ public class NewUserReply implements ReplyType
     {
         String template = """
         {
-        "loginSuccessful":"%s"
-        "userID":"%s"}
+        \t"loginSuccessful":"%s"
+        \t"userID":"%s"
+        }
         """;
         return String.format(template, accessSuccesful, userID);
     }

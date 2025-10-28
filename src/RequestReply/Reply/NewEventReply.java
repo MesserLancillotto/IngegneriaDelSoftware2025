@@ -19,7 +19,8 @@ public class NewEventReply implements ReplyType
         String template = """
         {
         "loginSuccessful":"%s"
-        "registrationSuccesful":"%s"}
+        "registrationSuccesful":"%s"
+        }
         """;
         return String.format(template, accessSuccesful, registrationSuccesful);
     }

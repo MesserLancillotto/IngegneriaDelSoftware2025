@@ -25,7 +25,7 @@ public class GetVoluntariesForVisitReply implements ReplyType
             .append(accessSuccesful)
             .append("\",\n\"event\":\"")
             .append(event)
-            .append("\"\n[");
+            .append("\"\n\"userIDs\":[");
         for(String voluntary : voluntaries)
         {
             reply.append("\"").append(voluntary).append("\",\n");

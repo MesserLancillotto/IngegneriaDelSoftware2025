@@ -18,8 +18,9 @@ public class PasswordChangeReply implements ReplyType
     {
         String template = """
         {
-        "loginSuccessful":"%s"
-        "passwordChangeSuccessful":"%s"}
+        \t"loginSuccessful":"%s"
+        \t"passwordChangeSuccessful":"%s"
+        }
         """;
         return String.format(
             template, 

@@ -34,7 +34,7 @@ public final class Client
 
     public static final String newOrganization(
         String userID, 
-        String userPassword, 
+        String userPassword,
         String organizationName, 
         ArrayList<String> territoriesOfCompetence
     ) {
@@ -109,8 +109,6 @@ public final class Client
 
     public static void main(String [] args) 
     {
-
-
         String request = newEvent(
             "VOLUNTARY.Lucia.Michelini.0", 
             "sicurissimaAlCubo3",
