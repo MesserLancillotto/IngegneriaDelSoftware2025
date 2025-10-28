@@ -118,6 +118,8 @@ class ServerAPI extends Thread
                             endDate,
                             organizationName                           
                         ).handleRequest();
+                    case GET_VOLUNTARIES_FOR_VISIT:
+                        
                 }
             }
             System.out.println("Log in denied");
