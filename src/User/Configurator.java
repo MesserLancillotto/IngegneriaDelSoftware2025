@@ -1,21 +1,33 @@
+package User;
 import java.util.*;
+import Client.Client;
 
 public class Configurator extends User
 {	
     // costruttore per primo accesso del configuratore
-    public Configurator ()
+    public Configurator (String tmpUserName, String tmpPassword)
     {
-        this.roleTitle = "C_";
-        this.userName = set_new_username(roleTitle);
-        this.password = set_new_password();
+        StringBuilder userId = new StringBuilder();
+        userId.append(UserTui.getStringNoTrim("Inserisci il nome: "));
+        userId.append (" ");
+        userId.append(UserTui.getStringNoTrim("Inserisci il cognome: "));
+        set_new_password();
         this.cityOfResidence = UserTui.getString("Inserisci la città di residenza");
 		this.birthYear = UserTui.getInteger("Inserisci l'anno di nascita", 1900, 2025);
+        this.roleTitle = "C_";
         
-        //client.makeServerRequest();
-        //invio al server i dati di questo account
-
-		set_basic_app_configuration (); // configurazione base dell'app da fare al primo accesso del configuratore
-		new ConfiguratorMenu (userName, password);
+        String newUserRequest = Client.newUser(tmpUserName, tmpPassword, userId.toString(), this.password, this.cityOfResidence, this.birthYear, this.roleTitle);
+        String newUserAnswer = Client.makeServerRequest(Client.getServerAddr(), Client.getPort(), newUserRequest);
+        if (JSONObject.extractBoolean(newUserAnswer, "loginSuccessful"))
+        {
+            userName = JSONObject.extractUserID(newUserAnswer);
+            set_basic_app_configuration (); // configurazione base dell'app da fare al primo accesso del configuratore
+		    new ConfiguratorMenu (userName, password);
+        }
+        else
+        {
+            System.out.println ("Errore nella creazione utente!");
+        }
     }
  
     //secondo costruttore, per quando i dati vengono recuperati dal server
@@ -48,8 +60,8 @@ public class Configurator extends User
         String tmpVisitType;
         String tmpVoluntaryName;
 
-        String addAnotherPlaceAnswer;
-        String addAnotherTypeVisitAnswer; 
+        boolean addAnotherPlaceAnswer;
+        boolean addAnotherTypeVisitAnswer; 
         //attributi usati come discriminante del ciclo
 
         do
@@ -66,12 +78,12 @@ public class Configurator extends User
                 //client.makeServerRequest(areaOfInterest, maxPeopleForSubscription, areaOfInterest)  
                 //invio al server il nuovo Place da aggiungere al database
 
-                addAnotherTypeVisitAnswer = UserTui.getYesNoAnswer ("Vuoi inserire un'altro tipo di visita associato a questo luogo(SI/NO)");
-            } while (addAnotherTypeVisitAnswer.toUpperCase().equals("SI")); // fine ciclo tipo visita
+                addAnotherTypeVisitAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro tipo di visita associato a questo luogo");
+            } while (addAnotherTypeVisitAnswer); // fine ciclo tipo visita
             
             System.out.printf ("Vuoi inserire un'altro luogo: ");
             addAnotherPlaceAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro luogo");
-        } while (addAnotherPlaceAnswer.toUpperCase().equals ("SI")); // fine ciclo luogo
+        } while (addAnotherPlaceAnswer); // fine ciclo luogo
 	}
 
   

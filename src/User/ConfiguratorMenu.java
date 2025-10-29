@@ -1,6 +1,8 @@
+package User;
 import java.util.*;
 import java.time.*;
 import java.time.format.*;
+import Client.Client;
 
 public class ConfiguratorMenu implements UserMenu
 {
@@ -37,14 +39,14 @@ public class ConfiguratorMenu implements UserMenu
 
     public void manage_options ()
 	{
-        String keepUsingConfiguratorMenu;
+        boolean keepUsingConfiguratorMenu;
         do
         {
             visualize_options();
 
             System.out.printf ("\nVuoi fare altro: ");
             keepUsingConfiguratorMenu = UserTui.getYesNoAnswer("\nVuoi fare altro");
-        }while (keepUsingConfiguratorMenu.toUpperCase().toUpperCase().equals ("SI"));
+        }while (keepUsingConfiguratorMenu);
 	}
 
     //costruttore
@@ -61,6 +63,8 @@ public class ConfiguratorMenu implements UserMenu
 	{
         ArrayList <Place> placeList = new ArrayList <>();
         //chiamata al server per caricare tutti i posti disponibili
+        String viewVisitablePlacesRequest = Client.getVisitablePlaces (configuratorUserName, configuratorPassword, "CITTA", "");
+        String viewVisitablePlacesResponse = Client.makeServerRequest(Client.getServerAddr(), Client.getPort(), viewVisitablePlacesRequest);
 
 		Set <String> distinctPlaces = new HashSet <> ();
 		for (Place p : placeList)
@@ -99,18 +103,19 @@ public class ConfiguratorMenu implements UserMenu
 
     public void manage_disponibilty_dates ()
     {
+        boolean addAnotherDate;
         DataManager date = new DataManager();
-        String addAnotherDate;
-
-         do
+        do
         {
-            StringBuilder dateToRemoveFromDatabase = new StringBuilder();
-            dateToRemoveFromDatabase.append(date.getUnaviableDay());
-            dateToRemoveFromDatabase.append(date.getReferenceMonth());
-            dateToRemoveFromDatabase.append(date.getYear());
-            //invio al server dataToRemoveFromDatabase (il formato è DDMMYYYY)
-            addAnotherDate = UserTui.getYesNoAnswer("Vuoi inserire un'altra data (SI/NO): ");
-        }while (addAnotherDate.toUpperCase().equals("SI"));
+            int unaviableDay = date.getUnaviableDay();
+            if (unaviableDay > 0)
+            {
+                int unixDate = (int)date.getUnixDate(unaviableDay);
+                String setClosedDayRequest = Client.setClosedDays (configuratorUserName, configuratorPassword, 
+                                                                    unixDate, date.setToEndOfDay(unixDate), "ORGANIZZAZIONE");
+            }
+            addAnotherDate = UserTui.getYesNoAnswer("Vuoi inserire un'altra data");
+        }while (addAnotherDate);
     }
 
     private void view_visit_state ()

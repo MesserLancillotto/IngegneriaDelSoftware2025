@@ -1,10 +1,65 @@
-
+package User;
 import java.io.*;
 import java.util.*;
 
 public class UserTui 
 {
     static BufferedReader consoleIn = new BufferedReader (new InputStreamReader (System.in));
+
+    public static String getPasswordFromUser (String thingToSayToUser)
+    {
+        while (true)
+        {
+            try
+            {
+                System.out.println ("La password necessita di almeno una maiuscola e di un numero");
+                System.out.printf ("\n%s: ", thingToSayToUser);
+                String value = consoleIn.readLine();
+                boolean passwIsSolid = passwordIsSolid(value);
+                
+                if (value != null && !value.isEmpty() && passwIsSolid)
+                    return value.trim();
+
+                System.out.println ("Valore inserito non valido, riprova!\n");
+            }
+            catch (IOException errorDuringDigitation)
+            {
+                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("Riprova");
+            }
+        }
+    }
+
+    private static boolean passwordIsSolid(String input) 
+    {
+        if (input == null || input.isEmpty()) 
+        {
+            return false;
+        }
+        
+        boolean haMaiuscola = false;
+        boolean haNumero = false;
+        
+        for (char c : input.toCharArray()) 
+        {
+            if (Character.isUpperCase(c)) 
+            {
+                haMaiuscola = true;
+            }
+            if (Character.isDigit(c)) 
+            {
+                haNumero = true;
+            }
+            
+            // Ottimizzazione: esci appena trovi entrambi
+            if (haMaiuscola && haNumero) 
+            {
+                return true;
+            }
+        }
+        
+        return haMaiuscola && haNumero;
+    }
 
     public static String getString (String thingToSayToUser)
     {
@@ -17,7 +72,7 @@ public class UserTui
                 
                 if (value != null && !value.isEmpty())
                     return value.trim();
-
+                
                 System.out.println ("Valore inserito non valido, riprova!\n");
             }
             catch (IOException errorDuringDigitation)
@@ -61,7 +116,33 @@ public class UserTui
                 if (input == null || input.isEmpty())
                     System.out.println ("Errore, valore inserito non valido");
                 else
+                {
+                    String confirmInput = "Hai inserito "+input+" confermi";
+                    if (getYesNoAnswer(confirmInput))
+                        return Integer.parseInt(input);
+                }
+             } 
+            catch (IOException errorDuringDigitation)
+            {
+                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("Riprova");
+            }
+        }
+    }
+
+    public static int getIntegerNoCheck (String thingToSayToUser)
+    {
+        while (true)
+        {
+            try
+            {
+                System.out.printf ("\n%s: ", thingToSayToUser);
+                String input = consoleIn.readLine();
+                if (input == null || input.isEmpty())
+                    System.out.println ("Errore, valore inserito non valido");
+                else
                     return Integer.parseInt(input);
+                
              } 
             catch (IOException errorDuringDigitation)
             {
@@ -95,17 +176,23 @@ public class UserTui
         }
     }
 
-    public static String getYesNoAnswer (String thingToSayToUser)
+    public static boolean getYesNoAnswer (String thingToSayToUser)
     {
         while (true)
         {
             try
             {
-                System.out.printf ("\n%s ", thingToSayToUser);
+                System.out.printf ("\n%s(SI/NO): ", thingToSayToUser);
                 String answer = consoleIn.readLine();
 
-                if (answer.toLowerCase().equals("si") || answer.toLowerCase().equals("no"))
-                    return answer;
+                if (answer.toLowerCase().equals("si"))
+                {
+                    return true;
+                }
+                if (answer.toLowerCase().equals("no"))
+                {
+                    return false;
+                }
                 System.out.println ("\nErrore, valore inserito non valido");
             }
             catch (IOException errorDuringDigitation)

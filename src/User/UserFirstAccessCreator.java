@@ -1,4 +1,5 @@
+package User;
 public interface UserFirstAccessCreator 
 {
-     User create ();
+     User create (String tmpUsernName, String tmpPassword);
 }

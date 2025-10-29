@@ -1,3 +1,5 @@
+package User;
+import Client.Client;
 public abstract class User 
 {
     String userName;
@@ -7,34 +9,21 @@ public abstract class User
 	String userID;
     String password;
 
-      // metodo per creare nuovo username
-	public static String set_new_username (String tmpRoleTitle)
-	{
-		StringBuilder tmpUsername = new StringBuilder();
-        String userInput;
-        Boolean usernameIsNotAlreadyTaken = false;
-        
-        tmpUsername.append(tmpRoleTitle);
-		
-		do 
-		{
-			userInput = tmpRoleTitle+UserTui.getString ("Inserisci il nuovo username");	//usare StringBuilder
-			//lo user decide 
-		}while (usernameIsNotAlreadyTaken);
-		//chiamata al server per controllare che non esista già
-
-        tmpUsername.append(userInput);
-
-		//client.makeServerRequest();
-		//mando al server il nuovo username da salvare
-		return tmpUsername.toString();
-	}
 	// metodo per creare nuova password
-	public static String set_new_password ()
+	public void set_new_password ()
 	{
-		String tmpPassword = UserTui.getString ("Inserisci la nuova password");
-		//client.makeServerRequest();
-		//mando al server la nuova password da salvare
-		return tmpPassword;
+		String tmpPassword = UserTui.getPasswordFromUser ("Inserisci la nuova password");
+		String requestChangePassword = Client.passwordChange(userName, password, tmpPassword);
+		String replyChangePassword = Client.makeServerRequest(Client.getServerAddr(), Client.getPort(), requestChangePassword);
+		boolean changePasswordSuccessfull = JSONObject.extractBoolean(replyChangePassword, "passwordChangeSuccessful");
+
+		if (changePasswordSuccessfull)
+		{
+			System.out.println ("La password è stata cambiata!");
+			this.password = tmpPassword;
+		}
+		else
+			System.out.println ("Errore, non è stato possibile cambiare la password");
+		
 	}
 }
