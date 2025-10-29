@@ -90,6 +90,12 @@ public final class Client
         return new Request(ComunicationType.NEW_EVENT, userID, userPassword, requestBody).toJSONString();
     }
 
+    public static final String getVisitablePlaces(String city, String address)
+    {
+        // città è obbligatorio, address è facoltativo, se lasciato vuoto usa ""
+        return new GetVisitablePlacesRequest(city, address).toJSONString();
+    }
+
     public static final String makeServerRequest(String server_addr, int port, String request) 
     {
         String response = "";
