@@ -90,10 +90,19 @@ public final class Client
         return new Request(ComunicationType.NEW_EVENT, userID, userPassword, requestBody).toJSONString();
     }
 
-    public static final String getVisitablePlaces(String city, String address)
+    public static final String getVisitablePlaces(String userID, String userPassword, String city, String address)
     {
         // città è obbligatorio, address è facoltativo, se lasciato vuoto usa ""
-        return new GetVisitablePlacesRequest(city, address).toJSONString();
+        GetVisitablePlacesRequest body = new GetVisitablePlacesRequest(city, address);
+        Request request = new Request(ComunicationType.GET_VISITABLE_PLACES, userID, userPassword, body);
+        return request.toJSONString();
+    }
+
+    public static final String setClosedDays(String userID, String userPassword, int start, int end, String organization)
+    {
+        SetClosedDaysRequest requestBody = new SetClosedDaysRequest(start, end, organization);
+        Request request = new Request(ComunicationType.SET_CLOSED_DAYS, userID, userPassword, requestBody);
+        return request.toJSONString();
     }
 
     public static final String makeServerRequest(String server_addr, int port, String request) 

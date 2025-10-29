@@ -76,7 +76,7 @@ public class Engine
     private static void createClosedDaysTable(
             Connection connection
                 ) throws SQLException {
-        String sql = "CREATE TABLE IF NOT EXISTS closedDays (startDay INT, endDay INT)";
+        String sql = "CREATE TABLE IF NOT EXISTS closedDays (startDay INT, endDay INT, organizationName VARCHAR(32))";
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
         } catch (SQLException e) {

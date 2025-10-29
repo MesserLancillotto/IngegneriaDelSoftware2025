@@ -128,7 +128,17 @@ class ServerAPI extends Thread
                             maximumUsers,
                             visitType                       
                         ).handleRequest();
-                    case GET_VOLUNTARIES_FOR_VISIT:
+                    case SET_CLOSED_DAYS:
+                        int closedStartDate = dictionary.getInt("startDate"); 
+                        int closedEndDate = dictionary.getInt("endDate");
+                        String organization = dictionary.getString("organization");
+                        return new SetClosedDaysEngine( 
+                            user, 
+                            password, 
+                            closedStartDate,
+                            closedEndDate,
+                            organization
+                        ).handleRequest();
                 }
             }
             System.out.println("Log in denied");
