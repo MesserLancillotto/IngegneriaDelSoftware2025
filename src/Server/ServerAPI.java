@@ -81,9 +81,10 @@ class ServerAPI extends Thread
                         System.out.println("NEW_ORGANIZATION");
                         String orgName = (String)dictionary.getString("organizationName");
                         ArrayList<String> list = new ArrayList<String>();
-                        for(int i = 0; 
-                        i < dictionary.getJSONArray("territoriesOfCompetence").length();
-                        i++
+                        for(
+                            int i = 0; 
+                            i < dictionary.getJSONArray("territoriesOfCompetence").length();
+                            i++
                         ) {
                             String e = dictionary.getJSONArray("territoriesOfCompetence").getString(i);
                             list.add(e);
@@ -106,20 +107,27 @@ class ServerAPI extends Thread
                     case NEW_EVENT:
                         String eventName = dictionary.getString("eventName");
                         String description = dictionary.getString("description");
+                        String city = dictionary.getString("city");
                         String address = dictionary.getString("address");
                         int startDate = dictionary.getInt("startDate");
                         int endDate = dictionary.getInt("endDate");
                         String organizationName = dictionary.getString("organizationName");
+                        int minimumUsers = dictionary.getInt("minimumUsers");
+                        int maximumUsers = dictionary.getInt("maximumUsers");
+                        String visitType = dictionary.getString("visitType");
                         return new NewEventEngine(
                             eventName,
                             description,
+                            city,
                             address,
                             startDate,
                             endDate,
-                            organizationName                           
+                            organizationName,
+                            minimumUsers,
+                            maximumUsers,
+                            visitType                       
                         ).handleRequest();
                     case GET_VOLUNTARIES_FOR_VISIT:
-                        
                 }
             }
             System.out.println("Log in denied");

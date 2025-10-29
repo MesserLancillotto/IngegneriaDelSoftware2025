@@ -63,22 +63,30 @@ public final class Client
     }
 
     public static final String newEvent(
-        String userID, 
+        String userID,
         String userPassword,
         String eventName,
         String description,
+        String city,
         String address,
         int startDate,
         int endDate,
-        String organizationName
+        String organizationName,
+        int minimumUsers,
+        int maximumUsers,
+        String visitType
     ) {
         NewEventRequest requestBody = new NewEventRequest(
             eventName,
             description,
+            city,
             address,
             startDate,
             endDate,
-            organizationName);
+            organizationName,
+            minimumUsers,
+            maximumUsers,
+            visitType);
         return new Request(ComunicationType.NEW_EVENT, userID, userPassword, requestBody).toJSONString();
     }
 
@@ -105,23 +113,5 @@ public final class Client
             System.out.println("An error occurred: " + e);
         }
         return response;
-    }
-
-    public static void main(String [] args) 
-    {
-        String request = newEvent(
-            "VOLUNTARY.Lucia.Michelini.0", 
-            "sicurissimaAlCubo3",
-            "Futurismo in castello",
-            "Mostra futurista a Brescia",
-            "Castello di Brescia",
-            101010101,
-            111100010,
-            "Pippis");
-
-        System.out.println("Request: ");
-        System.out.println(request);
-        System.out.println("Response: ");
-        System.out.println(makeServerRequest(SERVER_ADDR, PORT, request));
     }
 }
