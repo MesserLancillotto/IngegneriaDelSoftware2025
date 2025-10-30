@@ -4,6 +4,8 @@ import java.util.*;
 
 public class NewEventRequest implements RequestType
 {
+    private String userID;
+    private String password;
     private String eventName;
     private String description;
     private String city;
@@ -16,6 +18,8 @@ public class NewEventRequest implements RequestType
     private String visitType;
 
     public NewEventRequest(
+        String userID,
+        String password,
         String eventName,
         String description,
         String city,
@@ -27,6 +31,8 @@ public class NewEventRequest implements RequestType
         int maximumUsers,
         String visitType
     ) {
+        this.userID = userID;;
+        this.password = password;;
         this.eventName = eventName;
         this.description = description;
         this.city = city;

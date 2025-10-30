@@ -8,7 +8,8 @@ import RequestReply.ComunicationType.*;
 
 public class NewEventEngine extends Engine
 {
-
+    private String userID;
+    private String userPassword;
     private String eventName;
     private String description;
     private String city;
@@ -21,6 +22,8 @@ public class NewEventEngine extends Engine
     private String visitType;
 
     public NewEventEngine(
+        String userID,
+        String userPassword,
         String eventName,
         String description,
         String city,
@@ -32,6 +35,8 @@ public class NewEventEngine extends Engine
         int maximumUsers,
         String visitType
     ) {
+        this.userID = userID;
+        this.userPassword = userPassword;
         this.eventName = eventName;
         this.description = description;
         this.city = city;
@@ -50,6 +55,15 @@ public class NewEventEngine extends Engine
         (
             Connection connection = connectDB(dbUrl, "sa", "");
         ) {
+            String roleCheckQuery = "SELECT role, organization FROM users WHERE userName = ? AND userPassword = ?";
+            PreparedStatement roleStatement = connection.prepareStatement(roleCheckQuery);
+            roleStatement.setString(1, userID);
+            roleStatement.setString(2, userPassword);
+            ResultSet result = roleStatement.executeQuery();
+            if(!result.next() || result.getString("role") != "CONFIGURATOR" || result.getString("organization") != this.organization)
+            {
+                return new NewEventReply(false, false).toJSONString(); 
+            }
             String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, eventName);

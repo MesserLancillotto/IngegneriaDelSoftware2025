@@ -24,7 +24,6 @@ class GetVisitablePlacesEngine extends Engine
         (
             Connection connection = connectDB(dbUrl, "sa", "");
         ) {
-
             String query = "SELECT * FROM events WHERE (city = ? OR ? IS NULL) AND (address LIKE '%' || ? || '%' OR ? IS NULL)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, city);
