@@ -1,11 +1,11 @@
 package RequestReply.Request;
 
-public class PasswordChangeRequest implements RequestType 
+public class EditPasswordRequest implements RequestType 
 {
 
     private String newPassword;
 
-    public PasswordChangeRequest
+    public EditPasswordRequest
     (
         String newPassword
     ) {

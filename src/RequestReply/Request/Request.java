@@ -28,4 +28,3 @@ public class Request
         return String.format(template, requestType.name(), userID, userPassword, requestBody);
     }
 }
-

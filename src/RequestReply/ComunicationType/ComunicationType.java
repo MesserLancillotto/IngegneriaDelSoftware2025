@@ -2,14 +2,16 @@ package RequestReply.ComunicationType;
 
 public enum ComunicationType
 {
-    NEW_USER,
-    NEW_ORGANIZATION,
-    NEW_EVENT,
-    LOGIN,
-    PASSWORD_CHANGE,
-    GET_VOLUNTARIES_FOR_VISIT,
-    GET_VISITABLE_PLACES,
-    SET_CLOSED_DAYS,
-    MODIFY_PARTICIPANTS_NUMBERs
+    // request reply engine
+    SET_NEW_USER, // x x 
+    SET_NEW_ORGANIZATION, // x x
+    SET_NEW_EVENT, // x x
+    SET_CLOSED_DAYS, // x x
+    EDIT_EVENT, // 
+    EDIT_PASSWORD, // x x
+    GET_USER_DATA, // x x 
+    GET_VOLUNTARIES_FOR_VISIT, // x x
+    GET_VISITABLE_PLACES, // x x 
+    GET_EVENT // x x 
 }
 

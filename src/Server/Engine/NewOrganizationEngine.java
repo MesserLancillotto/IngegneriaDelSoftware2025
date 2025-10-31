@@ -35,6 +35,7 @@ public class NewOrganizationEngine extends Engine
             Connection connection = connectDB(dbUrl, "sa", "");
         )
         {
+            // AGGIUNGI
             String query = "SELECT * FROM organizations WHERE organizationName='%s'";
             query = String.format(query, organizationName);
             Statement statement = connection.createStatement();

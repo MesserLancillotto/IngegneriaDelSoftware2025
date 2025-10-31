@@ -4,8 +4,6 @@ import java.util.*;
 
 public class NewEventRequest implements RequestType
 {
-    private String userID;
-    private String password;
     private String eventName;
     private String description;
     private String city;
@@ -15,11 +13,10 @@ public class NewEventRequest implements RequestType
     private String organizationName;
     private int minimumUsers; 
     private int maximumUsers;
+    private int maximumFriends;
     private String visitType;
 
     public NewEventRequest(
-        String userID,
-        String password,
         String eventName,
         String description,
         String city,
@@ -29,10 +26,9 @@ public class NewEventRequest implements RequestType
         String organizationName,
         int minimumUsers,
         int maximumUsers,
+        int maximumFriends;
         String visitType
     ) {
-        this.userID = userID;;
-        this.password = password;;
         this.eventName = eventName;
         this.description = description;
         this.city = city;
@@ -42,6 +38,7 @@ public class NewEventRequest implements RequestType
         this.organizationName = organizationName;
         this.minimumUsers = minimumUsers;
         this.maximumUsers = maximumUsers;
+        this.maximumFriends = maximumFriends;
         this.visitType = visitType;
     }
 
@@ -57,6 +54,7 @@ public class NewEventRequest implements RequestType
             "organizationName":"%s",
             "minimumUsers":%d,
             "maximumUsers":%d,
+            "maximumFriends":%d,
             "visitType":"%s"
         """;
         template = String.format(
@@ -70,6 +68,7 @@ public class NewEventRequest implements RequestType
             organizationName,
             minimumUsers,
             maximumUsers,
+            maximumFriends,
             visitType
         );
         return template;

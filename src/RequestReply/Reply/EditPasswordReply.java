@@ -1,11 +1,11 @@
 package RequestReply.Reply;
 
-public class PasswordChangeReply implements ReplyType 
+public class EditPasswordReply implements ReplyType 
 {
     private boolean accessSuccesful;
     private boolean passwordChangeSuccessful;
 
-    public PasswordChangeReply
+    public EditPasswordReply
     (
         boolean accessSuccesful,
         boolean passwordChangeSuccessful

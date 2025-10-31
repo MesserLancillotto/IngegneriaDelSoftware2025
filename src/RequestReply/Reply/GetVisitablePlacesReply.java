@@ -16,6 +16,7 @@ public class GetVisitablePlacesReply implements ReplyType
         String organizationName,
         int minimumUsers,
         int maximumUsers,
+        int maximumFriends,
         String visitType,
         boolean confirmed
     ) {
