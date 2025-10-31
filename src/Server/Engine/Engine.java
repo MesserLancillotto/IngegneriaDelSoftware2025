@@ -36,9 +36,11 @@ public class Engine
                 CREATE TABLE IF NOT EXISTS closedDays (startDay INT, endDay INT, organizationName VARCHAR(32));
             """;
             statement.execute(query);
+            return true; 
         } catch (SQLException e) {
             throw e;
         }
+        return false;
     }
     private static boolean debug_data()
     {
@@ -63,9 +65,11 @@ public class Engine
                 INSERT INTO closedDays VALUES (1766534340, 1767743940, 'San Genesio');
             """;
             statement.execute(query);
+            return true; 
         } catch (SQLException e) {
             throw e;
         }
+        return false;
     }
 
 
