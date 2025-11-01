@@ -6,8 +6,6 @@ import java.util.*;
 
 public class NewOrganizationEngine extends Engine
 {
-    private String userID;
-    private String userPassword;
     private String organizationName;
     private ArrayList<String> territoriesOfCompetence;
     
@@ -28,68 +26,51 @@ public class NewOrganizationEngine extends Engine
         this.territoriesAdded = 0;
     }
 
-    public boolean organizationAlreadyPresent()
+    public boolean handleRequest()
     {
        try
         (
             Connection connection = connectDB(dbUrl, "sa", "");
         )
         {
-            // AGGIUNGI
-            String query = "SELECT * FROM organizations WHERE organizationName='%s'";
-            query = String.format(query, organizationName);
-            Statement statement = connection.createStatement();
-            if(statement.executeQuery(query).next())
-            {
-                return true;
+            String checkPermitsQuery = "SELECT role FROM users WHERE userID = ? AND userPassword = ?";
+            PreparedStatement checkPermitsStatement = connection.prepareStatement(checkPermitsQuery);
+            checkPermitsStatement.setString(1, userID);
+            checkPermitsStatement.setString(2, userPassword);
+            ResultSet checkPermitsResult = checkPermitsStatement.executeQuery();
+            if(
+                !checkPermitsResult.next() 
+                || UserRoleTitleStringConverter.stringToComunicationType(checkPermitsResult.getString("role")) != UserRoleTitle.CONFIGURATOR
+            ) {
+                return new NewOrganizationReply(false, false, 0).toJSONString();
             }
-        } catch(Exception e)
-        {
-            return false;
-        }
-        return false;
-    }
 
-    public String handleRequest()
-    {
-        try
-        (
-            Connection connection = connectDB(dbUrl, "sa", "");
-        )
-        {
-            String roleCheckQuery = "SELECT role FROM users WHERE userName = ? AND userPassword = ?";
-            PreparedStatement roleStatement = connection.prepareStatement(roleCheckQuery);
-            roleStatement.setString(1, userID);
-            roleStatement.setString(2, userPassword);
-            ResultSet result = roleStatement.executeQuery();
-            if(!result.next() || result.getString("role") != "CONFIGURATOR")
-            {
-                return new NewOrganizationReply(false, false, 0).toJSONString(); 
-            }
-            String organizationAlreadyPresentQuery = "SELECT DISTINCT organizationName FROM organizations WHERE organizationName = ?";
-            PreparedStatement organizationStatement = connection.prepareStatement(organizationAlreadyPresentQuery);
-            organizationStatement.setString(1, organizationName);
-            ResultSet resultOrganizations = organizationStatement.executeQuery();
-            if(resultOrganizations.next())
+            String checkAlreadyPresentOrganizationQuery = "SELECT DISTINCT organizationName FROM organizations WHERE organizationName = ?";
+            PreparedStatement checkAlreadyPresentOrganizationStatement = connection.prepareStatement(checkAlreadyPresentOrganizationQuery);
+            checkAlreadyPresentOrganizationStatement.setString(1, organizationName);
+            ResultSet checkAlreadyPresentOrganizationResult = checkAlreadyPresentOrganizationStatement.executeQuery();
+            if(checkAlreadyPresentOrganizationResult.next())
             {
                 return new NewOrganizationReply(true, false, 0).toJSONString(); 
             }
             for(String territory : territoriesOfCompetence)
             {
-                String query = "INSERT INTO organizations VALUES ('%s', '%s')";
-                query = String.format(query, organizationName, territory);
-                System.out.println(query);         
-                Statement statement = connection.createStatement();
+                String query = "INSERT INTO organizations VALUES ( ?, ? )";
+                PreparedStatement statement = connection.createStatement(query);
+                statement.setString(1, organizationName);
+                statement.setString(2, territory);
+                int v = statement.executeUpdate();
                 this.territoriesAdded += statement.executeUpdate(query);
             }
-        }catch(Exception e)
+            return new NewOrganizationReply(
+                    true,
+                    true,
+                    this.territoriesAdded
+                ).toJSONString();
+        } catch(Exception e)
         {
             e.printStackTrace();
+            return new NewOrganizationReply(false, false, 0).toJSONString(); 
         }
-        return new NewOrganizationReply(
-                true,
-                true,
-                this.territoriesAdded
-            ).toJSONString();
     }
 }

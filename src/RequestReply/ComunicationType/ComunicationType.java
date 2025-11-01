@@ -3,7 +3,7 @@ package RequestReply.ComunicationType;
 public enum ComunicationType
 {
     // request reply engine
-    SET_NEW_USER, // x x 
+    SET_NEW_USER, // x x x
     SET_NEW_ORGANIZATION, // x x
     SET_NEW_EVENT, // x x
     SET_CLOSED_DAYS, // x x

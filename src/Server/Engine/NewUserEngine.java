@@ -8,8 +8,6 @@ import RequestReply.ComunicationType.*;
 
 public class NewUserEngine extends Engine
 {
-        private String userID;
-        private String tmpPassword;
         private String userName;
         private String newPassword;
         private String cityOfResidence;
@@ -18,7 +16,7 @@ public class NewUserEngine extends Engine
 
         public NewUserEngine(
                 String userID,
-                String tmpPassword,
+                String userPassword,
                 String userName,
                 String newPassword,
                 String cityOfResidence,
@@ -26,7 +24,7 @@ public class NewUserEngine extends Engine
                 UserRoleTitle role
         ) {
                 this.userID = userID;
-                this.tmpPassword = tmpPassword;
+                this.userPassword = userPassword;
                 this.userName = userName;
                 this.newPassword = newPassword;
                 this.cityOfResidence = cityOfResidence;
@@ -41,7 +39,7 @@ public class NewUserEngine extends Engine
                         Connection connection = connectDB(dbUrl, "sa", "");
                 ) {
 
-                        String query = "SELECT role FROM users WHERE userID = ? AND userPassword = ?";
+                        String query = "SELECT role, organization FROM users WHERE userID = ? AND userPassword = ?";
                         PreparedStatement selectStatement = connection.prepareStatement(query); 
                         selectStatement.setString(1, userID);
                         selectStatement.setString(2, tmpPassword);
@@ -51,7 +49,7 @@ public class NewUserEngine extends Engine
                         if (resultSet.next()) {
                             currentRole = resultSet.getString("role");
                         } else {
-                            throw new Exception("Exception: user not found");
+                            throw new Exception("Exception: temporary user not found");
                         }
                         if
                         (
@@ -61,24 +59,32 @@ public class NewUserEngine extends Engine
                             throw new Exception("Exception: user not temporary");
                         } 
 
-                        String deleteTmpUser = "DELETE FROM users WHERE userID = ? AND userPassword = ?";
+                        // String getOrganization = "SELECT organization FROM users WHERE  userID = ? AND userPassword = ?";
+                        // PreparedStatement getOrganizationStatement = connection.prepareStatement(getOrganization);
+                        // getOrganizationStatement.setString(1, userID);
+                        // getOrganizationStatement.setString(2, tmpPassword);
+                        // ResultSet getOrganizationResult = getOrganizationStatement.executeQuery();
+                        // String organization = getOrganizationResult.getString("organization");
+                        String organization = resultSet.getString("organization");
+
+                        String deleteTmpUser = "DELETE FROM users WHERE userID = ?";
                         PreparedStatement deleteStatement = connection.prepareStatement(deleteTmpUser); 
                         deleteStatement.setString(1, userID);
-                        deleteStatement.setString(2, tmpPassword);
                         deleteStatement.executeUpdate(); 
                         
                         String newUserID = String.format("%s.%s.%d",
                                 UserRoleTitleStringConverter.roleToString(this.role),
                                 userName.replaceAll(" ", "."),
                                 birthYear % 100);
-                        String insertQuery = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)"; 
+                        String insertQuery = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)"; 
                         PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
                         insertStatement.setString(1, userName);
                         insertStatement.setString(2, cityOfResidence);  
                         insertStatement.setInt(3, birthYear); 
                         insertStatement.setString(4, newUserID); 
                         insertStatement.setString(5, newPassword);
-                        insertStatement.setString(6, UserRoleTitleStringConverter.roleToString(this.role)); 
+                        insertStatement.setString(6, this.role.name());
+                        insertStatement.setString(7, organization);
                         
                         if(insertStatement.executeUpdate() == 1)
                         {
