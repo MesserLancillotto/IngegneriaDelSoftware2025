@@ -4,6 +4,10 @@ import java.sql.*;
 import org.json.*;
 import java.util.*;
 
+import RequestReply.ComunicationType.*;
+import RequestReply.Request.*;
+import RequestReply.Reply.*;
+
 public class GetEventEngine extends Engine
 {
     private Map<String, Object> filters;

@@ -1,3 +1,7 @@
+package RequestReply.Reply;
+
+
+
 public class ModifyUsersForEventReply implements ReplyType
 {
     private boolean loginSuccessful;

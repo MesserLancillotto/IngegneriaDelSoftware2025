@@ -9,8 +9,16 @@ public class LoginReply implements ReplyType
     private String role;
     private String organization;
 
-    public LoginReply
-    (
+    public LoginReply(boolean loginSuccessful) { // // Costruttore per login fallito
+        this.loginSuccessful = loginSuccessful;
+        this.userName = "";
+        this.cityOfResidence = "";
+        this.birthYear = 0;
+        this.role = "";
+        this.organization = "";
+    }
+
+    public LoginReply(
         boolean loginSuccessful,
         String userName,
         String cityOfResidence,
@@ -29,13 +37,15 @@ public class LoginReply implements ReplyType
     public String toJSONString()
     {
         String template = """
+        {
         \t"loginSuccessful":%b,
         \t"userName":"%s",
         \t"cityOfResidence":"%s",
         \t"birthYear":%d,
         \t"role":"%s",
         \t"organization":"%s"
-        """;
+        }
+        """; // // Aggiunte parentesi graffe
         return String.format(
             template,
             loginSuccessful,

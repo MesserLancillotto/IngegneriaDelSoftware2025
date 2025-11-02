@@ -39,11 +39,11 @@ public class PasswordChangeEngine extends Engine
             String loginQuery = "SELECT * FROM users WHERE userID = ? AND userPassword = ?";
             PreparedStatement loginStatement = connection.prepareStatement(loginQuery);
             loginStatement.setString(1, userID);
-            loginStatement.setString(2, userPassword);
+            loginStatement.setString(2, password);
             ResultSet userResult = loginStatement.executeQuery();            
             if(!userResult.next())
             {
-               return new PasswordChangeReply(false, false).toJSONString();
+               return new EditPasswordReply(false, false).toJSONString();
             }
             String query = "UPDATE users SET userPassword = ? WHERE userID = ? AND userPassword = ?";
             PreparedStatement selectStatement = connection.prepareStatement(query); 
@@ -53,13 +53,13 @@ public class PasswordChangeEngine extends Engine
             int rowsUpdated = selectStatement.executeUpdate();
             
             if (rowsUpdated == 1) {
-               return new PasswordChangeReply(true, true).toJSONString();
+               return new EditPasswordReply(true, true).toJSONString();
             }
-            return new PasswordChangeReply(true, false).toJSONString();
+            return new EditPasswordReply(true, false).toJSONString();
         } catch(Exception e)
         {
             e.printStackTrace();
-            return new PasswordChangeReply(true, false).toJSONString();
+            return new EditPasswordReply(true, false).toJSONString();
         }
     }
 }

@@ -31,7 +31,7 @@ class GetVisitablePlacesEngine extends Engine
             statement.setString(3, address);
             statement.setString(4, address);
             ResultSet resultSet = statement.executeQuery();
-            GetVisitablePlacesReply reply = new GetVisitablePlacesReply();
+            GetEventReply reply = new GetEventReply();
             while (resultSet.next()) {
                 reply.insertEvent(
                     resultSet.getString("eventName"),

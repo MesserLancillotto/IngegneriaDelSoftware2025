@@ -8,10 +8,12 @@ import RequestReply.ComunicationType.*;
 
 public class NewUserEngine extends Engine
 {
+        private String userID;
+        private String userPassword;
         private String userName;
         private String newPassword;
         private String cityOfResidence;
-        private Integer birthYear;
+        private int birthYear;
         private UserRoleTitle role;
 
         public NewUserEngine(
@@ -20,8 +22,7 @@ public class NewUserEngine extends Engine
                 String userName,
                 String newPassword,
                 String cityOfResidence,
-                int birthYear,
-                UserRoleTitle role
+                int birthYear
         ) {
                 this.userID = userID;
                 this.userPassword = userPassword;
@@ -29,7 +30,6 @@ public class NewUserEngine extends Engine
                 this.newPassword = newPassword;
                 this.cityOfResidence = cityOfResidence;
                 this.birthYear = birthYear;
-                this.role = role;
         }
 
         public String handleRequest()
@@ -38,11 +38,10 @@ public class NewUserEngine extends Engine
                 (
                         Connection connection = connectDB(dbUrl, "sa", "");
                 ) {
-
                         String query = "SELECT role, organization FROM users WHERE userID = ? AND userPassword = ?";
                         PreparedStatement selectStatement = connection.prepareStatement(query); 
                         selectStatement.setString(1, userID);
-                        selectStatement.setString(2, tmpPassword);
+                        selectStatement.setString(2, userPassword);
 
                         ResultSet resultSet = selectStatement.executeQuery();
                         String currentRole = ""; 
@@ -58,15 +57,8 @@ public class NewUserEngine extends Engine
                         ) {
                             throw new Exception("Exception: user not temporary");
                         } 
-
-                        // String getOrganization = "SELECT organization FROM users WHERE  userID = ? AND userPassword = ?";
-                        // PreparedStatement getOrganizationStatement = connection.prepareStatement(getOrganization);
-                        // getOrganizationStatement.setString(1, userID);
-                        // getOrganizationStatement.setString(2, tmpPassword);
-                        // ResultSet getOrganizationResult = getOrganizationStatement.executeQuery();
-                        // String organization = getOrganizationResult.getString("organization");
+                        
                         String organization = resultSet.getString("organization");
-
                         String deleteTmpUser = "DELETE FROM users WHERE userID = ?";
                         PreparedStatement deleteStatement = connection.prepareStatement(deleteTmpUser); 
                         deleteStatement.setString(1, userID);

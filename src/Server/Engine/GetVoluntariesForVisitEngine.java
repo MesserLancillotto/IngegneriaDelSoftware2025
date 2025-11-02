@@ -2,6 +2,10 @@ package Server.Engine;
 
 import java.sql.*;
 import java.util.*;
+import RequestReply.Reply.*;
+import java.util.*;
+import RequestReply.UserRoleTitle.*;
+import RequestReply.ComunicationType.*;
 
 public class GetVoluntariesForVisitEngine extends Engine
 {
