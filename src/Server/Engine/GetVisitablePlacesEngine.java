@@ -43,6 +43,7 @@ class GetVisitablePlacesEngine extends Engine
                     resultSet.getString("organizationName"),
                     resultSet.getInt("minUsers"),
                     resultSet.getInt("maxUsers"),
+                    resultSet.getInt("maxFriends"),
                     resultSet.getString("visitType"),
                     resultSet.getBoolean("confirmed")
                 );

@@ -20,7 +20,6 @@ public class PasswordChangeEngine extends Engine
     private String password;
     private String newPassword;
 
-
     public PasswordChangeEngine(
         String userID,
         String password,
@@ -37,8 +36,12 @@ public class PasswordChangeEngine extends Engine
         (
             Connection connection = connectDB(dbUrl, "sa", "");
         ) {
-            LoginEngine engine = new LoginEngine(userID, password);
-            if(!engine.canLogIn())
+            String loginQuery = "SELECT * FROM users WHERE userID = ? AND userPassword = ?";
+            PreparedStatement loginStatement = connection.prepareStatement(loginQuery);
+            loginStatement.setString(1, userID);
+            loginStatement.setString(2, userPassword);
+            ResultSet userResult = loginStatement.executeQuery();            
+            if(!userResult.next())
             {
                return new PasswordChangeReply(false, false).toJSONString();
             }

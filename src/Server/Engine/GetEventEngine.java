@@ -1,0 +1,74 @@
+package Server.Engine;
+
+import java.sql.*;
+import org.json.*;
+import java.util.*;
+
+public class GetEventEngine extends Engine
+{
+    private Map<String, Object> filters;
+    
+    public GetEventEngine(Map<String, Object> filters) {
+        this.filters = filters;
+    }
+    
+    public String handleRequest()
+    {
+        GetEventReply response = new GetEventReply();
+        
+        try (Connection connection = connectDB(dbUrl, "sa", "")) {
+            StringBuilder query = new StringBuilder("SELECT * FROM events WHERE 1=1");
+            List<Object> parameters = new ArrayList<>();
+
+            if (filters.containsKey("city")) {
+                query.append(" AND city = ?");
+                parameters.add(filters.get("city"));
+            }
+            if (filters.containsKey("address")) {
+                query.append(" AND address LIKE ?");
+                parameters.add("%" + filters.get("address") + "%");
+            }
+            if (filters.containsKey("organizationName")) {
+                query.append(" AND organizationName = ?");
+                parameters.add(filters.get("organizationName"));
+            }
+            if (filters.containsKey("visitType")) {
+                query.append(" AND visitType = ?");
+                parameters.add(filters.get("visitType"));
+            }
+            if (filters.containsKey("confirmed")) {
+                query.append(" AND confirmed = ?");
+                parameters.add(filters.get("confirmed"));
+            }
+            
+            PreparedStatement statement = connection.prepareStatement(query.toString());
+            for (int i = 0; i < parameters.size(); i++) {
+                statement.setObject(i + 1, parameters.get(i));
+            }
+            
+            ResultSet resultSet = statement.executeQuery();
+            
+            while (resultSet.next()) {
+                response.insertEvent(
+                    resultSet.getString("eventName"),
+                    resultSet.getString("eventDescription"),
+                    resultSet.getString("city"),
+                    resultSet.getString("address"),
+                    resultSet.getInt("startDate"),
+                    resultSet.getInt("endDate"),
+                    resultSet.getString("organizationName"),
+                    resultSet.getInt("minUsers"),
+                    resultSet.getInt("maxUsers"),
+                    resultSet.getInt("maxFriends"),
+                    resultSet.getString("visitType"),
+                    resultSet.getBoolean("confirmed")
+                );
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return response.toJSONString();
+    }
+}

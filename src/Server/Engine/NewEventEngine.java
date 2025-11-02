@@ -16,9 +16,10 @@ public class NewEventEngine extends Engine
     private String address;
     private int startDate;
     private int endDate;
-    private String organizationName;
+    private String organization;
     private int minimumUsers; 
     private int maximumUsers;
+    private int maximumFriends;
     private String visitType;
 
     public NewEventEngine(
@@ -30,9 +31,10 @@ public class NewEventEngine extends Engine
         String address,
         int startDate,
         int endDate,
-        String organizationName,
+        String organization,
         int minimumUsers,
         int maximumUsers,
+        int maximumFriends,
         String visitType
     ) {
         this.userID = userID;
@@ -43,9 +45,10 @@ public class NewEventEngine extends Engine
         this.address = address;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.organizationName = organizationName;
+        this.organization = organization;
         this.minimumUsers = minimumUsers;
         this.maximumUsers = maximumUsers;
+        this.maximumFriends = maximumFriends;
         this.visitType = visitType;
     }
 
@@ -55,6 +58,18 @@ public class NewEventEngine extends Engine
         (
             Connection connection = connectDB(dbUrl, "sa", "");
         ) {
+            String checkClosureDaysQuery = "SELECT DISTINCT organizationName FROM closedDays WHERE (startDay BETWEEN ? AND ?) OR (endDay BETWEEN ? AND ?)";
+            PreparedStatement checkClosureDaysStatement = connection.prepareStatement(checkClosureDaysQuery);
+            checkClosureDaysStatement.setInt(1, startDate);
+            checkClosureDaysStatement.setInt(2, endDate);
+            checkClosureDaysStatement.setInt(3, startDate);
+            checkClosureDaysStatement.setInt(4, endDate);
+            ResultSet checkClosureDaysResult = checkClosureDaysStatement.executeQuery();
+            if(checkClosureDaysQuery.next())
+            {
+                return SetClosedDaysReply(false, false, true).toJSONString()
+            } 
+
             String roleCheckQuery = "SELECT role, organization FROM users WHERE userName = ? AND userPassword = ?";
             PreparedStatement roleStatement = connection.prepareStatement(roleCheckQuery);
             roleStatement.setString(1, userID);
@@ -62,9 +77,9 @@ public class NewEventEngine extends Engine
             ResultSet result = roleStatement.executeQuery();
             if(!result.next() || result.getString("role") != "CONFIGURATOR" || result.getString("organization") != this.organization)
             {
-                return new NewEventReply(false, false).toJSONString(); 
+                return new NewEventReply(false, false, false).toJSONString(); 
             }
-            String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //
+            String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, eventName);
             statement.setString(2, description);
@@ -72,19 +87,20 @@ public class NewEventEngine extends Engine
             statement.setString(4, address);
             statement.setInt(5, startDate);
             statement.setInt(6, endDate);
-            statement.setString(7, organizationName);
+            statement.setString(7, organization);
             statement.setInt(8, minimumUsers); 
-            statement.setInt(9, maximumUsers); 
-            statement.setString(10, visitType); 
-            statement.setBoolean(11, true);
+            statement.setInt(9, maximumUsers);
+            statement.setInt(10, maximumFriends);
+            statement.setString(11, visitType); 
+            statement.setBoolean(12, true);
             if(statement.executeUpdate() == 1)
             {
-                return new NewEventReply(true, true).toJSONString();
+                return new NewEventReply(true, true, false).toJSONString();
             }
         } catch(Exception e)
         {
             e.printStackTrace();
         }
-        return new NewEventReply(true, false).toJSONString();
+        return new NewEventReply(true, false, false).toJSONString();
     }
 }

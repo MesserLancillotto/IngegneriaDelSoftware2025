@@ -2,7 +2,7 @@ package RequestReply.Reply;
 
 import org.json.*;
 
-public class GetVisitablePlacesReply implements ReplyType
+public class GetEventReply implements ReplyType
 {
     private JSONArray result = new JSONArray();
 
@@ -30,6 +30,7 @@ public class GetVisitablePlacesReply implements ReplyType
             event.put("organizationName", organizationName);
             event.put("minUsers", minimumUsers);
             event.put("maxUsers", maximumUsers);
+            event.put("maxFriends", maximumFriends);
             event.put("visitType", visitType);
             event.put("confirmed", true);
             result.put(event);
