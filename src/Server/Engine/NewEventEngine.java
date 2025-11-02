@@ -67,7 +67,7 @@ public class NewEventEngine extends Engine
             ResultSet checkClosureDaysResult = checkClosureDaysStatement.executeQuery();
             if(checkClosureDaysQuery.next())
             {
-                return SetClosedDaysReply(false, false, true).toJSONString()
+                return SetClosedDaysReply(false, false, true).toJSONString();
             } 
 
             String roleCheckQuery = "SELECT role, organization FROM users WHERE userName = ? AND userPassword = ?";

@@ -26,7 +26,7 @@ public class NewEventRequest implements RequestType
         String organizationName,
         int minimumUsers,
         int maximumUsers,
-        int maximumFriends;
+        int maximumFriends,
         String visitType
     ) {
         this.eventName = eventName;
