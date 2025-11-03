@@ -6,6 +6,8 @@ import Client.Client;
 
 public class ConfiguratorMenu implements UserMenu
 {
+    private ArrayList <Visit> visitList = new ArrayList<>();
+
     public void initialize_menu_selection ()
     {
         menuSelection.put(1, () -> view_voluntary_list());
@@ -46,7 +48,7 @@ public class ConfiguratorMenu implements UserMenu
         }while (keepUsingConfiguratorMenu);
 	}
 
-    //costruttore
+    //COSTRUTTORE
     public ConfiguratorMenu ()
     {
         initialize_menu_selection();
@@ -55,29 +57,38 @@ public class ConfiguratorMenu implements UserMenu
 
     public void view_visitable_places ()
 	{
-        ArrayList <Place> placeList = new ArrayList <>();
-        //chiamata al server per caricare tutti i posti disponibili
-        
+        //Client.getInstance().get_event(null);
+        String getEventResponse = Client.getInstance().make_server_request();
+        visitList = JSONObject.getVisitArray (getEventResponse);
 
 		Set <String> distinctPlaces = new HashSet <> ();
-		for (Place p : placeList)
-		{
-			distinctPlaces.add (p.placeName);
-		}
+        for (Visit tmpVisit : visitList)
+        {
+            distinctPlaces.add(tmpVisit.getPlace());
+        }
 		UserTui.stamp_list ("Questi sono i posti visitabili: ", distinctPlaces);
 	}
 	
-	public void view_type_of_visit_by_place ()
-	{
-        ArrayList <Place> placeList = new ArrayList <>();
-        //chiamata al server per caricare tutti i posti disponibili
-
-		for (Place p: placeList)
-		{
-			String msg = "Ecco i tipi di visita associati a" + p.placeName+":"; 
-			UserTui.stamp_list (msg, p.get_type_visit_list());
-		}
-	}    
+    public void view_type_of_visit_by_place() 
+    {
+        //Client.getInstance().get_event(null);
+        String getEventResponse = Client.getInstance().make_server_request();
+        visitList = JSONObject.getVisitArray(getEventResponse);
+        
+        Map<String, Place> placeMap = new HashMap<>();
+        
+        for (Visit tmpVisit : visitList) 
+        {
+            String tmpPlace = tmpVisit.getPlace();
+            
+            // Se il place non esiste nella mappa, lo crea
+            placeMap.putIfAbsent(tmpPlace.toUpperCase(), new Place(tmpPlace));
+            
+            // Aggiunge il tipo di visita
+            placeMap.get(tmpPlace.toUpperCase()).addVisitType(tmpVisit.getVisitType());
+        }
+        UserTui.stamp_list("Ecco gli eventi associati a ciascun luogo", placeMap);
+    }
 
     public void modify_max_number_per_subscription()
     {
@@ -113,6 +124,18 @@ public class ConfiguratorMenu implements UserMenu
 
     private void view_visit_state ()
     {
+        //Client.getInstance().get_event(null);
+        String getEventResponse = Client.getInstance().make_server_request();
+        visitList = JSONObject.getVisitArray (getEventResponse);
 
+        System.out.println ("\nEcco l'elenco delle visite attualmente nello stato di proposto/completato/confermato/cancellato/effettuato");
+        for (Visit v: visitList)
+        {
+            if (v.getVisitState() == StateOfVisit.CANCELLATA && v.getVisitState() == StateOfVisit.PROPOSTA &&
+                        v.getVisitState() == StateOfVisit.COMPLETA && v.getVisitState() == StateOfVisit.CONFERMATA && v.getVisitState() == StateOfVisit.EFFETTUATA)
+            {
+                System.out.printf ("La visita %s, che si tiene a %s ed è nello stato %s\n", v.getEventName(), v.getPlace(), v.getVisitState().toString());
+            }
+        }
     }
 }

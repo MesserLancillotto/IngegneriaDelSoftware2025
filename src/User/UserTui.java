@@ -295,5 +295,16 @@ public class UserTui
 		}
 	}
 
+    public static void stamp_list (String title, Map <String, Place> placeList)
+    {
+        System.out.println ("\n"+title);
+        for (Map.Entry<String, Place> entry : placeList.entrySet())
+        {
+            Place place = entry.getValue();
+            System.out.printf ("A %s ci sono questi tipi di visite", place.getPlaceName());
+            place.stampTypeVisit();
+        }
+    }
+
 }
 

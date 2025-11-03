@@ -110,4 +110,9 @@ public class JSONObject
                 else
                     System.out.println ("\nErrore nel salvare i dati sul server!");
     }
+
+    public static ArrayList <Visit> getVisitArray (String json)
+    {
+        return null;
+    }
 }

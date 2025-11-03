@@ -17,11 +17,13 @@ public class Configurator extends User
 		this.birthYear = UserTui.getInteger("Inserisci l'anno di nascita", 1900, 2025);
         this.roleTitle = roleTitle;
         
-        Client.getInstance().set_new_user(tmpUserName, tmpPassword, cityOfResidence, birthYear);
+        Client.getInstance().set_new_user(userId.toString(), password, cityOfResidence, birthYear);
         String newUserAnswer = Client.getInstance().make_server_request();
         if (JSONObject.extractBoolean(newUserAnswer, "loginSuccessful"))
         {
             userName = JSONObject.getJsonValue(newUserAnswer, "userID");
+            Client.getInstance().setUserID(userName);
+            Client.getInstance().setUserPassword(password);
             set_basic_app_configuration (); // configurazione base dell'app da fare al primo accesso del configuratore
 		    new ConfiguratorMenu ();
         }
@@ -82,6 +84,7 @@ public class Configurator extends User
                 String associationName = ""; 
                 String tmpVoluntaryName = UserTui.getString("Inserire il volontario che segue questa visita");
                 // ????
+                // sulla scelta del volontario -> creare metodo che gli mostra quelli esistenti o che gli chiede di aggiugerne uno nuovo
 
                 String visitType = UserTui.getString("Inserisci il tipo di visita");
                 DataManagerPeriod date = new DataManagerPeriod();
@@ -90,9 +93,6 @@ public class Configurator extends User
                 int minPartecipants = UserTui.getInteger("Inserisci il numero minimo di partecipanti a questo evento", 1, 1000);
                 int maxPartecipants = UserTui.getInteger("Inserisci il numero massimo di partecipanti a questo evento", minPartecipants+1, 1000);
                 int maxPeopleForSubscription = JSONObjectCreator.getMaxPeopleForSubscription();
-
-
-                // sulla scelta del volontario -> creare metodo che gli mostra quelli esistenti o che gli chiede di aggiugerne uno nuovo
                 
                 Client.getInstance().set_new_event(eventName, eventDescription, cityName, cityAddress, startDate, endDate, 
                 associationName, minPartecipants, maxPartecipants, maxPeopleForSubscription, visitType);

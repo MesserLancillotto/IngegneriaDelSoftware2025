@@ -13,7 +13,7 @@ public class DataManager
     public HashMap <Integer, String> monthNumberToName = new HashMap <>();
     public HashMap <Integer, Integer> daysInAMonth = new HashMap<>();
 
-    public void initialize_month_association ()
+    public void initialize_month_association (int toCheckLeapYear)
     {
         monthNumberToName.put(1, "Gennaio");
         monthNumberToName.put(2, "Febbraio");
@@ -29,7 +29,7 @@ public class DataManager
         monthNumberToName.put(12, "Dicembre");
 
         daysInAMonth.put(1, 31);
-        if ((year % 4 == 0) && (year % 100 != 0 || year % 400 == 0))
+        if ((toCheckLeapYear % 4 == 0) && (toCheckLeapYear % 100 != 0 || toCheckLeapYear % 400 == 0))
             daysInAMonth.put(2, 29);
         else
             daysInAMonth.put(2, 28);
@@ -43,11 +43,6 @@ public class DataManager
         daysInAMonth.put(10, 31);
         daysInAMonth.put(11, 30);
         daysInAMonth.put(12, 31);
-    }
-
-    public DataManager ()
-    {
-        initialize_month_association();
     }
 
     public static int setToEndOfDay(long unixTimestamp)

@@ -12,6 +12,7 @@ public class UserLogin
     {
         userFactory.put ("C", (username, cityOfResidence, birthYear, password, roleTitle) -> new Configurator (username, cityOfResidence, birthYear, password, roleTitle));  
         userFactory.put ("V", (username, cityOfResidence, birthYear, password, roleTitle) -> new Voluntary (username, cityOfResidence, birthYear, password, roleTitle));  
+        
 		userFirstAccessFactory.put ("C", (tmpUsernName, tmpPassword, roleTitle) -> new Configurator (tmpUsernName, tmpPassword, roleTitle));
     }
 

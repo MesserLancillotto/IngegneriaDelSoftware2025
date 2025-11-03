@@ -2,6 +2,7 @@ package User;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class DataManagerPeriod extends DataManager
 {
@@ -13,7 +14,11 @@ public class DataManagerPeriod extends DataManager
 
     public DataManagerPeriod ()
     {
-        super();
+        LocalDate data = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+		String formattedData = data.format(formatter);
+        initialize_month_association(Integer.parseInt(formattedData.substring(4)));
+        
         boolean periodIsUnvalid = true;
         startDate = acquireDate("Inserisci la data di inizio (formato: DD/MM/YYYY)", "Inserisci l'ora di inizio (formato: HH:MM)");
 

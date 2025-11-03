@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Visit 
 {
-	private enum stateOfVisit {PROPOSTA, COMPLETA, CONFERMATA, CANCELLATA, EFFETTUATA};	
+	StateOfVisit state;
 
 	String eventName;
 	String description;
@@ -33,10 +33,27 @@ public class Visit
 		this.maxUsers = maxUsers;
 		this.maxFriends = maxFriends;
 		this.visitType = visitType;
+		
+		//DA IMPLEMENTARE
+		this.state = StateOfVisit.CONFERMATA;
+	}
+
+	public String getPlace ()
+	{
+		return city+":"+address;
 	}
 
 	public String getVisitType ()
 	{
 		return visitType;
+	}
+
+	public String getEventName ()
+	{
+		return eventName;
+	}
+	public StateOfVisit getVisitState ()
+	{
+		return state;
 	}
 }

@@ -18,8 +18,6 @@ public class DataManagerDisponibility extends DataManager
 
     public DataManagerDisponibility (int reference)
     {
-        super();
-
         LocalDate data = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
 		String formattedData = data.format(formatter);
@@ -33,6 +31,7 @@ public class DataManagerDisponibility extends DataManager
             referenceMonth = getIncreasedMonth(reference-1, month);
         else
             referenceMonth = getIncreasedMonth(reference, month);
+        initialize_month_association(referenceYear);
     }
 
     public int getReferenceDay (String thingToSayForDay, String thingToSayForDuration)

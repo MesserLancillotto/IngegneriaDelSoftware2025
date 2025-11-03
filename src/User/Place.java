@@ -3,23 +3,35 @@ import java.util.*;
 
 public class Place 
 {
-    HashMap <Visit, Voluntary> visitAssociation = new HashMap <>();
+    ArrayList <String> visitTypeInThisPlace = new ArrayList<>();
 	String placeName;
 	
-	public Place (String placeName, String visitType, String voluntaryName)
+	public Place (String placeName)
 	{
 		this.placeName = placeName;
-		//visitAssociation.put(null, null)
 	}
 	
-	public Set <String> get_type_visit_list ()
+	public Set<String> get_type_visit_list ()
 	{
-		Set <String> typeVisitList = new HashSet <>();
-		for (Map.Entry <Visit, Voluntary> tmpMap : visitAssociation.entrySet())
+		return new HashSet<>(visitTypeInThisPlace);
+	}
+
+	public void addVisitType (String visitType)
+	{
+		visitTypeInThisPlace.add(visitType);
+	}
+
+	public void stampTypeVisit()
+	{
+		Set<String> visiType = new HashSet<>(visitTypeInThisPlace);
+		for (String type: visiType)
 		{
-			typeVisitList.add(tmpMap.getKey().getVisitType());
+			System.out.println (type);
 		}
-		return typeVisitList;
+	}
+	public String getPlaceName ()
+	{
+		return placeName;
 	}
 	   
 }
