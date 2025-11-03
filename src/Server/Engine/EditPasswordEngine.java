@@ -13,14 +13,14 @@ import RequestReply.ComunicationType.*;
 import RequestReply.UserRoleTitle.*;
 import Server.Engine.*;
 
-public class PasswordChangeEngine extends Engine
+public class EditPasswordEngine extends Engine
 {
 
     private String userID;
     private String password;
     private String newPassword;
 
-    public PasswordChangeEngine(
+    public EditPasswordEngine(
         String userID,
         String password,
         String newPassword
@@ -51,7 +51,6 @@ public class PasswordChangeEngine extends Engine
             selectStatement.setString(2, userID);
             selectStatement.setString(3, password);
             int rowsUpdated = selectStatement.executeUpdate();
-            
             if (rowsUpdated == 1) {
                return new EditPasswordReply(true, true).toJSONString();
             }

@@ -1,5 +1,7 @@
 package RequestReply.Reply;
 
+import org.json.*;
+
 public class GetUserDataReply implements ReplyType
 {
     private boolean loginSuccessful;

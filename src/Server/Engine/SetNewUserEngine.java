@@ -6,7 +6,7 @@ import java.util.*;
 import RequestReply.UserRoleTitle.*;
 import RequestReply.ComunicationType.*;
 
-public class NewUserEngine extends Engine
+public class SetNewUserEngine extends Engine
 {
         private String userID;
         private String userPassword;
@@ -16,7 +16,7 @@ public class NewUserEngine extends Engine
         private int birthYear;
         private UserRoleTitle role;
 
-        public NewUserEngine(
+        public SetNewUserEngine(
                 String userID,
                 String userPassword,
                 String userName,

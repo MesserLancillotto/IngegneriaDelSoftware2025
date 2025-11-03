@@ -1,5 +1,7 @@
 package RequestReply.Reply;
 
+import org.json.*;
+
 public class SetNewUserReply implements ReplyType
 {
     private boolean accessSuccesful;
@@ -16,12 +18,9 @@ public class SetNewUserReply implements ReplyType
 
     public String toJSONString()
     {
-        String template = """
-        {
-        \t"loginSuccessful":"%s"
-        \t"userID":"%s"
-        }
-        """;
-        return String.format(template, accessSuccesful, userID);
+        JSONObject json = new JSONObject();
+        json.put("accessSuccesful", accessSuccesful);
+        json.put("userID", userID);
+        return json.toString();
     }
 }

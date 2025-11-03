@@ -1,6 +1,7 @@
 package RequestReply.Request;
 
 import java.util.*;
+import org.json.*;
 
 public class SetNewOrganizationRequest implements RequestType
 {
@@ -18,12 +19,9 @@ public class SetNewOrganizationRequest implements RequestType
 
     public String toJSONString()
     {
-        StringBuilder request = new StringBuilder("\"organizationName\":\"").append(organizationName).append("\",\n\"territoriesOfCompetence\":\n[\n");
-        for(String territory : territoriesOfCompetence)
-        {
-            request.append("\t\"").append(territory).append("\",\n");
-        }
-        request.deleteCharAt(request.length() - 2).append("]");
-        return request.toString();
+        JSONObject json = new JSONObject();
+        json.put("organizationName", organizationName);
+        json.put("territoriesOfCompetence", territoriesOfCompetence);
+        return json.toString();
     }
 }

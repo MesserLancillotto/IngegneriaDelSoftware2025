@@ -1,6 +1,8 @@
 package RequestReply.Reply;
 
 import java.util.*;
+import org.json.*;
+
 
 public class SetNewOrganizationReply implements ReplyType
 {
@@ -21,16 +23,10 @@ public class SetNewOrganizationReply implements ReplyType
 
     public String toJSONString()
     {
-        String template = """
-        {
-        \t"loginSuccessful":"%s",
-        \t"registrationSuccessful":"%s",
-        \t"territoriesAdded":"%s"
-        }""";
-        return String.format(
-            template,
-            accessSuccesful,
-            registrationSuccessful,
-            territoriesAdded);
+        JSONObject json = new JSONObject();
+        json.put("accessSuccesful", accessSuccesful);
+        json.put("registrationSuccessful", registrationSuccessful);
+        json.put("territoriesAdded", territoriesAdded);
+        return json.toString();
     }
 }

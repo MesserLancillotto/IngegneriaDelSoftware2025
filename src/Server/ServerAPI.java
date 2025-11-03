@@ -59,100 +59,108 @@ class ServerAPI extends Thread
 
     private static String userResponse(String request)
     {
-        return "";
-    }
-    /*
         JSONObject dictionary = new JSONObject(request);
-        String user = dictionary.getString("userID");
-        String password = dictionary.getString("userPassword");
-        LoginEngine engine = new LoginEngine(user, password);
-        boolean canLogIn = engine.canLogIn();
-        System.out.println("CAN LOGIN: " + canLogIn);
+        Engine engine;
+        ComunicationType comunicationType;
         try
         {
-            if(canLogIn)
+            comunicationType = ComunicationType.valueOf((String)dictionary.get("requestType"));
+            String userID = dictionary.getString("userID"); 
+            String userPassword = dictionary.getString("userPassword");
+            String organization;
+            dictionary.remove("userID");
+            dictionary.remove("userPassword");
+            switch(comunicationType)
             {
-                System.out.println("Can log in: " + canLogIn);
-                switch(
-                    ComunicationTypeStringConverter.stringToComunicationType(
-                        (String)dictionary.getString("requestType"))
-                ) {
-                    case LOGIN:
-                        System.out.println("LOGIN");
-                        return new LoginReply(canLogIn).toJSONString();
-                    case NEW_ORGANIZATION:
-                        System.out.println("NEW_ORGANIZATION");
-                        String orgName = (String)dictionary.getString("organizationName");
-                        ArrayList<String> list = new ArrayList<String>();
-                        for(
-                            int i = 0; 
-                            i < dictionary.getJSONArray("territoriesOfCompetence").length();
-                            i++
-                        ) {
-                            String e = dictionary.getJSONArray("territoriesOfCompetence").getString(i);
-                            list.add(e);
-                        }
-                        return new NewOrganizationEngine(orgName, list).handleRequest(); 
-                    case NEW_USER:
-                        String userName = dictionary.getString("userName");
-                        String newPassword = dictionary.getString("newPassword");
-                        String cityOfResidence = dictionary.getString("cityOfResidence");
-                        int birthYear = Integer.parseInt(dictionary.getString("birthYear"));
-                        UserRoleTitle role = 
-                            UserRoleTitleStringConverter.stringToRole(
-                                dictionary.getString("role"));
-                        return new NewUserEngine(user, password, userName, newPassword, cityOfResidence, birthYear, role).handleRequest();
-                    case PASSWORD_CHANGE:
-                        String userID = dictionary.getString("userID");
-                        String oldPassword = dictionary.getString("userPassword");
-                        String changedPassword = dictionary.getString("newPassword");
-                        return new PasswordChangeEngine(userID, oldPassword, changedPassword).handleRequest();
-                    case NEW_EVENT:
-                        String eventName = dictionary.getString("eventName");
-                        String description = dictionary.getString("description");
-                        String city = dictionary.getString("city");
-                        String address = dictionary.getString("address");
-                        int startDate = dictionary.getInt("startDate");
-                        int endDate = dictionary.getInt("endDate");
-                        String organizationName = dictionary.getString("organizationName");
-                        int minimumUsers = dictionary.getInt("minimumUsers");
-                        int maximumUsers = dictionary.getInt("maximumUsers");
-                        String visitType = dictionary.getString("visitType");
-                        return new NewEventEngine(
-                            eventName,
-                            description,
-                            city,
-                            address,
-                            startDate,
-                            endDate,
-                            organizationName,
-                            minimumUsers,
-                            maximumUsers,
-                            visitType                       
-                        ).handleRequest();
-                    case SET_CLOSED_DAYS:
-                        int closedStartDate = dictionary.getInt("startDate"); 
-                        int closedEndDate = dictionary.getInt("endDate");
-                        String organization = dictionary.getString("organization");
-                        return new SetClosedDaysEngine( 
-                            user, 
-                            password, 
-                            closedStartDate,
-                            closedEndDate,
-                            organization
-                        ).handleRequest();
-                }
+                case EDIT_EVENT:
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    for(String key : dictionary.keySet())
+                    {
+                        map.put(key, dictionary.get(key));
+                    }
+                    return new EditEventEngine(
+                        userID,
+                        userPassword,
+                        map
+                    ).handleRequest();
+                case EDIT_PASSWORD:
+                    return new EditPasswordEngine(
+                        userID, 
+                        userPassword,
+                        dictionary.getString("newPassword")
+                    ).handleRequest();
+                case GET_EVENT:
+                    Map<String, Object> filters = new HashMap<String, Object>();
+                    for(String key : dictionary.keySet())
+                    {
+                        filters.put(key, dictionary.get(key));
+                    }
+                    return new GetEventEngine(
+                        filters
+                    ).handleRequest();
+                case GET_USER_DATA:
+                    return new GetUserDataEngine(
+                        userID, 
+                        userPassword, 
+                        dictionary.getString("target")
+                    ).handleRequest();
+                case GET_VOLUNTARIES_FOR_VISIT:
+                    return new GetVoluntariesForVisitEngine(
+                        userID, 
+                        userPassword,
+                        dictionary.getString("eventName")
+                    ).handleRequest();
+                case SET_CLOSED_DAYS:
+                    return new SetClosedDaysEngine(
+                        userID, 
+                        userPassword,
+                        dictionary.getInt("startDate"),
+                        dictionary.getInt("endDate"),
+                        dictionary.getString("organization")
+                    ).handleRequest();
+                case SET_NEW_EVENT:
+                    return new SetNewEventEngine(
+                        userID,
+                        userPassword,
+                        dictionary.getString("eventName"),
+                        dictionary.getString("description"),
+                        dictionary.getString("city"),
+                        dictionary.getString("address"),
+                        dictionary.getInt("startDate"),
+                        dictionary.getInt("endDate"),
+                        dictionary.getString("organization"),
+                        dictionary.getInt("minimumUsers"),
+                        dictionary.getInt("maximumUsers"),
+                        dictionary.getInt("maximumFriends"),
+                        dictionary.getString("visitType")
+                    ).handleRequest();
+                case SET_NEW_ORGANIZATION:
+                    JSONArray territoriesArray = dictionary.getJSONArray("territori");
+                    ArrayList<String> territories = new ArrayList<>();
+                    territoriesArray.forEach(item -> territories.add((String)item));
+                    return new SetNewOrganizationEngine(
+                        userID,
+                        userPassword,
+                        dictionary.getString("organizationName"),
+                        territories
+                    ).handleRequest();
+                case SET_NEW_USER:
+                    return new SetNewUserEngine(
+                        userID,
+                        userPassword,
+                        dictionary.getString("userName"),
+                        dictionary.getString("newPassword"),
+                        dictionary.getString("cityOfResidence"),
+                        dictionary.getInt("birthYear")
+                    ).handleRequest();
             }
-            System.out.println("Log in denied");
-
         } catch(Exception e)
         {
-            canLogIn = false;
-            e.printStackTrace();
+            return "ERROR";
         }
-        return new NewOrganizationReply(false, false, 0).toJSONString();
+        return "";
     }
-*/
+
     public synchronized void run()
     {
         handleUserRequest();

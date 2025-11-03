@@ -3,13 +3,13 @@ package Server.Engine;
 import java.sql.*;
 import RequestReply.Reply.*;
 
-public class LoginEngine extends Engine 
+public class GetUserDataEngine extends Engine 
 {
     private String userID;
     private String userPassword;
     private String targetID; // chiedi login se target = user, chiedi dati sottoposto se user != target  
 
-    public LoginEngine(String userID, String userPassword, String targetID) {
+    public GetUserDataEngine(String userID, String userPassword, String targetID) {
         this.userID = userID;
         this.userPassword = userPassword;
         this.targetID = targetID;
@@ -18,7 +18,7 @@ public class LoginEngine extends Engine
     private String getDataAsUser()
     {
         try (Connection connection = connectDB(dbUrl, "sa", "")) {
-            String query = "SELECT userName, cityOfResidence, birthYear, role, organization FROM users WHERE userID = ? AND userPassword = ?"; // // userName -> userID
+            String query = "SELECT userName, cityOfResidence, birthYear, role, organization FROM users WHERE userID = ? AND userPassword = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, userID);
             statement.setString(2, userPassword);
@@ -37,14 +37,13 @@ public class LoginEngine extends Engine
         } catch(Exception e) {
             e.printStackTrace();
         }
-        return new GetUserDataReply(false, "", "", 0, "", "").toJSONString();
+        return new GetUserDataReply(false).toJSONString();
     }
 
     private String getDataAsConfigurator()
     {
         try (Connection connection = connectDB(dbUrl, "sa", "")) {
-            // Verifica che l'utente sia CONFIGURATOR
-            String query = "SELECT role, organization FROM users WHERE userID = ? AND userPassword = ?"; // // userName -> userID
+            String query = "SELECT role, organization FROM users WHERE userID = ? AND userPassword = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, userID);
             statement.setString(2, userPassword);
@@ -53,25 +52,20 @@ public class LoginEngine extends Engine
             {
                 return new GetUserDataReply(false).toJSONString();
             }
-            
             String configuratorOrganization = result.getString("organization");
-            
-            // Prendi dati del target
-            String userDataQuery = "SELECT userName, cityOfResidence, birthYear, role, organization FROM users WHERE userID = ?"; // // userName -> userID
-            PreparedStatement userStatement = connection.prepareStatement(userDataQuery); // // PreparedStatement
+            String userDataQuery = "SELECT userName, cityOfResidence, birthYear, role, organization FROM users WHERE userID = ?";
+            PreparedStatement userStatement = connection.prepareStatement(userDataQuery);
             userStatement.setString(1, targetID);
-            ResultSet userResult = userStatement.executeQuery(); // // userStatement.executeQuery()
-            
-            if(!userResult.next() || !userResult.getString("organization").equals(configuratorOrganization)) // // Controlla userResult.next()
+            ResultSet userResult = userStatement.executeQuery();
+            if(!userResult.next() || !userResult.getString("organization").equals(configuratorOrganization))
             {
                 return new GetUserDataReply(false).toJSONString();
             }
-            
             return new GetUserDataReply(
                 true, 
                 userResult.getString("userName"),
                 userResult.getString("cityOfResidence"),
-                userResult.getInt("birthYear"), // // "birthYear" tra virgolette
+                userResult.getInt("birthYear"),
                 userResult.getString("role"),
                 userResult.getString("organization")
             ).toJSONString();
@@ -81,7 +75,7 @@ public class LoginEngine extends Engine
         }
     }
     
-    public String handleRequest() // // Rimuovi throws SQLException
+    public String handleRequest()
     {
         if(userID.equals(targetID))
         {

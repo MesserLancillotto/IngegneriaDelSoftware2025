@@ -7,7 +7,7 @@ import RequestReply.Reply.*;
 import RequestReply.UserRoleTitle.*;
 import java.util.*;
 
-public class NewOrganizationEngine extends Engine
+public class SetNewOrganizationEngine extends Engine
 {
     private String userID;
     private String userPassword;
@@ -16,7 +16,7 @@ public class NewOrganizationEngine extends Engine
     
     private int territoriesAdded;
 
-    public NewOrganizationEngine
+    public SetNewOrganizationEngine
     (
         String userID,
         String userPassword,
@@ -36,8 +36,7 @@ public class NewOrganizationEngine extends Engine
        try
         (
             Connection connection = connectDB(dbUrl, "sa", "");
-        )
-        {
+        ) {
             String checkPermitsQuery = "SELECT role FROM users WHERE userID = ? AND userPassword = ?";
             PreparedStatement checkPermitsStatement = connection.prepareStatement(checkPermitsQuery);
             checkPermitsStatement.setString(1, userID);

@@ -20,7 +20,8 @@ public class GetEventEngine extends Engine
     {
         GetEventReply response = new GetEventReply();
         
-        try (Connection connection = connectDB(dbUrl, "sa", "")) {
+        try (Connection connection = connectDB(dbUrl, "sa", "")) 
+        {
             StringBuilder query = new StringBuilder("SELECT * FROM events WHERE 1=1");
             List<Object> parameters = new ArrayList<>();
 

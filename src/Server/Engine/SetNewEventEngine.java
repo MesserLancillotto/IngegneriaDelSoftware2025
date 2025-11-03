@@ -6,7 +6,7 @@ import java.util.*;
 import RequestReply.UserRoleTitle.*;
 import RequestReply.ComunicationType.*;
 
-public class NewEventEngine extends Engine
+public class SetNewEventEngine extends Engine
 {
     private String userID;
     private String userPassword;
@@ -22,7 +22,7 @@ public class NewEventEngine extends Engine
     private int maximumFriends;
     private String visitType;
 
-    public NewEventEngine(
+    public SetNewEventEngine(
         String userID,
         String userPassword,
         String eventName,
@@ -58,6 +58,16 @@ public class NewEventEngine extends Engine
         (
             Connection connection = connectDB(dbUrl, "sa", "");
         ) {
+            String roleCheckQuery = "SELECT role, organization FROM users WHERE userName = ? AND userPassword = ?";
+            PreparedStatement roleStatement = connection.prepareStatement(roleCheckQuery);
+            roleStatement.setString(1, userID);
+            roleStatement.setString(2, userPassword);
+            ResultSet result = roleStatement.executeQuery();
+            if(!result.next() || result.getString("role") != "CONFIGURATOR" || result.getString("organization") != this.organization)
+            {
+                return new SetNewEventReply(false, false, false).toJSONString(); 
+            }
+
             String checkClosureDaysQuery = "SELECT DISTINCT organizationName FROM closedDays WHERE (startDay BETWEEN ? AND ?) OR (endDay BETWEEN ? AND ?)";
             PreparedStatement checkClosureDaysStatement = connection.prepareStatement(checkClosureDaysQuery);
             checkClosureDaysStatement.setInt(1, startDate);
@@ -67,18 +77,9 @@ public class NewEventEngine extends Engine
             ResultSet checkClosureDaysResult = checkClosureDaysStatement.executeQuery();
             if(checkClosureDaysResult.next())
             {
-                return new SetClosedDaysReply(false, false).toJSONString();
+                return new SetNewEventReply(true, false, true).toJSONString();
             } 
 
-            String roleCheckQuery = "SELECT role, organization FROM users WHERE userName = ? AND userPassword = ?";
-            PreparedStatement roleStatement = connection.prepareStatement(roleCheckQuery);
-            roleStatement.setString(1, userID);
-            roleStatement.setString(2, userPassword);
-            ResultSet result = roleStatement.executeQuery();
-            if(!result.next() || result.getString("role") != "CONFIGURATOR" || result.getString("organization") != this.organization)
-            {
-                return new SetNewEventReply(false, false).toJSONString(); 
-            }
             String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, eventName);
@@ -95,12 +96,12 @@ public class NewEventEngine extends Engine
             statement.setBoolean(12, true);
             if(statement.executeUpdate() == 1)
             {
-                return new SetNewEventReply(true, true).toJSONString();
+                return new SetNewEventReply(true, true, false).toJSONString();
             }
         } catch(Exception e)
         {
             e.printStackTrace();
         }
-        return new SetNewEventReply(true, false).toJSONString();
+        return new SetNewEventReply(true, false, false).toJSONString();
     }
 }

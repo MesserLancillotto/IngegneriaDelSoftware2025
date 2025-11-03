@@ -1,5 +1,7 @@
 package RequestReply.Reply;
 
+import org.json.*;
+
 public class EditPasswordReply implements ReplyType 
 {
     private boolean accessSuccesful;
