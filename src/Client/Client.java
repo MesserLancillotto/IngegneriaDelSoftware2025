@@ -115,7 +115,7 @@ public final class Client
         );
         comunicationType = ComunicationType.SET_NEW_USER;
     }
-    public String makeServerRequest()
+    public String make_server_request()
     {
         String request = new Request(comunicationType, userID, userPassword, body).toJSONString();
         String response = "";
