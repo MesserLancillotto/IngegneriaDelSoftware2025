@@ -3,16 +3,21 @@ import java.util.*;
 
 public class Voluntary extends User
 {
-    ArrayList <String> allowedEventType;
-	
-	public Voluntary ()
+	public Voluntary (String userName, String cityOfResidence, int birthYear, String password, String roleTitle)
 	{
-		super();
+		this.userName = userName;
+		this.cityOfResidence = cityOfResidence;
+		this.birthYear = birthYear;
+        this.password = password;
+		this.roleTitle = roleTitle;
+
+		first_access();
+		new VoluntaryMenu (userName);
 	}
 	
-	// fornisce le date in cui può tenere una visita
-	public void give_disponibility (int date, String event)
+	private void first_access()
 	{
-		
-	}    
+		while(set_new_password());
+	}
+
 }

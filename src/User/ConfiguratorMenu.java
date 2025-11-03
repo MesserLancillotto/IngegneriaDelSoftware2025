@@ -6,14 +6,11 @@ import Client.Client;
 
 public class ConfiguratorMenu implements UserMenu
 {
-    private String configuratorUserName;
-    private String configuratorPassword;
-
     public void initialize_menu_selection ()
     {
         menuSelection.put(1, () -> view_voluntary_list());
         menuSelection.put(2, () -> view_visitable_places());
-        menuSelection.put(3, () -> view_type_of_visit());
+        menuSelection.put(3, () -> view_type_of_visit_by_place());
         menuSelection.put(4, () -> view_visit_state());  
         menuSelection.put(5, () -> modify_max_number_per_subscription());
         menuSelection.put(6, () -> manage_disponibilty_dates());  
@@ -21,7 +18,7 @@ public class ConfiguratorMenu implements UserMenu
         menuOptionList.add("Visualizza l'elenco volontari");
         menuOptionList.add("Visualizza l'elenco dei luoghi visitabili");
         menuOptionList.add("Visualizza l'elenco dei tipi di visita associati a ciascun luogo");
-        menuOptionList.add("Visualizza le visite in stato di visita");	// non ho capito cosa vuole
+        menuOptionList.add("Visualizza le visite in stato di visita");	
         menuOptionList.add("Modifica il numero massimo di persone iscrivibili a un'iniziativa da parte di un fruitore");
         menuOptionList.add("Segna date precluse alle visite");
     }
@@ -50,11 +47,8 @@ public class ConfiguratorMenu implements UserMenu
 	}
 
     //costruttore
-    public ConfiguratorMenu (String configuratorUserName, String configuratorPassword)
+    public ConfiguratorMenu ()
     {
-        this.configuratorUserName = configuratorUserName;
-        this.configuratorPassword = configuratorPassword;
-
         initialize_menu_selection();
         manage_options();
     }
@@ -63,8 +57,7 @@ public class ConfiguratorMenu implements UserMenu
 	{
         ArrayList <Place> placeList = new ArrayList <>();
         //chiamata al server per caricare tutti i posti disponibili
-        String viewVisitablePlacesRequest = Client.getVisitablePlaces (configuratorUserName, configuratorPassword, "CITTA", "");
-        String viewVisitablePlacesResponse = Client.makeServerRequest(Client.getServerAddr(), Client.getPort(), viewVisitablePlacesRequest);
+        
 
 		Set <String> distinctPlaces = new HashSet <> ();
 		for (Place p : placeList)
@@ -74,7 +67,7 @@ public class ConfiguratorMenu implements UserMenu
 		UserTui.stamp_list ("Questi sono i posti visitabili: ", distinctPlaces);
 	}
 	
-	public void view_type_of_visit ()
+	public void view_type_of_visit_by_place ()
 	{
         ArrayList <Place> placeList = new ArrayList <>();
         //chiamata al server per caricare tutti i posti disponibili
@@ -89,30 +82,30 @@ public class ConfiguratorMenu implements UserMenu
     public void modify_max_number_per_subscription()
     {
         int newMaxNumber = UserTui.getInteger("\nDefinire il nuovo numero massimo di persone che un fruitore può iscrivere in una volta sola", 0, 100);
-        //client.makeServerRequest(password, newMaxNumber, cityOfResidence);
-        //invio al server il nuovo valore
+        JSONObjectCreator.setMaxPeopleForSubscription(newMaxNumber);
     }
 
     public void view_voluntary_list()
     {
-        Set <String> voluntaryList = new HashSet <>();
-        //client.makeServerRequest(password, birthYear, cityOfResidence);
-        //chiedo al server di mandarmi i voluntary
+        Client.getInstance().get_voluntaries_for_visit("");
+        String getVoluntariesResponse = Client.getInstance().make_server_request();
+        Set <String> voluntaryList = new HashSet <>(JSONObject.extractArray(getVoluntariesResponse, "userID"));
         UserTui.stamp_list("Ecco l'elenco dei volontari iscritti:", voluntaryList);
     }
 
     public void manage_disponibilty_dates ()
     {
         boolean addAnotherDate;
-        DataManager date = new DataManager();
+        DataManagerDisponibility date = new DataManagerDisponibility(3);
         do
         {
-            int unaviableDay = date.getUnaviableDay();
+            int unaviableDay = date.getReferenceDay("Inserire il giorno precluso alle visite", "Di quanti giorni è la chiusura");
             if (unaviableDay > 0)
             {
                 int unixDate = (int)date.getUnixDate(unaviableDay);
-                String setClosedDayRequest = Client.setClosedDays (configuratorUserName, configuratorPassword, 
-                                                                    unixDate, date.setToEndOfDay(unixDate), "ORGANIZZAZIONE");
+                Client.getInstance().set_closed_days(unixDate, date.getEndDayOfClosure(), "ASSOCIAZIONE");  // definisci ASSOCIAZIONE
+                String closedDaysReply = Client.getInstance().make_server_request();
+                JSONObject.confirmRequest (closedDaysReply, "querySuccesful");
             }
             addAnotherDate = UserTui.getYesNoAnswer("Vuoi inserire un'altra data");
         }while (addAnotherDate);

@@ -10,9 +10,9 @@ public class UserLogin
 
     private static void initialize_user_factory ()
     {
-        userFactory.put ("C", (username, cityOfResidence, birthYear, password) -> new Configurator (username, cityOfResidence, birthYear, password));  
-
-		userFirstAccessFactory.put ("C", (tmpUsernName, tmpPassword) -> new Configurator (tmpUsernName, tmpPassword));
+        userFactory.put ("C", (username, cityOfResidence, birthYear, password, roleTitle) -> new Configurator (username, cityOfResidence, birthYear, password, roleTitle));  
+        userFactory.put ("V", (username, cityOfResidence, birthYear, password, roleTitle) -> new Voluntary (username, cityOfResidence, birthYear, password, roleTitle));  
+		userFirstAccessFactory.put ("C", (tmpUsernName, tmpPassword, roleTitle) -> new Configurator (tmpUsernName, tmpPassword, roleTitle));
     }
 
 	public static void main (String[] args)
@@ -28,25 +28,25 @@ public class UserLogin
         {
             String userName = UserTui.getString("Inserisci username");
             String password = UserTui.getString("Inserisci password");
-
-            String logRequest = Client.loginRequest (userName, password);
-            String loginResult = Client.makeServerRequest (Client.getServerAddr(), Client.getPort(), logRequest);
+            Client.setUserID (userName);
+            Client.setUserPassword (password);
+            Client.getInstance().get_user_data(userName);
+            String loginResult = Client.getInstance().make_server_request();
 
             loginSuccessfull = JSONObject.extractBoolean(loginResult, "loginSuccessful");
             
             if (loginSuccessfull)
             {
+                String roleTitle =JSONObject.getJsonValue(loginResult, "role");
                 if (userName.substring(0,1).equals ("T"))
                 {
-                    userFirstAccessFactory.get("C").create (userName, password);
+                    userFirstAccessFactory.get("C").create (userName, password, roleTitle);
                 }
                 else 
                 {
-                    //client.makeServerRequest();
-                    //carico da server i dati che mi servono dell'utente
-                    String cityOfResidence = "";
-                    int birthYear = 0;
-                    userFactory.get(userName.substring(0,1)).create (userName, cityOfResidence, birthYear, password);
+                    String cityOfResidence = JSONObject.getJsonValue(loginResult, "cityOfResidence");
+                    int birthYear = Integer.parseInt(JSONObject.getJsonValue(loginResult, "birthYear"));
+                    userFactory.get(userName.substring(0,1)).create (userName, cityOfResidence, birthYear, password, roleTitle);
                 }
             }
         }while (!loginSuccessfull);

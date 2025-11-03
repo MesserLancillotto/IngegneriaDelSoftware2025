@@ -10,20 +10,24 @@ public abstract class User
     String password;
 
 	// metodo per creare nuova password
-	public void set_new_password ()
+	public boolean set_new_password ()
 	{
 		String tmpPassword = UserTui.getPasswordFromUser ("Inserisci la nuova password");
-		String requestChangePassword = Client.passwordChange(userName, password, tmpPassword);
-		String replyChangePassword = Client.makeServerRequest(Client.getServerAddr(), Client.getPort(), requestChangePassword);
+		Client.getInstance().edit_password(tmpPassword);
+		String replyChangePassword = Client.getInstance().make_server_request();
 		boolean changePasswordSuccessfull = JSONObject.extractBoolean(replyChangePassword, "passwordChangeSuccessful");
 
 		if (changePasswordSuccessfull)
 		{
 			System.out.println ("La password è stata cambiata!");
-			this.password = tmpPassword;
+			Client.setUserPassword(tmpPassword);
+			return true;
 		}
 		else
+		{
 			System.out.println ("Errore, non è stato possibile cambiare la password");
+			return false;
+		}
 		
 	}
 }

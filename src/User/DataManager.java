@@ -6,15 +6,12 @@ import java.time.format.*;
 
 public class DataManager 
 {
-    private int day;
-    private int month;
-    private int referenceMonth;
-    private int year;
-    private int referenceYear;
-    private Set <Integer> enteredDates = new HashSet<>();
+    public int day;
+    public int month;
+    public int year;
     
-    private HashMap <Integer, String> monthNumberToName = new HashMap <>();
-    private HashMap <Integer, Integer> daysInAMonth = new HashMap<>();
+    public HashMap <Integer, String> monthNumberToName = new HashMap <>();
+    public HashMap <Integer, Integer> daysInAMonth = new HashMap<>();
 
     public void initialize_month_association ()
     {
@@ -50,66 +47,10 @@ public class DataManager
 
     public DataManager ()
     {
-        LocalDate data = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
-		String formattedData = data.format(formatter);
-
-        this.day = Integer.parseInt(formattedData.substring(0, 2));
-        this.month = Integer.parseInt(formattedData.substring(2, 4));
-        this.year = Integer.parseInt(formattedData.substring(4));
-        this.referenceYear = this.year;
-
-        if (day < 16)
-            referenceMonth = getIncreasedMonth(2, month);
-        else
-            referenceMonth = getIncreasedMonth(3, month);
+        initialize_month_association();
     }
 
-    public int getUnaviableDay ()
-    {
-        boolean confirmDate;
-        String userMessage = "Inserire il giorno precluso alle visite nel mese di "+monthNumberToName.get(referenceMonth)+ " (DD):";
-        
-        int unaviableDate;
-
-        do
-        {
-            unaviableDate = UserTui.getInteger(userMessage, 0, daysInAMonth.get(referenceMonth)+1);
-            confirmDate = UserTui.getYesNoAnswer("Hai inserito il giorno "+unaviableDate+" confermi");
-
-            if (enteredDates.contains(unaviableDate) && confirmDate)
-            {
-                System.out.println ("Hai già inserito questa data scegline un'altra!");
-                return -1;
-            }
-            enteredDates.add(unaviableDate);
-        }while (!confirmDate);
-
-        return unaviableDate;
-    }
-
-    private int getIncreasedMonth (int increase, int tmpMonth)
-    {
-        for (int i = 0; i < increase; i++)
-        {
-            tmpMonth += 1;
-            if (tmpMonth > 12)
-            {
-                tmpMonth = 1;
-                referenceYear +=1;
-            }
-        }
-
-        return tmpMonth;
-    }
-
-    public long getUnixDate (int tmpDay)
-    {
-        LocalDate date = LocalDate.of(referenceYear, referenceMonth, tmpDay);
-        return date.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
-    }
-
-     public static int setToEndOfDay(long unixTimestamp)
+    public static int setToEndOfDay(long unixTimestamp)
     {
         Instant instant = Instant.ofEpochSecond(unixTimestamp);
         ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
@@ -118,21 +59,6 @@ public class DataManager
         int endOfDayDate = (int)endOfDay.toEpochSecond();
         
         return endOfDayDate;
-    }
-
-    public int getReferenceMonth ()
-    {
-        return referenceMonth;
-    }
-
-    public String getMonthName (int month)
-    {
-        return monthNumberToName.get(month);
-    }
-
-    public int getYear ()
-    {
-        return year;
     }
 
 }

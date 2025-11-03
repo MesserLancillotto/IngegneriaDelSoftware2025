@@ -8,4 +8,5 @@ public interface UserMenu
 
     void initialize_menu_selection ();
     void visualize_options ();
+
 }

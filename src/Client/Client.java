@@ -13,91 +13,160 @@ public final class Client
     private static final int PORT = 8000;
     private static final String SERVER_ADDR = "127.0.0.1";
 
-    public static final String loginRequest(String userID, String userPassword)
+    private static String userID;
+    private static String userPassword;
+    //private static RequestType body;
+    //private static ComunicationType comunicationType;
+
+    private static Client instance;
+
+    /*
+    public Client(
+        String userID,
+        String userPassword
+    ) {
+        
+        this.userID = userID;
+        this.userPassword = userPassword;
+        
+    }
+    */
+
+    private Client ()
+    {
+        if (userID == null|| userPassword == null)
+        {
+            System.out.println ("\nErrore configurazione client non eseguita!");
+        }
+    }
+
+    public static synchronized Client getInstance ()
+    {
+         if (instance == null) {
+            instance = new Client();
+        }
+        return instance;
+    }
+
+    public static void setUserID (String tmpuUserID)
+    {
+        userID = tmpuUserID;
+    }
+
+    public static void setUserPassword (String tmpUserPassword)
+    {
+        userPassword = tmpUserPassword;
+    }
+
+    public void edit_event(String eventName, Map<String, Object> fields)
     {
         /*
-        LoginRequest requestBody = new LoginRequest();
-        Request request = new Request(ComunicationType.LOGIN, userID, userPassword, requestBody);
-        return request.toJSONString();
+        RequestType body = new EditEventRequest(eventName, fields);
+        comunicationType = ComunicationType.EDIT_EVENT;
         */
-        return "";
     }
-
-    public static final String passwordChange(String userID, String userPassword, String newPassword)
+    public void edit_password(String newPassword)
     {
-        /* 
-        PasswordChangeRequest requestBody = new PasswordChangeRequest(newPassword);
-        Request request = new Request(ComunicationType.PASSWORD_CHANGE, userID, userPassword, requestBody);
-        return request.toJSONString();
+        /*
+        RequestType body = new EditPasswordRequest(newPassword);
+        comunicationType = ComunicationType.EDIT_PASSWORD;
         */
-        return "";
+    }
+    public void get_event(Map<String, Object> filters) 
+    {
+        /*
+        RequestType body = new GetEventRequest(filters);
+        comunicationType = ComunicationType.GET_EVENT;
+        */
     }
 
-    public static final String newOrganization(
-        String userID, 
-        String userPassword,
-        String organizationName, 
-        ArrayList<String> territoriesOfCompetence
-    ) {
-        /* 
-        NewOrganizationRequest requestBody = new NewOrganizationRequest(organizationName, territoriesOfCompetence);
-        Request request = new Request(ComunicationType.NEW_ORGANIZATION, userID, userPassword, requestBody);
-        return request.toJSONString();
+    public void get_user_data(String target)
+    {
+        /*
+        RequestType body = new GetUserDataRequest(target);
+        comunicationType = ComunicationType.GET_USER_DATA;
         */
-        return "";
     }
-    
-    public static final String newUser(
-        String tmpID,
-        String tmpPassword,
-        String userName,
-        String userNewPassword, 
-        String cityOfResidence,
-        Integer birthYear,
-        String role 
-    ) {
-        /* 
-        NewUserRequest requestBody = new NewUserRequest(
-            userName,
-            userNewPassword,
-            cityOfResidence,
-            birthYear,
-            role);
-        Request request = new Request(ComunicationType.NEW_USER, tmpID, tmpPassword, requestBody);
-        return request.toJSONString();
+    public void get_voluntaries_for_visit(String event)
+    {
+        /*
+        RequestType body = new GetVoluntariesForVisitRequest(event);
+        comunicationType = ComunicationType.GET_VOLUNTARIES_FOR_VISIT;
         */
-        return "";
     }
-
-    public static final String newEvent(
-        String userID, 
-        String userPassword,
+    public void set_closed_days(
+        int startDate, 
+        int endDate,
+        String organization
+    ) {
+        /*
+        RequestType body = new SetClosedDaysRequest(startDate, endDate, organization);
+        comunicationType = ComunicationType.SET_CLOSED_DAYS;
+        */
+    }
+    public void set_new_event(
         String eventName,
         String description,
+        String city,
         String address,
         int startDate,
         int endDate,
-        String organizationName
+        String organizationName,
+        int minimumUsers,
+        int maximumUsers,
+        int maximumFriends,
+        String visitType
     ) {
-        /* 
-        NewEventRequest requestBody = new NewEventRequest(
+        /*
+        RequestType body = new SetNewEventRequest(
             eventName,
             description,
+            city,
             address,
             startDate,
             endDate,
-            organizationName);
-        return new Request(ComunicationType.NEW_EVENT, userID, userPassword, requestBody).toJSONString();
+            organizationName,
+            minimumUsers,
+            maximumUsers,
+            maximumFriends,
+            visitType
+        );
+        comunicationType = ComunicationType.SET_NEW_EVENT;
         */
-        return "";
     }
-
-    public static final String makeServerRequest(String server_addr, int port, String request) 
+    public void set_new_organization(        
+        String organizationName,
+        ArrayList<String> territoriesOfCompetence
+    ) {
+        /*
+        RequestType body = new SetNewOrganizationRequest(organizationName, territoriesOfCompetence);
+        comunicationType = ComunicationType.SET_NEW_ORGANIZATION;
+        */
+    }
+    public void set_new_user(
+        String userName,
+        String newPassword,
+        String cityOfResidence,
+        Integer birthYear
+    ) {
+        /*
+        RequestType body = new SetNewUserRequest(
+            userName,
+            newPassword,
+            cityOfResidence,
+            birthYear
+        );
+        comunicationType = ComunicationType.SET_NEW_USER;
+        */
+    }
+    public String make_server_request()
     {
+        /*
+        String request = new Request(comunicationType, userID, userPassword, body).toJSONString();
         String response = "";
         try
         (
-            Socket socket = new Socket(server_addr, port);
+            Socket socket = new Socket(SERVER_ADDR, PORT);
         )
         {
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -115,56 +184,7 @@ public final class Client
             System.out.println("An error occurred: " + e);
         }
         return response;
-    }
-
-    public static final String getVisitablePlaces(String userID, String userPassword, String city, String address)
-    {
-        /* 
-        // città è obbligatorio, address è facoltativo, se lasciato vuoto usa ""
-        GetVisitablePlacesRequest body = new GetVisitablePlacesRequest(city, address);
-        Request request = new Request(ComunicationType.GET_VISITABLE_PLACES, userID, userPassword, body);
-        return request.toJSONString();
-        */
-
-        return "";
-    }
-
-    public static final String setClosedDays(String userID, String userPassword, int start, int end, String organization)
-    {
-        /* 
-        SetClosedDaysRequest requestBody = new SetClosedDaysRequest(start, end, organization);
-        Request request = new Request(ComunicationType.SET_CLOSED_DAYS, userID, userPassword, requestBody);
-        return request.toJSONString();
         */
         return "";
-    }
-
-
-    public static void main(String [] args) 
-    {
-        String request = newEvent(
-            "VOLUNTARY.Lucia.Michelini.0", 
-            "sicurissimaAlCubo3",
-            "Futurismo in castello",
-            "Mostra futurista a Brescia",
-            "Castello di Brescia",
-            101010101,
-            111100010,
-            "Pippis");
-
-        System.out.println("Request: ");
-        System.out.println(request);
-        System.out.println("Response: ");
-        System.out.println(makeServerRequest(SERVER_ADDR, PORT, request));
-    }
-
-    public static String getServerAddr ()
-    {
-        return SERVER_ADDR;
-    }
-
-    public static int getPort ()
-    {
-        return PORT;
     }
 }

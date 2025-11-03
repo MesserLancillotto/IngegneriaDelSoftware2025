@@ -83,6 +83,41 @@ public class UserTui
         }
     }
 
+    //acquisizione array di stringhe
+    public static ArrayList <String> getStringArray (String thingToSayToUser, String cycleConfirmation)
+   {
+        ArrayList<String> values = new ArrayList<>();
+        boolean addMoreValues = true;
+        
+        while (addMoreValues)
+        {
+            try
+            {
+                System.out.printf("\n%s: ", thingToSayToUser);
+                String value = consoleIn.readLine();
+                
+                if (value != null && !value.isEmpty())
+                {
+                    values.add(value);
+                    addMoreValues = getYesNoAnswer(cycleConfirmation);
+                }
+                else
+                {
+                    System.out.println("Valore inserito non valido, riprova!\n");
+                }
+            }
+            catch (IOException errorDuringDigitation)
+            {
+                System.out.println("\nErrore durante la digitazione: " + errorDuringDigitation.getMessage());
+                System.out.println("Riprova");
+            }
+            
+        }
+
+        return values;
+    }
+
+    //acquisizione lasciando gli spazi
     public static String getStringNoTrim (String thingToSayToUser)
     {
         while (true)
@@ -96,6 +131,30 @@ public class UserTui
                     return value;
 
                 System.out.println ("Valore inserito non valido, riprova!\n");
+            }
+            catch (IOException errorDuringDigitation)
+            {
+                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("Riprova");
+            }
+        }
+    }
+
+    //acquisizione tenendo gli spazi con un num. max di caratteri
+    public static String getStringNoTrim (String thingToSayToUser, int maxCharacters)
+    {
+        while (true)
+        {
+            try
+            {
+                System.out.printf ("\n%s(Max: %d caratteri): ", thingToSayToUser, maxCharacters);
+                String value = consoleIn.readLine();
+                
+                if (value != null && !value.isEmpty())
+                    return value;
+                else if (value.length() > maxCharacters)
+                    System.out.println ("\nStringa non valida, hai superato il numero massimo di caratteri consentiti");
+                System.out.println ("\nValore inserito non valido, riprova!\n");
             }
             catch (IOException errorDuringDigitation)
             {
@@ -201,6 +260,30 @@ public class UserTui
                 System.out.println ("Riprova");
             }
         }
+    }
+
+    public static String getDateFromUser (String thingToSayToUser)
+    {
+        while (true)
+        {
+            try
+            {
+                System.out.printf ("\n%s: ", thingToSayToUser);
+                String value = consoleIn.readLine();
+                
+                boolean isADate;
+                if (value != null && !value.isEmpty())
+                    return value;
+
+                System.out.println ("Valore inserito non valido, riprova!\n");
+            }
+            catch (IOException errorDuringDigitation)
+            {
+                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("Riprova");
+            }
+        }
+        
     }
 
     public static void stamp_list (String title, Collection <String>listToStamp)
