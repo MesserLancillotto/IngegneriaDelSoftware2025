@@ -55,7 +55,6 @@ class ServerAPI extends Thread
         {
             System.out.println("An error occurred: " + e);
         } 
-
     }
 
     private static String userResponse(String request)

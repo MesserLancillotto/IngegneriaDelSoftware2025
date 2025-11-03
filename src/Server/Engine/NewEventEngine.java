@@ -67,7 +67,7 @@ public class NewEventEngine extends Engine
             ResultSet checkClosureDaysResult = checkClosureDaysStatement.executeQuery();
             if(checkClosureDaysResult.next())
             {
-                return new SetClosedDaysReply(false, false, false).toJSONString();
+                return new SetClosedDaysReply(false, false).toJSONString();
             } 
 
             String roleCheckQuery = "SELECT role, organization FROM users WHERE userName = ? AND userPassword = ?";
@@ -77,7 +77,7 @@ public class NewEventEngine extends Engine
             ResultSet result = roleStatement.executeQuery();
             if(!result.next() || result.getString("role") != "CONFIGURATOR" || result.getString("organization") != this.organization)
             {
-                return new NewEventReply(false, false).toJSONString(); 
+                return new SetNewEventReply(false, false).toJSONString(); 
             }
             String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -95,12 +95,12 @@ public class NewEventEngine extends Engine
             statement.setBoolean(12, true);
             if(statement.executeUpdate() == 1)
             {
-                return new NewEventReply(true, true).toJSONString();
+                return new SetNewEventReply(true, true).toJSONString();
             }
         } catch(Exception e)
         {
             e.printStackTrace();
         }
-        return new NewEventReply(true, false).toJSONString();
+        return new SetNewEventReply(true, false).toJSONString();
     }
 }

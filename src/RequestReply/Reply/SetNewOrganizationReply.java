@@ -2,13 +2,13 @@ package RequestReply.Reply;
 
 import java.util.*;
 
-public class NewOrganizationReply implements ReplyType
+public class SetNewOrganizationReply implements ReplyType
 {
     private boolean accessSuccesful;
     private boolean registrationSuccessful;
     private int territoriesAdded;
 
-    public NewOrganizationReply
+    public SetNewOrganizationReply
     (
         boolean accessSuccesful,
         boolean registrationSuccessful,

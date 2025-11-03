@@ -15,62 +15,62 @@ public class GetEventRequest implements RequestType
         this.filters = new HashMap<>();
     }
     
-    public GetEventRequest withCity(String city) {
+    private GetEventRequest withCity(String city) {
         filters.put("city", city);
         return this;
     }
     
-    public GetEventRequest withOrganization(String organization) {
+    private GetEventRequest withOrganization(String organization) {
         filters.put("organizationName", organization);
         return this;
     }
     
-    public GetEventRequest withVisitType(String visitType) {
+    private GetEventRequest withVisitType(String visitType) {
         filters.put("visitType", visitType);
         return this;
     }
     
-    public GetEventRequest withConfirmed(boolean confirmed) {
+    private GetEventRequest withConfirmed(boolean confirmed) {
         filters.put("confirmed", confirmed);
         return this;
     }
     
-    public GetEventRequest withEventName(String eventName) {
+    private GetEventRequest withEventName(String eventName) {
         filters.put("eventName", eventName);
         return this;
     }
     
-    public GetEventRequest withAddress(String address) {
+    private GetEventRequest withAddress(String address) {
         filters.put("address", address);
         return this;
     }
     
-    public GetEventRequest withStartDate(int startDate) {
+    private GetEventRequest withStartDate(int startDate) {
         filters.put("startDate", startDate);
         return this;
     }
     
-    public GetEventRequest withEndDate(int endDate) {
+    private GetEventRequest withEndDate(int endDate) {
         filters.put("endDate", endDate);
         return this;
     }
     
-    public GetEventRequest withOrganizationName(String organizationName) {
+    private GetEventRequest withOrganizationName(String organizationName) {
         filters.put("organizationName", organizationName);
         return this;
     }
     
-    public GetEventRequest withMinUsers(int minUsers) {
+    private GetEventRequest withMinUsers(int minUsers) {
         filters.put("minUsers", minUsers);
         return this;
     }
     
-    public GetEventRequest withMaxUsers(int maxUsers) {
+    private GetEventRequest withMaxUsers(int maxUsers) {
         filters.put("maxUsers", maxUsers);
         return this;
     }
     
-    public GetEventRequest withMaxFriends(int maxFriends) {
+    private GetEventRequest withMaxFriends(int maxFriends) {
         filters.put("maxFriends", maxFriends);
         return this;
     }

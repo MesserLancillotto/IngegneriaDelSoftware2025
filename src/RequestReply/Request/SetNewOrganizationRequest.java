@@ -2,12 +2,12 @@ package RequestReply.Request;
 
 import java.util.*;
 
-public class NewOrganizationRequest implements RequestType
+public class SetNewOrganizationRequest implements RequestType
 {
     private String organizationName;
     private ArrayList<String> territoriesOfCompetence ;
 
-    public NewOrganizationRequest
+    public SetNewOrganizationRequest
     (
         String organizationName,
         ArrayList<String> territoriesOfCompetence

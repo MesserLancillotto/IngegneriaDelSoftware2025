@@ -1,6 +1,8 @@
 package Server.Engine;
 
 import java.sql.*;
+
+import RequestReply.Request.*;
 import RequestReply.Reply.*;
 import RequestReply.UserRoleTitle.*;
 import java.util.*;
@@ -45,7 +47,7 @@ public class NewOrganizationEngine extends Engine
                 !checkPermitsResult.next() 
                 || !checkPermitsResult.getString("role").equals("CONFIGURATOR")
             ) {
-                return new NewOrganizationReply(false, false, 0).toJSONString();
+                return new SetNewOrganizationReply(false, false, 0).toJSONString();
             }
 
             String checkAlreadyPresentOrganizationQuery = "SELECT DISTINCT organizationName FROM organizations WHERE organizationName = ?";
@@ -54,7 +56,7 @@ public class NewOrganizationEngine extends Engine
             ResultSet checkAlreadyPresentOrganizationResult = checkAlreadyPresentOrganizationStatement.executeQuery();
             if(checkAlreadyPresentOrganizationResult.next())
             {
-                return new NewOrganizationReply(true, false, 0).toJSONString(); 
+                return new SetNewOrganizationReply(true, false, 0).toJSONString(); 
             }
             
             for(String territory : territoriesOfCompetence)
@@ -66,7 +68,7 @@ public class NewOrganizationEngine extends Engine
                 int v = statement.executeUpdate();
                 this.territoriesAdded += v; 
             }
-            return new NewOrganizationReply(
+            return new SetNewOrganizationReply(
                     true,
                     true,
                     this.territoriesAdded
@@ -74,7 +76,7 @@ public class NewOrganizationEngine extends Engine
         } catch(Exception e)
         {
             e.printStackTrace();
-            return new NewOrganizationReply(false, false, 0).toJSONString(); 
+            return new SetNewOrganizationReply(false, false, 0).toJSONString(); 
         }
     }
 }

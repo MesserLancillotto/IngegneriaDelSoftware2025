@@ -1,11 +1,11 @@
 package RequestReply.Reply;
 
-public class NewUserReply implements ReplyType
+public class SetNewUserReply implements ReplyType
 {
     private boolean accessSuccesful;
     private String userID;
 
-    public NewUserReply
+    public SetNewUserReply
     (
         boolean accessSuccesful,
         String userID

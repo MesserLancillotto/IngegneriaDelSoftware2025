@@ -6,17 +6,14 @@ public class SetClosedDaysReply implements ReplyType
 {
     private boolean loginSuccessful;
     private boolean querySuccesful;
-    private boolean closed;
 
     public SetClosedDaysReply
     (
         boolean loginSuccessful,
-        boolean querySuccesful,
-        boolean closed
+        boolean querySuccesful
     ) {
         this.loginSuccessful = loginSuccessful;
         this.querySuccesful = querySuccesful;
-        this.closed = closed;
     }
 
     public String toJSONString()
@@ -25,8 +22,7 @@ public class SetClosedDaysReply implements ReplyType
         {
         \t"loginSuccessful":%b,
         \t"querySuccesful":%b
-        \t"closed":%b
         }
-        """, loginSuccessful, querySuccesful, closed);
+        """, loginSuccessful, querySuccesful);
     }
 }

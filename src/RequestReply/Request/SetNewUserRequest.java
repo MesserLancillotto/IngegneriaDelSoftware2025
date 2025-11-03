@@ -2,44 +2,40 @@ package RequestReply.Request;
 
 import RequestReply.UserRoleTitle.*;
 
-public class NewUserRequest implements RequestType
+public class SetNewUserRequest implements RequestType
 {
     private String userName;
     private String newPassword;
     private String cityOfResidence;
     private Integer birthYear;
-    private UserRoleTitle role;
 
-    public NewUserRequest
+    public SetNewUserRequest
     (
         String userName,
         String newPassword,
         String cityOfResidence,
-        Integer birthYear,
-        UserRoleTitle role 
+        Integer birthYear
     ) {
         this.userName = userName;
         this.newPassword = newPassword;
         this.cityOfResidence = cityOfResidence;
         this.birthYear = birthYear;
-        this.role = role;
     }
 
     public String toJSONString()
     {
         String template = """
-        "userName": "%s",
-        "newPassword":"%s",
-        "cityOfResidence": "%s", 
-        "birthYear": "%s",
-        "role": "%s"
+        \t"userName": "%s",
+        \t"newPassword":"%s",
+        \t"cityOfResidence": "%s", 
+        \t"birthYear": "%s"
         """;
         return String.format(
             template, 
             userName,
             newPassword,
             cityOfResidence,
-            birthYear,
-            role).replace("\"\n", "\"");
+            birthYear
+        );
     }
 }

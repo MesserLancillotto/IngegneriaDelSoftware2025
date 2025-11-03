@@ -11,7 +11,7 @@ INSERT INTO organizations VALUES ('San Genesio', 'Bergamo');
 INSERT INTO organizations VALUES ('San Genesio', 'Bologna');
 INSERT INTO organizations VALUES ('San Genesio', 'Venezia');
 
-CREATE TABLE IF NOT EXISTS events (eventName VARCHAR(64), eventDescription VARCHAR(512), city VARCHAR(16), address VARCHAR(64), startDate INT, endDate INT, organizationName VARCHAR(32), minUsers INT, maxUsers INT,  maxFriends INT, visitType VARCHAR(32), confirmed BOOLEAN);
+CREATE TABLE IF NOT EXISTS events (eventName VARCHAR(64) UNIQUE, eventDescription VARCHAR(512), city VARCHAR(16), address VARCHAR(64), startDate INT, endDate INT, organizationName VARCHAR(32), minUsers INT, maxUsers INT,  maxFriends INT, visitType VARCHAR(32), confirmed BOOLEAN);
 
 INSERT INTO events VALUES ('Cinema in Castello: la corazzata Potiomkin', 'Terna di serate per ammirare i grandi capolavori cinematografici del Novecento, ore 21:00', 'Bergamo', 'Castello di Bergamo', 1770411600, 1770584400, 'San Genesio', 50, 500, 4, 'Cinema', true);
 INSERT INTO events VALUES ('Cinema in Castello: il deserto rosso', 'Terna di serate per ammirare i grandi capolavori cinematografici del Novecento, ore 21:00', 'Bologna', 'Castello di Bologna', 1761944400, 1762117200, 'San Genesio', 50, 500, 4, 'Cinema', true);

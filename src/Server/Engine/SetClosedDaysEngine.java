@@ -49,7 +49,7 @@ public class SetClosedDaysEngine extends Engine
             ResultSet result = roleStatement.executeQuery();
             if(!result.next() || result.getString("role") != "CONFIGURATOR" || result.getString("organization") != this.organization)
             {
-                return new SetClosedDaysReply(false, false, false).toJSONString(); 
+                return new SetClosedDaysReply(false, false).toJSONString(); 
             }
             String query = "INSERT INTO closedDays VALUES ( ?, ?, ? )"; 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -58,12 +58,12 @@ public class SetClosedDaysEngine extends Engine
             statement.setString(3, organization);
             if(statement.executeUpdate() == 1)
             {
-                return new SetClosedDaysReply(true, true, true).toJSONString(); 
+                return new SetClosedDaysReply(true, true).toJSONString(); 
             }
         } catch(Exception e)
         {
             e.printStackTrace();
         }
-        return new SetClosedDaysReply(true, false, false).toJSONString();
+        return new SetClosedDaysReply(true, false).toJSONString();
     }
 }

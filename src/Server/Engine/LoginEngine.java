@@ -25,7 +25,7 @@ public class LoginEngine extends Engine
             ResultSet result = statement.executeQuery();
             if(result.next())
             {
-                return new LoginReply(
+                return new GetUserDataReply(
                     true, 
                     result.getString("userName"),
                     result.getString("cityOfResidence"),
@@ -37,7 +37,7 @@ public class LoginEngine extends Engine
         } catch(Exception e) {
             e.printStackTrace();
         }
-        return new LoginReply(false, "", "", 0, "", "").toJSONString();
+        return new GetUserDataReply(false, "", "", 0, "", "").toJSONString();
     }
 
     private String getDataAsConfigurator()
@@ -51,7 +51,7 @@ public class LoginEngine extends Engine
             ResultSet result = statement.executeQuery();
             if(!result.next() || !result.getString("role").equals("CONFIGURATOR"))
             {
-                return new LoginReply(false).toJSONString();
+                return new GetUserDataReply(false).toJSONString();
             }
             
             String configuratorOrganization = result.getString("organization");
@@ -64,10 +64,10 @@ public class LoginEngine extends Engine
             
             if(!userResult.next() || !userResult.getString("organization").equals(configuratorOrganization)) // // Controlla userResult.next()
             {
-                return new LoginReply(false).toJSONString();
+                return new GetUserDataReply(false).toJSONString();
             }
             
-            return new LoginReply(
+            return new GetUserDataReply(
                 true, 
                 userResult.getString("userName"),
                 userResult.getString("cityOfResidence"),
@@ -77,7 +77,7 @@ public class LoginEngine extends Engine
             ).toJSONString();
         } catch(Exception e) {
             e.printStackTrace();
-            return new LoginReply(false).toJSONString();
+            return new GetUserDataReply(false).toJSONString();
         }
     }
     

@@ -2,7 +2,7 @@ package RequestReply.Request;
 
 import java.util.*;
 
-public class NewEventRequest implements RequestType
+public class SetNewEventRequest implements RequestType
 {
     private String eventName;
     private String description;
@@ -16,7 +16,7 @@ public class NewEventRequest implements RequestType
     private int maximumFriends;
     private String visitType;
 
-    public NewEventRequest(
+    public SetNewEventRequest(
         String eventName,
         String description,
         String city,

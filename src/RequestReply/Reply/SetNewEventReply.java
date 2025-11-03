@@ -1,11 +1,11 @@
 package RequestReply.Reply;
 
-public class NewEventReply implements ReplyType
+public class SetNewEventReply implements ReplyType
 {
     private boolean accessSuccesful;
     private boolean registrationSuccesful;
 
-    public NewEventReply
+    public SetNewEventReply
     (
         boolean accessSuccesful,
         boolean registrationSuccesful
@@ -18,8 +18,8 @@ public class NewEventReply implements ReplyType
     {
         String template = """
         {
-        "loginSuccessful":"%s"
-        "registrationSuccesful":"%s"
+        \t"loginSuccessful":"%s"
+        \t"registrationSuccesful":"%s"
         }
         """;
         return String.format(template, accessSuccesful, registrationSuccesful);

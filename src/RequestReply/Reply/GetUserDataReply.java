@@ -1,6 +1,6 @@
 package RequestReply.Reply;
 
-public class LoginReply implements ReplyType
+public class GetUserDataReply implements ReplyType
 {
     private boolean loginSuccessful;
     private String userName;
@@ -9,7 +9,7 @@ public class LoginReply implements ReplyType
     private String role;
     private String organization;
 
-    public LoginReply(boolean loginSuccessful) { // // Costruttore per login fallito
+    public GetUserDataReply(boolean loginSuccessful) { // // Costruttore per login fallito
         this.loginSuccessful = loginSuccessful;
         this.userName = "";
         this.cityOfResidence = "";
@@ -18,7 +18,7 @@ public class LoginReply implements ReplyType
         this.organization = "";
     }
 
-    public LoginReply(
+    public GetUserDataReply(
         boolean loginSuccessful,
         String userName,
         String cityOfResidence,

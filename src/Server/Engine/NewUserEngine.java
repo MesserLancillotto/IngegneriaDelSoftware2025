@@ -80,12 +80,12 @@ public class NewUserEngine extends Engine
                         
                         if(insertStatement.executeUpdate() == 1)
                         {
-                                return new NewUserReply(true, newUserID).toJSONString(); 
+                                return new SetNewUserReply(true, newUserID).toJSONString(); 
                         }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return new NewUserReply(false, "").toJSONString(); //
+                return new SetNewUserReply(false, "").toJSONString(); //
         }
     }
