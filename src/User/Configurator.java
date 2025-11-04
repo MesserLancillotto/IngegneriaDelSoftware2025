@@ -2,6 +2,7 @@ package User;
 import java.util.*;
 import Client.Client;
 
+
 public class Configurator extends User
 {	
     // costruttore per primo accesso del configuratore

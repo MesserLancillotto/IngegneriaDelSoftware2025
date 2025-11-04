@@ -57,7 +57,7 @@ public class ConfiguratorMenu implements UserMenu
 
     public void view_visitable_places ()
 	{
-        //Client.getInstance().get_event(null);
+        Client.getInstance().get_event(null);
         String getEventResponse = Client.getInstance().make_server_request();
         visitList = JSONObject.getVisitArray (getEventResponse);
 
@@ -71,7 +71,8 @@ public class ConfiguratorMenu implements UserMenu
 	
     public void view_type_of_visit_by_place() 
     {
-        //Client.getInstance().get_event(null);
+        //HashMap<String, Object> filters = {"city":"%", "address":"%", "visitType":"%", "organization":"San Genesio"};
+        Client.getInstance().get_event(null);
         String getEventResponse = Client.getInstance().make_server_request();
         visitList = JSONObject.getVisitArray(getEventResponse);
         
@@ -124,7 +125,7 @@ public class ConfiguratorMenu implements UserMenu
 
     private void view_visit_state ()
     {
-        //Client.getInstance().get_event(null);
+        Client.getInstance().get_event(null);
         String getEventResponse = Client.getInstance().make_server_request();
         visitList = JSONObject.getVisitArray (getEventResponse);
 

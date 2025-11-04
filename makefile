@@ -8,3 +8,5 @@ run_client:
 	java -cp bin Client.Client
 clean:
 	rm -rf bin/*
+exec:
+	java -cp "bin:lib/*" Client.Client

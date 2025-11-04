@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
+
 public class DataManagerDisponibility extends DataManager
 {
     private Set <Integer> enteredDates = new HashSet<>();

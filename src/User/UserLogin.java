@@ -29,8 +29,8 @@ public class UserLogin
         {
             String userName = UserTui.getString("Inserisci username");
             String password = UserTui.getString("Inserisci password");
-            Client.setUserID (userName);
-            Client.setUserPassword (password);
+            Client.getInstance().setUserID (userName);
+            Client.getInstance().setUserPassword (password);
             Client.getInstance().get_user_data(userName);
             String loginResult = Client.getInstance().make_server_request();
 
