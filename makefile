@@ -3,8 +3,6 @@ clean:
 
 all:
 	mvn compile
-	# mvn dependency:copy-dependencies -DoutputDirectory=lib
-
 anew:
 	mvn clean compile -U;
 

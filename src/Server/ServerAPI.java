@@ -68,6 +68,7 @@ class ServerAPI extends Thread
             String userID = dictionary.getString("userID"); 
             String userPassword = dictionary.getString("userPassword");
             String organization;
+            Map<String, Object> filters;
             dictionary.remove("userID");
             dictionary.remove("userPassword");
             switch(comunicationType)
@@ -90,7 +91,7 @@ class ServerAPI extends Thread
                         dictionary.getString("newPassword")
                     ).handleRequest();
                 case GET_EVENT:
-                    Map<String, Object> filters = new HashMap<String, Object>();
+                    filters = new HashMap<String, Object>();
                     for(String key : dictionary.keySet())
                     {
                         filters.put(key, dictionary.get(key));
@@ -105,10 +106,12 @@ class ServerAPI extends Thread
                         dictionary.getString("target")
                     ).handleRequest();
                 case GET_VOLUNTARIES_FOR_VISIT:
+                    filters = new HashMap<String, Object>();
                     return new GetVoluntariesForVisitEngine(
                         userID, 
                         userPassword,
-                        dictionary.getString("eventName")
+                        dictionary.getString("eventName"),
+                        filters
                     ).handleRequest();
                 case SET_CLOSED_DAYS:
                     return new SetClosedDaysEngine(

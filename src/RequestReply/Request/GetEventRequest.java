@@ -86,7 +86,6 @@ public class GetEventRequest implements RequestType
         return this;
     }
 
-
     public String toJSONString() {
         JSONObject json = new JSONObject();
         for (Map.Entry<String, Object> entry : filters.entrySet()) {
