@@ -42,12 +42,14 @@ public class GetVoluntariesForVisitRequest implements RequestType
 
     private GetVoluntariesForVisitRequest withYear(int year)
     {
+        // anno degli utenti ricercati
         filters.put("year", year);
         return this;        
     }
 
     private GetVoluntariesForVisitRequest greaterAge(boolean value)
     {
+        // età degli utenti, meno o più dell'anno segnato sopra
         filters.put("olderThanYear", value);
         return this;
     }

@@ -15,10 +15,12 @@ INSERT INTO users VALUES ('Carlo Goldoni', 'Venezia', 1997, 'CONFIGURATOR.Carlo.
 INSERT INTO users VALUES ('Pulcinella Palummo', 'Napoli', 1995, 'VOLUNTARY.Pulcinella.Palummo.95', 'lmZ2lbgE7hB5ZQrU', 'VOLUNTARY', 'Santa Cecilia', TRUE);
 INSERT INTO users VALUES ('Antonio Vivaldi', 'Venezia', 1978, 'CONFIGURATOR.Antonio.Vivaldi.78', 'rosso', 'CONFIGURATOR', 'Santa Cecilia', TRUE);
 
+INSERT INTO users VALUES ('Michelangelo Merisi', 'Milano', 1971, 'CONFIGURATOR.Michelangelo.Merisi.71', 'maddalena', 'CONFIGURATOR', '', FALSE);
+
 CREATE TABLE IF NOT EXISTS allowedVisits (userID VARCHAR(64), visitType VARCHAR(32));
 
-INSERT INTO allowedVisits VALUES ('VOLUNTARY.Arlecchino.Valcalepio.99', 'Cinema');
-INSERT INTO allowedVisits VALUES ('VOLUNTARY.Arlecchino.Valcalepio.99', 'Visita guidata');
+INSERT INTO allowedVisits VALUES ('VOLUNTARY.Arlecchino.Valcalepio.81', 'Cinema');
+INSERT INTO allowedVisits VALUES ('VOLUNTARY.Arlecchino.Valcalepio.81', 'Visita guidata');
 INSERT INTO allowedVisits VALUES ('VOLUNTARY.Balanzone.Pignoletto.83', 'Cinema');
 
 CREATE TABLE IF NOT EXISTS organizations (organization VARCHAR(32), territory VARCHAR(64));

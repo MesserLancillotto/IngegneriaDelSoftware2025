@@ -18,11 +18,9 @@ public class SetClosedDaysReply implements ReplyType
 
     public String toJSONString()
     {
-        return String.format("""
-        {
-        \t"loginSuccessful":%b,
-        \t"querySuccesful":%b
-        }
-        """, loginSuccessful, querySuccesful);
+        JSONObject json = new JSONObject();
+        json.put("loginSuccessful", loginSuccessful);
+        json.put("querySuccesful", querySuccesful);
+        return json.toString();
     }
 }

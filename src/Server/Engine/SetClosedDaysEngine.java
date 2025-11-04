@@ -42,13 +42,17 @@ public class SetClosedDaysEngine extends Engine
         (
             Connection connection = connectDB(dbUrl, "sa", "");
         ) {
-            String roleCheckQuery = "SELECT role, organization FROM users WHERE userName = ? AND userPassword = ?";
+            String roleCheckQuery = "SELECT role, organization FROM users WHERE userID = ? AND userPassword = ?";
             PreparedStatement roleStatement = connection.prepareStatement(roleCheckQuery);
             roleStatement.setString(1, userID);
             roleStatement.setString(2, password);
             ResultSet result = roleStatement.executeQuery();
-            if(!result.next() || result.getString("role") != "CONFIGURATOR" || result.getString("organization") != this.organization)
-            {
+
+            if(
+                !result.next() 
+                || !result.getString("role").equals("CONFIGURATOR") 
+                || !result.getString("organization").equals(this.organization)
+            ) {
                 return new SetClosedDaysReply(false, false).toJSONString(); 
             }
             String query = "INSERT INTO closedDays VALUES ( ?, ?, ? )"; 

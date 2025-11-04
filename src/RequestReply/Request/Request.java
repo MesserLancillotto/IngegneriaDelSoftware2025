@@ -1,5 +1,7 @@
 package RequestReply.Request;
 
+import org.json.*;
+import java.util.*;
 import RequestReply.ComunicationType.*;
 
 public class Request 
@@ -24,7 +26,13 @@ public class Request
 
     public String toJSONString()
     {
-        String template = "{\n\"requestType\":\"%s\",\n\"userID\":\"%s\",\n\"userPassword\":\"%s\",\n%s\n}";
-        return String.format(template, requestType.name(), userID, userPassword, requestBody);
+        JSONObject json = new JSONObject();
+        json.put("requestType", requestType);
+        json.put("userID", userID);
+        json.put("userPassword", userPassword);
+        for(Map.Entry<String, Object> entry : new JSONObject(requestBody).toMap().entrySet()) {
+            json.put(entry.getKey(), entry.getValue());
+        }
+        return json.toString();
     }
 }

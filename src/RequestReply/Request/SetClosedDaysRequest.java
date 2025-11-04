@@ -1,5 +1,6 @@
 package RequestReply.Request;
 
+import org.json.*;
 import RequestReply.UserRoleTitle.*;
 
 public class SetClosedDaysRequest implements RequestType
@@ -21,11 +22,10 @@ public class SetClosedDaysRequest implements RequestType
 
     public String toJSONString()
     {
-        String template = """
-        \t"startDate":%d,
-        \t"endDate":%d,
-        \t"organization":"%s"
-        """;
-        return String.format(template, startDate, endDate, organization);
+        JSONObject json = new JSONObject();
+        json.put("startDate", startDate);
+        json.put("endDate", endDate);
+        json.put("organization", organization);
+        return json.toString();
     }
 }

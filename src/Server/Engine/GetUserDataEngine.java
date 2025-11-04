@@ -74,7 +74,7 @@ public class GetUserDataEngine extends Engine
             }
             String visitTypeQuery = "SELECT visitType FROM allowedVisits WHERE userID = ?";
             PreparedStatement visitTypeStatement = connection.prepareStatement(visitTypeQuery);
-            visitTypeStatement.setString(1, userID);
+            visitTypeStatement.setString(1, targetID);
             ResultSet visitTypes = visitTypeStatement.executeQuery();
             ArrayList<String> allowedVisitTypes = new ArrayList<>();
             while (visitTypes.next()) {

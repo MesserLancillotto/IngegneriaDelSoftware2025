@@ -38,11 +38,11 @@ class ServerAPI extends Thread
             );
             
             String request = dataInputStream.readUTF();
-            String response = userResponse(request);
-
             System.out.println("Request:\n-----------");
             System.out.println(request);
             System.out.println("-----------");
+
+            String response = userResponse(request);
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataOutputStream.writeUTF(response);
             dataOutputStream.flush();
@@ -107,10 +107,12 @@ class ServerAPI extends Thread
                     ).handleRequest();
                 case GET_VOLUNTARIES_FOR_VISIT:
                     filters = new HashMap<String, Object>();
+                    String eventNameProxy;
+                    eventNameProxy = dictionary.has("eventName") ? dictionary.getString("eventName") : null;
                     return new GetVoluntariesForVisitEngine(
                         userID, 
                         userPassword,
-                        dictionary.getString("eventName"),
+                        eventNameProxy,
                         filters
                     ).handleRequest();
                 case SET_CLOSED_DAYS:
@@ -138,7 +140,7 @@ class ServerAPI extends Thread
                         dictionary.getString("visitType")
                     ).handleRequest();
                 case SET_NEW_ORGANIZATION:
-                    JSONArray territoriesArray = dictionary.getJSONArray("territori");
+                    JSONArray territoriesArray = dictionary.getJSONArray("territoriesOfCompetence");
                     ArrayList<String> territories = new ArrayList<>();
                     territoriesArray.forEach(item -> territories.add((String)item));
                     return new SetNewOrganizationEngine(
@@ -159,6 +161,7 @@ class ServerAPI extends Thread
             }
         } catch(Exception e)
         {
+            e.printStackTrace();
             return "ERROR";
         }
         return "";

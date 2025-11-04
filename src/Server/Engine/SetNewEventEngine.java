@@ -58,17 +58,20 @@ public class SetNewEventEngine extends Engine
         (
             Connection connection = connectDB(dbUrl, "sa", "");
         ) {
-            String roleCheckQuery = "SELECT role, organization FROM users WHERE userName = ? AND userPassword = ?";
+            String roleCheckQuery = "SELECT role, organization FROM users WHERE userID = ? AND userPassword = ?";
             PreparedStatement roleStatement = connection.prepareStatement(roleCheckQuery);
             roleStatement.setString(1, userID);
             roleStatement.setString(2, userPassword);
             ResultSet result = roleStatement.executeQuery();
-            if(!result.next() || result.getString("role") != "CONFIGURATOR" || result.getString("organization") != this.organization)
-            {
+            if(
+                !result.next() 
+                || !result.getString("role").equals("CONFIGURATOR") 
+                || !result.getString("organization").equals(this.organization)
+            ) {
                 return new SetNewEventReply(false, false, false).toJSONString(); 
             }
 
-            String checkClosureDaysQuery = "SELECT DISTINCT organizationName FROM closedDays WHERE (startDay BETWEEN ? AND ?) OR (endDay BETWEEN ? AND ?)";
+            String checkClosureDaysQuery = "SELECT DISTINCT organization FROM closedDays WHERE (startDay BETWEEN ? AND ?) OR (endDay BETWEEN ? AND ?)";
             PreparedStatement checkClosureDaysStatement = connection.prepareStatement(checkClosureDaysQuery);
             checkClosureDaysStatement.setInt(1, startDate);
             checkClosureDaysStatement.setInt(2, endDate);
@@ -76,6 +79,16 @@ public class SetNewEventEngine extends Engine
             checkClosureDaysStatement.setInt(4, endDate);
             ResultSet checkClosureDaysResult = checkClosureDaysStatement.executeQuery();
             if(checkClosureDaysResult.next())
+            {
+                return new SetNewEventReply(true, false, true).toJSONString();
+            } 
+
+            String checkTerritoryQuery = "SELECT DISTINCT territory FROM organizations WHERE organization = ? AND territory = ?";
+            PreparedStatement checkTerritoryStatement = connection.prepareStatement(checkTerritoryQuery);
+            checkTerritoryStatement.setString(1, organization);
+            checkTerritoryStatement.setString(2, city);
+            ResultSet checkTerritoryResult = checkTerritoryStatement.executeQuery();
+            if(!checkTerritoryResult.next())
             {
                 return new SetNewEventReply(true, false, true).toJSONString();
             } 

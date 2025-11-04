@@ -50,7 +50,7 @@ public class SetNewOrganizationEngine extends Engine
                 return new SetNewOrganizationReply(false, false, 0).toJSONString();
             }
 
-            String checkAlreadyPresentOrganizationQuery = "SELECT DISTINCT organizationName FROM organizations WHERE organizationName = ?";
+            String checkAlreadyPresentOrganizationQuery = "SELECT DISTINCT organization FROM organizations WHERE organization = ?";
             PreparedStatement checkAlreadyPresentOrganizationStatement = connection.prepareStatement(checkAlreadyPresentOrganizationQuery);
             checkAlreadyPresentOrganizationStatement.setString(1, organizationName);
             ResultSet checkAlreadyPresentOrganizationResult = checkAlreadyPresentOrganizationStatement.executeQuery();
