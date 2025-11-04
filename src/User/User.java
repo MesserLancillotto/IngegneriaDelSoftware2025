@@ -1,5 +1,6 @@
 package User;
 import Client.Client;
+import org.json.*;
 public abstract class User 
 {
     String userName;
@@ -8,6 +9,7 @@ public abstract class User
 	String roleTitle;
 	String userID;
     String password;
+	String organization;
 
 	// metodo per creare nuova password
 	public boolean set_new_password ()
@@ -15,12 +17,14 @@ public abstract class User
 		String tmpPassword = UserTui.getPasswordFromUser ("Inserisci la nuova password");
 		Client.getInstance().edit_password(tmpPassword);
 		String replyChangePassword = Client.getInstance().make_server_request();
-		boolean changePasswordSuccessfull = JSONObject.extractBoolean(replyChangePassword, "passwordChangeSuccessful");
+
+		JSONObject dictionary = new JSONObject(replyChangePassword);
+		boolean changePasswordSuccessfull = dictionary.getBoolean("passwordChangeSuccessful");
 
 		if (changePasswordSuccessfull)
 		{
 			System.out.println ("La password è stata cambiata!");
-			Client.setUserPassword(tmpPassword);
+			Client.getInstance().setUserPassword(tmpPassword);
 			return true;
 		}
 		else
@@ -28,6 +32,5 @@ public abstract class User
 			System.out.println ("Errore, non è stato possibile cambiare la password");
 			return false;
 		}
-		
 	}
 }

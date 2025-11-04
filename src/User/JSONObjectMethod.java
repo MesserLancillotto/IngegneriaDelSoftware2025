@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JSONObject 
+import org.json.*;
+
+public class JSONObjectMethod 
 {
     public static String getJsonValue(String input, String key) 
     {
@@ -105,7 +107,7 @@ public class JSONObject
 
     public static void confirmRequest (String json, String field)
     {
-         if (JSONObject.extractBoolean(json, field))
+         if (JSONObjectMethod.extractBoolean(json, field))
                     System.out.println ("\nDati correttamente salvati!");
                 else
                     System.out.println ("\nErrore nel salvare i dati sul server!");
@@ -114,5 +116,25 @@ public class JSONObject
     public static ArrayList <Visit> getVisitArray (String json)
     {
         return null;
+    }
+    ////////////////
+    
+
+    public static ArrayList <String> jsonArrayConverter (JSONArray jsonArray)
+    {
+        try
+        {
+            ArrayList<String> list = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) 
+            {
+                list.add(jsonArray.getString(i));
+            }
+
+            return list;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 }

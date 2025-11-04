@@ -4,6 +4,8 @@ import java.time.*;
 import java.time.format.*;
 import Client.Client;
 
+import org.json.*;
+
 public class ConfiguratorMenu implements UserMenu
 {
     private ArrayList <Visit> visitList = new ArrayList<>();
@@ -57,36 +59,50 @@ public class ConfiguratorMenu implements UserMenu
 
     public void view_visitable_places ()
 	{
-        Client.getInstance().get_event(null);
+        HashMap <String, Object> filters = new HashMap<>();
+        filters.put ("city", "%");
+        filters.put ("address", "%");
+        Client.getInstance().get_event(filters);
         String getEventResponse = Client.getInstance().make_server_request();
-        visitList = JSONObject.getVisitArray (getEventResponse);
+        JSONArray eventsArray = new JSONArray(getEventResponse);
 
-		Set <String> distinctPlaces = new HashSet <> ();
-        for (Visit tmpVisit : visitList)
+        Set <String> distinctPlaces = new HashSet <> ();
+        for (int i = 0; i < getEventResponse.length(); i++)
         {
-            distinctPlaces.add(tmpVisit.getPlace());
+            JSONObject event = eventsArray.getJSONObject(i);
+            StringBuilder place = new StringBuilder ();
+            place.append(event.getString("city"));
+            place.append (":");
+            place.append(event.getString("address"));
+            distinctPlaces.add(place.toString());
+
         }
 		UserTui.stamp_list ("Questi sono i posti visitabili: ", distinctPlaces);
 	}
 	
     public void view_type_of_visit_by_place() 
     {
-        //HashMap<String, Object> filters = {"city":"%", "address":"%", "visitType":"%", "organization":"San Genesio"};
-        Client.getInstance().get_event(null);
+        HashMap <String, Object> filters = new HashMap<>();
+        filters.put ("city", "%");
+        filters.put ("address", "%");
+        filters.put ("visitType", "%");
+        Client.getInstance().get_event(filters);
         String getEventResponse = Client.getInstance().make_server_request();
-        visitList = JSONObject.getVisitArray(getEventResponse);
+        JSONArray eventsArray = new JSONArray(getEventResponse);
         
         Map<String, Place> placeMap = new HashMap<>();
         
-        for (Visit tmpVisit : visitList) 
+        for (int i = 0; i < getEventResponse.length(); i++)
         {
-            String tmpPlace = tmpVisit.getPlace();
+            JSONObject event = eventsArray.getJSONObject(i);
+            StringBuilder place = new StringBuilder ();
+            place.append(event.getString("city"));
+            place.append (":");
+            place.append(event.getString("address"));
+            String p = place.toString().toUpperCase();
             
-            // Se il place non esiste nella mappa, lo crea
-            placeMap.putIfAbsent(tmpPlace.toUpperCase(), new Place(tmpPlace));
-            
-            // Aggiunge il tipo di visita
-            placeMap.get(tmpPlace.toUpperCase()).addVisitType(tmpVisit.getVisitType());
+            placeMap.putIfAbsent(p, new Place (p));
+            placeMap.get (p).addVisitType(event.getString("visitType"));
         }
         UserTui.stamp_list("Ecco gli eventi associati a ciascun luogo", placeMap);
     }
@@ -97,11 +113,12 @@ public class ConfiguratorMenu implements UserMenu
         JSONObjectCreator.setMaxPeopleForSubscription(newMaxNumber);
     }
 
+    //DA SISTEMARE
     public void view_voluntary_list()
     {
         Client.getInstance().get_voluntaries_for_visit("");
         String getVoluntariesResponse = Client.getInstance().make_server_request();
-        Set <String> voluntaryList = new HashSet <>(JSONObject.extractArray(getVoluntariesResponse, "userID"));
+        Set <String> voluntaryList = new HashSet <>(JSONObjectMethod.extractArray(getVoluntariesResponse, "userID"));
         UserTui.stamp_list("Ecco l'elenco dei volontari iscritti:", voluntaryList);
     }
 
@@ -117,7 +134,8 @@ public class ConfiguratorMenu implements UserMenu
                 int unixDate = (int)date.getUnixDate(unaviableDay);
                 Client.getInstance().set_closed_days(unixDate, date.getEndDayOfClosure(), "ASSOCIAZIONE");  // definisci ASSOCIAZIONE
                 String closedDaysReply = Client.getInstance().make_server_request();
-                JSONObject.confirmRequest (closedDaysReply, "querySuccesful");
+                JSONObject dictionary = new JSONObject(closedDaysReply);
+                UserTui.operationIsSuccessful(dictionary.getBoolean("querySuccesful"));
             }
             addAnotherDate = UserTui.getYesNoAnswer("Vuoi inserire un'altra data");
         }while (addAnotherDate);
@@ -125,17 +143,35 @@ public class ConfiguratorMenu implements UserMenu
 
     private void view_visit_state ()
     {
-        Client.getInstance().get_event(null);
+        HashMap <String, Object> filters = new HashMap<>();
+        filters.put ("city", "%");
+        filters.put ("address", "%");
+        filters.put ("state", "%");
+        filters.put ("startDate", "%");
+        filters.put ("eventName", "%");
+        Client.getInstance().get_event(filters);
         String getEventResponse = Client.getInstance().make_server_request();
-        visitList = JSONObject.getVisitArray (getEventResponse);
+        JSONArray eventsArray = new JSONArray(getEventResponse);
+
+        for (int i = 0; i < getEventResponse.length(); i++)
+        {
+            JSONObject event = eventsArray.getJSONObject(i);
+            String tmpEventName = event.getString("eventName");
+            String tmpCity = event.getString("city");
+            String tmpAddress = event.getString("address");
+            String tmpState = event.getString("state");
+            int tmpStartDate = event.getInt("startDate");
+
+            visitList.add(new Visit (tmpEventName, tmpCity, tmpAddress, tmpState, tmpStartDate));
+        }
 
         System.out.println ("\nEcco l'elenco delle visite attualmente nello stato di proposto/completato/confermato/cancellato/effettuato");
         for (Visit v: visitList)
         {
-            if (v.getVisitState() == StateOfVisit.CANCELLATA && v.getVisitState() == StateOfVisit.PROPOSTA &&
-                        v.getVisitState() == StateOfVisit.COMPLETA && v.getVisitState() == StateOfVisit.CONFERMATA && v.getVisitState() == StateOfVisit.EFFETTUATA)
+            if (v.getVisitState() == StateOfVisit.CANCELLATA || v.getVisitState() == StateOfVisit.PROPOSTA ||
+                        v.getVisitState() == StateOfVisit.COMPLETA || v.getVisitState() == StateOfVisit.CONFERMATA || v.getVisitState() == StateOfVisit.EFFETTUATA)
             {
-                System.out.printf ("La visita %s, che si tiene a %s ed è nello stato %s\n", v.getEventName(), v.getPlace(), v.getVisitState().toString());
+                System.out.printf ("La visita %s, che si tiene a %s il %s ed è nello stato %s\n", v.getEventName(), v.getPlace(), v.getStartDay(),v.getVisitState().toString());
             }
         }
     }

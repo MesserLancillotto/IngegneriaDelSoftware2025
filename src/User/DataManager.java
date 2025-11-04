@@ -56,4 +56,31 @@ public class DataManager
         return endOfDayDate;
     }
 
+    public static String fromUnixToNormal(int value) 
+    {
+        try 
+        {
+            // Verifica che il timestamp non sia negativo
+            if (value < 0) 
+            {
+                return "Data non valida";
+            }
+            
+            // Converti il timestamp Unix in LocalDateTime
+            Instant instant = Instant.ofEpochSecond(value);
+            LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+            
+            // Definisci il formato italiano
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy 'alle' HH:mm");
+            
+            // Formatta la data
+            return dateTime.format(formatter);
+            
+        } 
+        catch (Exception e) 
+        {
+            return "Data non valida";
+        }
+    }
+
 }

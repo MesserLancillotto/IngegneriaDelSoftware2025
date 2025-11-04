@@ -48,12 +48,12 @@ public final class Client
         return instance;
     }
 
-    public static void setUserID (String tmpuUserID)
+    public void setUserID (String tmpuUserID)
     {
         userID = tmpuUserID;
     }
 
-    public static void setUserPassword (String tmpUserPassword)
+    public void setUserPassword (String tmpUserPassword)
     {
         userPassword = tmpUserPassword;
     }

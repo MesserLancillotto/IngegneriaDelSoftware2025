@@ -2,73 +2,60 @@ package User;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
+import org.json.*;
 
 
 public class JSONObjectCreator 
 {
+    private static final String KEY = "maxPeopleForSubscription";
     private static final String CONFIG_FILE = "config.json";
 
-    // GETTER - legge direttamente dal file JSON
-    public static int getMaxPeopleForSubscription() 
+    public static void setMaxPeopleForSubscription (int maxPeopleForSubscription)
+    {
+        JSONObject json = new JSONObject();
+        json.put(KEY, maxPeopleForSubscription);
+        saveJsonToFile (json.toString(), CONFIG_FILE);
+    }
+
+    private static void saveJsonToFile(String jsonString, String filePath) 
     {
         try 
         {
-            if (!Files.exists(Paths.get(CONFIG_FILE))) 
-            {
-                return 0; // Valore di default se il file non esiste
-            }
-            
-            String content = new String(Files.readAllBytes(Paths.get(CONFIG_FILE)));
-            
-            // Estrazione del valore dal JSON
-            String[] lines = content.split("\n");
-            for (String line : lines) 
-            {
-                if (line.contains("maxPeopleForSubscription")) 
-                {
-                    // Rimuove tutto tranne i numeri
-                    String value = line.replaceAll("[^0-9]", "").trim();
-                    return Integer.parseInt(value);
-                }
-            }
+            // Scrive la stringa JSON nel file
+            Files.write(Paths.get(filePath), 
+                       jsonString.getBytes(), 
+                       StandardOpenOption.CREATE, 
+                       StandardOpenOption.TRUNCATE_EXISTING);
             
         } 
         catch (IOException e) 
         {
-            System.err.println("Errore durante la lettura: " + e.getMessage());
-        } 
-        catch (NumberFormatException e) 
-        {
-            System.err.println("Errore nel formato del file JSON: " + e.getMessage());
+            System.err.println("Errore nel salvataggio: " + e.getMessage());
         }
-        
-        return 0; // Valore di default in caso di errore
     }
 
-    // SETTER - scrive direttamente nel file JSON
-    public static void setMaxPeopleForSubscription(int maxPeopleForSubscription) 
+    public static int getMaxPeopleForSubscription ()
     {
-        try (FileWriter file = new FileWriter(CONFIG_FILE)) 
+        JSONObject json = new JSONObject(readJsonFromFile(CONFIG_FILE));
+        return json.getInt(KEY);
+    }
+
+    private static String readJsonFromFile(String filePath) 
+    {
+        try 
         {
-            String json = "{"
-                + "\n"
-                + "  \"maxPeopleForSubscription\": " + maxPeopleForSubscription + "\n"
-                + "}";
-            file.write(json);
-            System.out.println("Valore aggiornato nel file JSON: " + maxPeopleForSubscription);
-            
+            // Legge tutto il contenuto del file come stringa
+            String jsonString = new String(Files.readAllBytes(Paths.get(filePath)));
+            return jsonString;    
         } 
         catch (IOException e) 
         {
-            System.err.println("Errore durante il salvataggio: " + e.getMessage());
+            System.err.println("Errore nella lettura: " + e.getMessage());
+            return null;
         }
     }
-
-    // Metodo per verificare se il file di configurazione esiste
-    public boolean configExists() 
-    {
-        return Files.exists(Paths.get(CONFIG_FILE));
-    }
+    
 }
 

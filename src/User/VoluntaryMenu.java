@@ -60,7 +60,7 @@ public class VoluntaryMenu implements UserMenu
                 int unixDate = (int)date.getUnixDate(disponibilityDay);
                 //Client.getInstance().nome_metodo(unixDate, date.getEndDayOfClosure(), "ASSOCIAZIONE")
                 String voluntaryDisponibilityResponse = Client.getInstance().make_server_request();
-                JSONObject.confirmRequest (voluntaryDisponibilityResponse, "querySuccesful");
+                JSONObjectMethod.confirmRequest (voluntaryDisponibilityResponse, "querySuccesful");
             }
             addAnotherDate = UserTui.getYesNoAnswer("Vuoi inserire un'altra data");
         }while (addAnotherDate);

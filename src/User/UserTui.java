@@ -129,8 +129,33 @@ public class UserTui
                 
                 if (value != null && !value.isEmpty())
                     return value;
+                else
+                    System.out.println ("Valore inserito non valido, riprova!\n");
+            }
+            catch (IOException errorDuringDigitation)
+            {
+                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("Riprova");
+            }
+        }
+    }
 
-                System.out.println ("Valore inserito non valido, riprova!\n");
+    public static String getStringNoTrimWithConfirm (String thingToSayToUser)
+    {
+        while (true)
+        {
+            try
+            {
+                System.out.printf ("\n%s: ", thingToSayToUser);
+                String value = consoleIn.readLine();
+                
+                if (value != null && !value.isEmpty())
+                {
+                    if (getYesNoAnswer("Hai inserito "+value+" confermi"))
+                        return value;
+                }
+                else
+                    System.out.println ("Valore inserito non valido, riprova!\n");
             }
             catch (IOException errorDuringDigitation)
             {
@@ -301,9 +326,17 @@ public class UserTui
         for (Map.Entry<String, Place> entry : placeList.entrySet())
         {
             Place place = entry.getValue();
-            System.out.printf ("A %s ci sono questi tipi di visite", place.getPlaceName());
+            System.out.printf ("A %s ci sono questi tipi di visite\n", place.getPlaceName());
             place.stampTypeVisit();
         }
+    }
+
+    public static void operationIsSuccessful (boolean result)
+    {
+        if (result)
+            System.out.println ("\nL'operazione ha avuto successo");
+        else
+            System.out.println ("\nERRORE! l'operazione non ha avuto successo");
     }
 
 }

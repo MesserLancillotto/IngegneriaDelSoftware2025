@@ -6,6 +6,7 @@ public class Place
     ArrayList <String> visitTypeInThisPlace = new ArrayList<>();
 	String placeName;
 	
+	//COSTRUTTORE
 	public Place (String placeName)
 	{
 		this.placeName = placeName;

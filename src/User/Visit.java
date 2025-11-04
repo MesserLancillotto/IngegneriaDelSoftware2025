@@ -38,9 +38,22 @@ public class Visit
 		this.state = StateOfVisit.CONFERMATA;
 	}
 
+	public Visit (String eventName, String city, String address, String state, int startDate)
+	{
+		this.eventName = eventName;
+		this.city = city;
+		this.address = address;
+		this.state = StateOfVisit.fromString(state);
+		this.startDate = startDate;
+	}
+
 	public String getPlace ()
 	{
-		return city+":"+address;
+		StringBuilder sb = new StringBuilder();
+		sb.append(city);
+		sb.append (":");
+		sb.append(address);
+		return sb.toString();
 	}
 
 	public String getVisitType ()
@@ -55,5 +68,10 @@ public class Visit
 	public StateOfVisit getVisitState ()
 	{
 		return state;
+	}
+
+	public String getStartDay ()
+	{
+		return DataManager.fromUnixToNormal (startDate);
 	}
 }
