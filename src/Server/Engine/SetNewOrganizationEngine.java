@@ -37,7 +37,7 @@ public class SetNewOrganizationEngine extends Engine
         (
             Connection connection = connectDB(dbUrl, "sa", "");
         ) {
-            String checkPermitsQuery = "SELECT role FROM users WHERE userID = ? AND userPassword = ?";
+            String checkPermitsQuery = "SELECT role, organization FROM users WHERE userID = ? AND userPassword = ?";
             PreparedStatement checkPermitsStatement = connection.prepareStatement(checkPermitsQuery);
             checkPermitsStatement.setString(1, userID);
             checkPermitsStatement.setString(2, userPassword);
@@ -45,6 +45,7 @@ public class SetNewOrganizationEngine extends Engine
             if(
                 !checkPermitsResult.next() 
                 || !checkPermitsResult.getString("role").equals("CONFIGURATOR")
+                || !checkPermitsResult.getString("organization").equals("")
             ) {
                 return new SetNewOrganizationReply(false, false, 0).toJSONString();
             }
@@ -57,7 +58,7 @@ public class SetNewOrganizationEngine extends Engine
             {
                 return new SetNewOrganizationReply(true, false, 0).toJSONString(); 
             }
-            
+
             for(String territory : territoriesOfCompetence)
             {
                 String query = "INSERT INTO organizations VALUES ( ?, ? )";
@@ -67,6 +68,12 @@ public class SetNewOrganizationEngine extends Engine
                 int v = statement.executeUpdate();
                 this.territoriesAdded += v; 
             }
+            String query = "UPDATE users SET organization = ? WHERE userID = ? AND userPassword = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, organizationName);
+            statement.setString(2, userID);
+            statement.setString(3, userPassword);
+            int x = statement.executeUpdate();
             return new SetNewOrganizationReply(
                     true,
                     true,

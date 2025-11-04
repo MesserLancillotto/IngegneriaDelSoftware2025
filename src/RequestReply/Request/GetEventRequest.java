@@ -40,6 +40,12 @@ public class GetEventRequest implements RequestType
         return this;
     }
     
+
+    private GetEventRequest withPartialName(String partialName) {
+        filters.put("partialName", partialName);
+        return this;
+    }
+
     private GetEventRequest withAddress(String address) {
         filters.put("address", address);
         return this;
@@ -75,6 +81,12 @@ public class GetEventRequest implements RequestType
         return this;
     }
     
+    private GetEventRequest withState(String state) {
+        filters.put("state", state);
+        return this;
+    }
+
+
     public String toJSONString() {
         JSONObject json = new JSONObject();
         for (Map.Entry<String, Object> entry : filters.entrySet()) {

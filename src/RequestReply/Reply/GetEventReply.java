@@ -18,22 +18,22 @@ public class GetEventReply implements ReplyType
         int maximumUsers,
         int maximumFriends,
         String visitType,
-        boolean confirmed
+        String state
     ) {
-            JSONObject event = new JSONObject();
-            event.put("eventName", eventName);
-            event.put("description", description);
-            event.put("city", city);
-            event.put("address", address);
-            event.put("startDate", startDate);
-            event.put("endDate", endDate);
-            event.put("organizationName", organizationName);
-            event.put("minUsers", minimumUsers);
-            event.put("maxUsers", maximumUsers);
-            event.put("maxFriends", maximumFriends);
-            event.put("visitType", visitType);
-            event.put("confirmed", true);
-            result.put(event);
+        JSONObject event = new JSONObject();
+        event.put("eventName", eventName);
+        event.put("description", description);
+        event.put("city", city);
+        event.put("address", address);
+        event.put("startDate", startDate);
+        event.put("endDate", endDate);
+        event.put("organizationName", organizationName);
+        event.put("minUsers", minimumUsers);
+        event.put("maxUsers", maximumUsers);
+        event.put("maxFriends", maximumFriends);
+        event.put("visitType", visitType);
+        event.put("state", state);
+        result.put(event);
     }
 
     public String toJSONString()

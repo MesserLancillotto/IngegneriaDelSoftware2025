@@ -22,32 +22,43 @@ public class GetEventEngine extends Engine
         
         try (Connection connection = connectDB(dbUrl, "sa", "")) 
         {
-            StringBuilder query = new StringBuilder("SELECT * FROM events WHERE 1=1");
+            StringBuilder query = new StringBuilder("SELECT * FROM events WHERE 1=1 ");
             List<Object> parameters = new ArrayList<>();
 
-            if (filters.containsKey("city")) {
-                query.append(" AND city = ?");
+            if (filters.containsKey("partialName"))
+            {
+                query.append(" AND eventName LIKE ? ");
+                parameters.add(filters.get("%" + "partialName" + "%"));
+            }
+            if (filters.containsKey("city")) 
+            {
+                query.append(" AND city = ? ");
                 parameters.add(filters.get("city"));
             }
-            if (filters.containsKey("address")) {
-                query.append(" AND address LIKE ?");
+            if (filters.containsKey("address")) 
+            {
+                query.append(" AND address LIKE ? ");
                 parameters.add("%" + filters.get("address") + "%");
             }
-            if (filters.containsKey("organizationName")) {
-                query.append(" AND organizationName = ?");
+            if (filters.containsKey("organizationName")) 
+            {
+                query.append(" AND organizationName = ? ");
                 parameters.add(filters.get("organizationName"));
             }
-            if (filters.containsKey("visitType")) {
-                query.append(" AND visitType = ?");
+            if (filters.containsKey("visitType")) 
+            {
+                query.append(" AND visitType = ? ");
                 parameters.add(filters.get("visitType"));
             }
-            if (filters.containsKey("confirmed")) {
-                query.append(" AND confirmed = ?");
-                parameters.add(filters.get("confirmed"));
+            if (filters.containsKey("state")) 
+            {
+                query.append(" AND state = ? ");
+                parameters.add(filters.get("state"));
             }
             
             PreparedStatement statement = connection.prepareStatement(query.toString());
-            for (int i = 0; i < parameters.size(); i++) {
+            for (int i = 0; i < parameters.size(); i++) 
+            {
                 statement.setObject(i + 1, parameters.get(i));
             }
             
@@ -66,7 +77,7 @@ public class GetEventEngine extends Engine
                     resultSet.getInt("maxUsers"),
                     resultSet.getInt("maxFriends"),
                     resultSet.getString("visitType"),
-                    resultSet.getBoolean("confirmed")
+                    resultSet.getString("confirmed")
                 );
             }
             

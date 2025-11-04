@@ -1,5 +1,7 @@
 package RequestReply.Request;
 
+import org.json.*;
+
 public class GetUserDataRequest implements RequestType
 {
     private String target;
@@ -10,6 +12,8 @@ public class GetUserDataRequest implements RequestType
 
     public String toJSONString()
     {
-        return String.format("\"target\":\"%s\"", target);
+        JSONObject json = new JSONObject();
+        json.put("target", target);
+        return json.toString();
     }
 }
