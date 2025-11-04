@@ -118,7 +118,8 @@ public class ConfiguratorMenu implements UserMenu
     {
         Client.getInstance().get_voluntaries_for_visit("");
         String getVoluntariesResponse = Client.getInstance().make_server_request();
-        Set <String> voluntaryList = new HashSet <>(JSONObjectMethod.extractArray(getVoluntariesResponse, "userID"));
+        Set <String> voluntaryList; //= new HashSet <>(JSONObjectMethod.extractArray(getVoluntariesResponse, "userID"));
+        voluntaryList = new HashSet<>();
         UserTui.stamp_list("Ecco l'elenco dei volontari iscritti:", voluntaryList);
     }
 

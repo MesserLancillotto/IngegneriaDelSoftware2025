@@ -1,10 +1,14 @@
 package User;
 
+import org.json.*;
+import java.util.*;
+
 import Client.Client;
 
 public class VoluntaryMenu implements UserMenu
 {
     private String voluntaryUserName;
+    private ArrayList <String> associatedVisitType;
 
     public void initialize_menu_selection()
 	{
@@ -36,16 +40,22 @@ public class VoluntaryMenu implements UserMenu
         }while (keepUsingConfiguratorMenu);
 	}
     //COSTRUTTORE
-    public VoluntaryMenu (String voluntaryUserName)
+    public VoluntaryMenu (String voluntaryUserName, ArrayList <String> associatedVisitType)
     {
         this.voluntaryUserName = voluntaryUserName;
+        this.associatedVisitType = associatedVisitType;
         initialize_menu_selection();
         manage_options();
     }
 
     private void view_associated_visit_type ()
     {
-        //Client.getInstance().get_event(voluntaryUserName);
+        Set <String> visitType = new HashSet<>(associatedVisitType);
+        StringBuilder msg = new StringBuilder();
+        msg.append("Ecco i tipi di visita a cui sei associato (");
+        msg.append(voluntaryUserName);
+        msg.append (")");
+        UserTui.stamp_list(msg.toString(), visitType);
     }
 
     private void give_disponibility()
@@ -60,7 +70,8 @@ public class VoluntaryMenu implements UserMenu
                 int unixDate = (int)date.getUnixDate(disponibilityDay);
                 //Client.getInstance().nome_metodo(unixDate, date.getEndDayOfClosure(), "ASSOCIAZIONE")
                 String voluntaryDisponibilityResponse = Client.getInstance().make_server_request();
-                JSONObjectMethod.confirmRequest (voluntaryDisponibilityResponse, "querySuccesful");
+                JSONObject dictionary = new JSONObject(voluntaryDisponibilityResponse);
+                UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful"));
             }
             addAnotherDate = UserTui.getYesNoAnswer("Vuoi inserire un'altra data");
         }while (addAnotherDate);
