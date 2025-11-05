@@ -21,9 +21,9 @@ public class Client_test
         // client.edit_password("BaruffeChiozzotte");
 
         // get_event
-        Map<String, Object> filters = new HashMap<String, Object>();
-        filters.put("city", "Bergamo");
-        client.get_event(filters);
+        // Map<String, Object> filters = new HashMap<String, Object>();
+        // filters.put("city", "Bergamo");
+        // client.get_event(filters);
 
         // client.get_user_data("VOLUNTARY.Arlecchino.Valcalepio.81");
 
@@ -72,7 +72,7 @@ public class Client_test
         // territoriesOfCompetence.add("Alessandria");
         // client.set_new_organization("San Luca", territoriesOfCompetence);
 
-        System.out.println(client.make_server_request());
+        // System.out.println(client.make_server_request());
 
     }
 }
