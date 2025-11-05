@@ -8,8 +8,16 @@ public class Client_test
     {
         Client client = new Client("CONFIGURATOR.Carlo.Goldoni.97", "samuele");
         
-        // edit_event
-        
+        // ORGANIZZAZIONE DIVERSA
+        // Map<String, Object> fields = new HashMap<String, Object>();
+        // fields.put("state", "CONFIRMED"); 
+        // client.edit_event("Le quattro stagioni al parco", fields);
+
+        // TUTTO CORRETTO
+        // Map<String, Object> fields = new HashMap<String, Object>();
+        // fields.put("state", "CONFIRMED"); 
+        // client.edit_event("Cinema in Castello: la corazzata Potiomkin", fields);
+
         // client.edit_password("BaruffeChiozzotte");
 
         // get_event

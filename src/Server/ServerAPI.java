@@ -79,6 +79,7 @@ class ServerAPI extends Thread
                     {
                         map.put(key, dictionary.get(key));
                     }
+                    map.remove("requestType");
                     return new EditEventEngine(
                         userID,
                         userPassword,

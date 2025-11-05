@@ -5,16 +5,15 @@ import java.util.*;
 
 public class EditEventRequest implements RequestType
 {
-    private Map<String, Object> fields;
+    private Map<String, Object> fields = new HashMap<String, Object>();
     
     public EditEventRequest(String eventName) {
-        this.fields = new HashMap<>();
         this.fields.put("eventName", eventName);
     }
 
     public EditEventRequest(String eventName, Map<String, Object> fields)
     {
-        this.fields.put("eventName", eventName);
+        this(eventName);
         this.fields.putAll(fields);
     }
     
@@ -92,6 +91,8 @@ public class EditEventRequest implements RequestType
     
     public String toJSONString() 
     {
+        if(!fields.containsKey("eventName"))
+            return "";
         JSONObject json = new JSONObject(fields);
         return json.toString();
     }

@@ -45,22 +45,24 @@ public class EditEventEngine extends Engine
             {
                 return new EditEventReply(false, false, false, false).toJSONString();
             }
-            if(userResult.getString("role").equals("CONFIGURATOR"))
+            if(!userResult.getString("role").equals("CONFIGURATOR"))
             {
                 return new EditEventReply(true, false, true, false).toJSONString();
             }
             String userOrganization = userResult.getString("organization");
 
-            String organizationQuery = "SELECT organizationName FROM events WHERE eventName = ?";
+            String organizationQuery = "SELECT organization FROM events WHERE eventName = ?";
             PreparedStatement organizationStatement = connection.prepareStatement(organizationQuery);
             organizationStatement.setString(1, (String)fields.get("eventName"));
             ResultSet organizationResult = organizationStatement.executeQuery();
 
-            if (!organizationResult.next()) {
+            if (!organizationResult.next()) 
+            {
                 return new EditEventReply(false).toJSONString();
             }
-            String eventOrganization = organizationResult.getString("organizationName");
-            if (!userOrganization.equals(eventOrganization)) {
+            String eventOrganization = organizationResult.getString("organization");
+            if (!userOrganization.equals(eventOrganization)) 
+            {
                 return new EditEventReply(false).toJSONString();
             }
             List<String> keys = new ArrayList<>(fields.keySet());
@@ -79,9 +81,10 @@ public class EditEventEngine extends Engine
                 statement.setObject(paramIndex, fields.get(key));
                 paramIndex++;
             }
-            statement.setString(paramIndex, (String)fields.get("eventName")); // // Aggiungi il cast
+            statement.setString(paramIndex, (String)fields.get("eventName"));
             int rowsUpdated = statement.executeUpdate();
-            if (rowsUpdated == 1) {
+            if (rowsUpdated == 1) 
+            {
                return new EditEventReply(true, true, false, false).toJSONString();
             }
         } catch(Exception e)
