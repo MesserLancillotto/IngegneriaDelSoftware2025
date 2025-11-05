@@ -29,6 +29,12 @@ public final class Client
         this.comunicationType = ComunicationType.EDIT_EVENT;
     }
 
+    public void get_event_with_disponibility()
+    {
+        this.body = new GetEventWithDisponibilityRequest();
+        this.comunicationType = ComunicationType.GET_EVENT_WITH_DISPONIBILITY;
+    }
+
     public void edit_password(String newPassword) {
         this.body = new EditPasswordRequest(newPassword);
         this.comunicationType = ComunicationType.EDIT_PASSWORD;
@@ -53,6 +59,8 @@ public final class Client
         this.body = new SetClosedDaysRequest(startDate, endDate, organization);
         this.comunicationType = ComunicationType.SET_CLOSED_DAYS;
     }
+
+
 
     public void set_new_event(
         String eventName,

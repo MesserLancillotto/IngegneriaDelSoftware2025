@@ -70,6 +70,7 @@ public class GetEventEngine extends Engine
                     resultSet.getString("eventDescription"),
                     resultSet.getString("city"),
                     resultSet.getString("address"),
+                    resultSet.getString("meetingPoint"),
                     resultSet.getInt("startDate"),
                     resultSet.getInt("endDate"),
                     resultSet.getString("organization"),

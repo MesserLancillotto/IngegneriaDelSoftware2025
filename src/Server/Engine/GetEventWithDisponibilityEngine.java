@@ -46,15 +46,16 @@ public class GetEventWithDisponibilityEngine extends Engine
             while (resultSet.next()) {
                 response.insertEvent(
                     resultSet.getString("eventName"),
-                    resultSet.getString("eventDescription"),
+                    resultSet.getString("description"),
                     resultSet.getString("city"),
                     resultSet.getString("address"),
+                    resultSet.getString("meetingPoint"),
                     resultSet.getInt("startDate"),
                     resultSet.getInt("endDate"),
                     resultSet.getString("organization"),
-                    resultSet.getInt("minUsers"),
-                    resultSet.getInt("maxUsers"),
-                    resultSet.getInt("maxFriends"),
+                    resultSet.getInt("minimumUsers"),
+                    resultSet.getInt("maximumUsers"),
+                    resultSet.getInt("maximumFriends"),
                     resultSet.getString("visitType"),
                     resultSet.getString("state")
                 );

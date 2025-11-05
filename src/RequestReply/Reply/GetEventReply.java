@@ -8,15 +8,16 @@ public class GetEventReply implements ReplyType
 
     public void insertEvent(
         String eventName,
-        String description,
+        String description, 
         String city,
         String address,
+        String meetingPoint, 
         int startDate,
         int endDate,
-        String organizationName,
-        int minimumUsers,
-        int maximumUsers,
-        int maximumFriends,
+        String organization,
+        int minimumUsers, 
+        int maximumUsers,   
+        int maximumFriends, 
         String visitType,
         String state
     ) {
@@ -25,9 +26,10 @@ public class GetEventReply implements ReplyType
         event.put("description", description);
         event.put("city", city);
         event.put("address", address);
+        event.put("meetingPoint", meetingPoint);
         event.put("startDate", startDate);
         event.put("endDate", endDate);
-        event.put("organizationName", organizationName);
+        event.put("organization", organization);
         event.put("minUsers", minimumUsers);
         event.put("maxUsers", maximumUsers);
         event.put("maxFriends", maximumFriends);

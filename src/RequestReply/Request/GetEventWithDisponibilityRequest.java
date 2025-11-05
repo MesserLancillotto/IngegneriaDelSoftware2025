@@ -3,7 +3,7 @@ package RequestReply.Request;
 import org.json.JSONObject;
 import java.util.*;
 
-public class GetEventWithDisponibilityRequest
+public class GetEventWithDisponibilityRequest implements RequestType
 {
     JSONObject json = new JSONObject();
 
