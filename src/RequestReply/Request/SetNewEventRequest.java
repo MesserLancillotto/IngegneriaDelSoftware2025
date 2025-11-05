@@ -27,7 +27,7 @@ public class SetNewEventRequest implements RequestType
         String description,
         String city,
         String address,
-        String meetingPoint, // // Aggiungi questo parametro
+        String meetingPoint,
         int startDate,
         int endDate,
         String organization,
@@ -36,8 +36,8 @@ public class SetNewEventRequest implements RequestType
         int maximumFriends,
         String visitType,
         ArrayList<String> visitDays,
-        ArrayList<Integer> startHour, // // ArrayList<Integer>
-        ArrayList<Integer> duration   // // ArrayList<Integer>
+        ArrayList<Integer> startHour,
+        ArrayList<Integer> duration
     ) {
         this.eventName = eventName;
         this.description = description;

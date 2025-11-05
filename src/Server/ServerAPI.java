@@ -140,7 +140,7 @@ class ServerAPI extends Thread
                         dictionary.getInt("maximumUsers"),
                         dictionary.getInt("maximumFriends"),
                         dictionary.getString("visitType"),
-                        
+                        dictionary.getString("state"),
                         getStringArrayListFromJSON(dictionary.getJSONArray("visitDays")),
                         getIntegerArrayListFromJSON(dictionary.getJSONArray("startHour")),
                         getIntegerArrayListFromJSON(dictionary.getJSONArray("duration"))
@@ -180,7 +180,7 @@ class ServerAPI extends Thread
 
     // helper
 
-    private ArrayList<String> getStringArrayListFromJSON(JSONArray jsonArray) {
+    private static ArrayList<String> getStringArrayListFromJSON(JSONArray jsonArray) {
         ArrayList<String> list = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             list.add(jsonArray.getString(i));
@@ -188,7 +188,7 @@ class ServerAPI extends Thread
         return list;
     }
 
-    private ArrayList<Integer> getIntegerArrayListFromJSON(JSONArray jsonArray) {
+    private static ArrayList<Integer> getIntegerArrayListFromJSON(JSONArray jsonArray) {
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             list.add(jsonArray.getInt(i));
