@@ -109,13 +109,17 @@ public final class Client
         String description,
         String city,
         String address,
+        String meetingPoint,
         int startDate,
         int endDate,
         String organizationName,
         int minimumUsers,
         int maximumUsers,
         int maximumFriends,
-        String visitType
+        String visitType,
+        ArrayList<String> visitDays,
+        ArrayList<Integer> startHour,
+        ArrayList<Integer> duration
     ) {
         /*
         RequestType body = new SetNewEventRequest(

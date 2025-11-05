@@ -107,8 +107,8 @@ public class Configurator extends User
                 int maxPartecipants = UserTui.getInteger("Inserisci il numero massimo di partecipanti a questo evento", minPartecipants+1, 1000);
                 int maxPeopleForSubscription = JSONObjectCreator.getMaxPeopleForSubscription();
                 
-                Client.getInstance().set_new_event(eventName, eventDescription, cityName, cityAddress, startDate, endDate, 
-                organization, minPartecipants, maxPartecipants, maxPeopleForSubscription, visitType);
+                Client.getInstance().set_new_event(eventName, eventDescription, cityName, cityAddress, meetingPoint, startDate, endDate, 
+                organization, minPartecipants, maxPartecipants, maxPeopleForSubscription, visitType, visitDays, startHours, duration);
                 String setNewEventReply = Client.getInstance().make_server_request();
                 JSONObject dictionary = new JSONObject(setNewEventReply);
                 UserTui.operationIsSuccessful(dictionary.getBoolean("registrationSuccesful"));
