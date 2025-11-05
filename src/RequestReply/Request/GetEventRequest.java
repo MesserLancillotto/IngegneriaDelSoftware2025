@@ -5,7 +5,7 @@ import org.json.*;
 
 public class GetEventRequest implements RequestType
 {
-    private Map<String, Object> filters;
+    private Map<String, Object> filters = new HashMap<String, Object>();
     
     public GetEventRequest(Map<String, Object> filters) {
         this.filters = filters;
@@ -21,7 +21,7 @@ public class GetEventRequest implements RequestType
     }
     
     private GetEventRequest withOrganization(String organization) {
-        filters.put("organizationName", organization);
+        filters.put("organization", organization);
         return this;
     }
     
@@ -87,10 +87,7 @@ public class GetEventRequest implements RequestType
     }
 
     public String toJSONString() {
-        JSONObject json = new JSONObject();
-        for (Map.Entry<String, Object> entry : filters.entrySet()) {
-            json.put(entry.getKey(), entry.getValue());
-        }
+        JSONObject json = new JSONObject(filters);
         return json.toString();
     }
 }

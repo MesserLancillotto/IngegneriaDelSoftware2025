@@ -40,10 +40,10 @@ public class GetEventEngine extends Engine
                 query.append(" AND address LIKE ? ");
                 parameters.add("%" + filters.get("address") + "%");
             }
-            if (filters.containsKey("organizationName")) 
+            if (filters.containsKey("organization")) 
             {
-                query.append(" AND organizationName = ? ");
-                parameters.add(filters.get("organizationName"));
+                query.append(" AND organization = ? ");
+                parameters.add(filters.get("organization"));
             }
             if (filters.containsKey("visitType")) 
             {
@@ -72,12 +72,12 @@ public class GetEventEngine extends Engine
                     resultSet.getString("address"),
                     resultSet.getInt("startDate"),
                     resultSet.getInt("endDate"),
-                    resultSet.getString("organizationName"),
+                    resultSet.getString("organization"),
                     resultSet.getInt("minUsers"),
                     resultSet.getInt("maxUsers"),
                     resultSet.getInt("maxFriends"),
                     resultSet.getString("visitType"),
-                    resultSet.getString("confirmed")
+                    resultSet.getString("state")
                 );
             }
             
