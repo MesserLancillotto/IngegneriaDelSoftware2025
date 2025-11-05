@@ -1,12 +1,49 @@
 package User;
-import java.util.*;
 
-public interface UserMenu 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public abstract class UserMenu 
 {
     HashMap <Integer, Runnable> menuSelection = new HashMap <>();
     ArrayList <String> menuOptionList = new ArrayList<>();
 
-    void initialize_menu_selection ();
-    void visualize_options ();
+    abstract void initialize_menu_selection ();
+    
+    public void visualize_options ()
+	{
+        int optionCount = 1;
+        for (String options : menuOptionList)
+        {
+            System.out.println (optionCount+options);
+        }
+        menuSelection.get(UserTui.getInteger("Cosa vuoi fare", 0, optionCount+1))
+                            .run();
+	}
+
+    public static void printCenteredTitle(String title) 
+    {
+        int totalWidth = 50;
+        int padding = (totalWidth - title.length() - 2) / 2;
+        
+        String border = "✽".repeat(totalWidth);
+        String paddingStr = " ".repeat(padding);
+        
+        System.out.println("\n" + border);
+        System.out.println("✽" + paddingStr + " " + title + " " + paddingStr + "✽");
+        System.out.println(border + "\n");
+    }
+    
+    public void manage_options ()
+	{
+        boolean keepUsingConfiguratorMenu;
+        do
+        {
+            visualize_options();
+
+            System.out.printf ("\nVuoi fare altro: ");
+            keepUsingConfiguratorMenu = UserTui.getYesNoAnswer("\nVuoi fare altro");
+        }while (keepUsingConfiguratorMenu);
+	}
 
 }

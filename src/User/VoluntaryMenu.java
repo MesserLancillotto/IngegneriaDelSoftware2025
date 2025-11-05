@@ -5,7 +5,7 @@ import java.util.*;
 
 import Client.Client;
 
-public class VoluntaryMenu implements UserMenu
+public class VoluntaryMenu extends UserMenu
 {
     private String voluntaryUserName;
     private ArrayList <String> associatedVisitType;
@@ -17,31 +17,11 @@ public class VoluntaryMenu implements UserMenu
 
         menuOptionList.add("Visualizza il tipo di visite a cui sei associato");
 	}
-    public void visualize_options ()
-	{
-        int optionCount = 1;
-        for (String options : menuOptionList)
-        {
-            System.out.println (optionCount+options);
-        }
-        menuSelection.get(UserTui.getInteger("Cosa vuoi fare", 0, optionCount+1))
-                            .run();
-	}
-
-    public void manage_options ()
-	{
-        boolean keepUsingConfiguratorMenu;
-        do
-        {
-            visualize_options();
-
-            System.out.printf ("\nVuoi fare altro: ");
-            keepUsingConfiguratorMenu = UserTui.getYesNoAnswer("\nVuoi fare altro");
-        }while (keepUsingConfiguratorMenu);
-	}
+   
     //COSTRUTTORE
     public VoluntaryMenu (String voluntaryUserName, ArrayList <String> associatedVisitType)
     {
+        printCenteredTitle("MENU PRINCIPALE VOLONTARI");
         this.voluntaryUserName = voluntaryUserName;
         this.associatedVisitType = associatedVisitType;
         initialize_menu_selection();
