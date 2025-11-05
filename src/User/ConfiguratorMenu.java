@@ -75,7 +75,6 @@ public class ConfiguratorMenu implements UserMenu
             place.append (":");
             place.append(event.getString("address"));
             distinctPlaces.add(place.toString());
-
         }
 		UserTui.stamp_list ("Questi sono i posti visitabili: ", distinctPlaces);
 	}

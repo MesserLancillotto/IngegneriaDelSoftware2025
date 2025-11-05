@@ -58,7 +58,7 @@ public class DataManagerPeriod extends DataManager
         return getUnixDate();
     }
 
-    private boolean checkHourFormat (String hour)
+    public boolean checkHourFormat(String hour)
     {
         if (hour == null || hour.length() != 5) 
         {

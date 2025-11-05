@@ -1,6 +1,7 @@
 package User;
 import java.util.*;
 
+import org.h2.store.Data;
 import org.json.JSONObject;
 
 import Client.Client;
@@ -86,13 +87,19 @@ public class Configurator extends User
             {
                 String eventName = UserTui.getStringNoTrim ("Inserisci il nome dell'evento");
                 String eventDescription = UserTui.getStringNoTrim("Inserisci una descrizione dell'evento", 500);
-
-                // acquisizione da migliorare 
-                String tmpVoluntaryName = UserTui.getString("Inserire il volontario che segue questa visita");
-                // ????
-                // sulla scelta del volontario -> creare metodo che gli mostra quelli esistenti o che gli chiede di aggiugerne uno nuovo
-
                 String visitType = UserTui.getString("Inserisci il tipo di visita");
+                String meetingPoint = UserTui.getStringNoTrim ("Inserisci dove è il meeting point");
+                ArrayList <String> visitDays = new ArrayList<>();
+                ArrayList <Integer> startHours = new ArrayList<>();
+                ArrayList <Integer> duration = new ArrayList<>();
+
+                do
+                {
+                    visitDays.add (DataManager.getDayOfWeekFromUser("Inserisci il giorno della settimana in cui si svolge questa visita"));
+                    startHours.add (DataManager.getAnHourFromUser("Inserisci l'orario di inizio di questa visita (formato HH:MM)"));
+                    duration.add (UserTui.getInteger("Inserisci la durata in minuti di questa visita", 1, 1440));
+                }while (UserTui.getYesNoAnswer("Vuoi inserire un altro giorno in cui si svolge questa visita"));
+
                 DataManagerPeriod date = new DataManagerPeriod();
                 int startDate = date.getStartDate();
                 int endDate = date.getEndDate();
