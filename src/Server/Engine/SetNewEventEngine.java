@@ -23,6 +23,10 @@ public class SetNewEventEngine extends Engine
     private int maximumFriends;
     private String visitType;
     private String state;
+    
+    private ArrayList<String> visitDays; // // Dichiarare queste variabili
+    private ArrayList<Integer> startHour;
+    private ArrayList<Integer> duration;
 
     public SetNewEventEngine(
         String userID,
@@ -31,7 +35,7 @@ public class SetNewEventEngine extends Engine
         String description,
         String city,
         String address,
-        String meetingPoint;
+        String meetingPoint, // // Virgola, non punto e virgola
         int startDate,
         int endDate,
         String organization,
@@ -40,8 +44,7 @@ public class SetNewEventEngine extends Engine
         int maximumFriends,
         String visitType,
         String state,
-
-        ArrayList<Strin> visitDays,
+        ArrayList<String> visitDays,
         ArrayList<Integer> startHour,
         ArrayList<Integer> duration        
     ) {
@@ -121,12 +124,13 @@ public class SetNewEventEngine extends Engine
             statement.setInt(10, maximumUsers);
             statement.setInt(11, maximumFriends);
             statement.setString(12, visitType); 
-            statement.setBoolean(13, state);
-            if(!statement.executeUpdate() == 1)
+            statement.setString(13, state);
+            if(statement.executeUpdate() != 1)
             {
                 return new SetNewEventReply(true, false, false).toJSONString();
             }
-            for(int i = 0; i < visitDays.length(); i++)
+            
+            for(int i = 0; i < visitDays.size(); i++)
             {
                 query = "INSERT INTO daysOfWeek VALUES ( ?, ?, ?, ? )";
                 statement = connection.prepareStatement(query);
@@ -134,7 +138,7 @@ public class SetNewEventEngine extends Engine
                 statement.setString(2, visitDays.get(i));
                 statement.setInt(3, startHour.get(i));
                 statement.setInt(4, duration.get(i));
-                int _ = statement.executeUpdate();
+                int _x = statement.executeUpdate();
             }
             return new SetNewEventReply(true, true, false).toJSONString();
             

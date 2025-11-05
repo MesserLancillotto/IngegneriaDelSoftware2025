@@ -18,16 +18,16 @@ public class SetNewEventRequest implements RequestType
     private int maximumFriends;
     private String visitType;
 
-    private ArrayList<Strin> visitDays;
-    private int startHour;
-    private int duration;
+    private ArrayList<String> visitDays;
+    private ArrayList<Integer> startHour; // // ArrayList<Integer>, non int
+    private ArrayList<Integer> duration;  // // ArrayList<Integer>, non int
 
     public SetNewEventRequest(
         String eventName,
         String description,
         String city,
         String address,
-        String meetingPoint,
+        String meetingPoint, // // Aggiungi questo parametro
         int startDate,
         int endDate,
         String organization,
@@ -35,10 +35,9 @@ public class SetNewEventRequest implements RequestType
         int maximumUsers,
         int maximumFriends,
         String visitType,
-
-        ArrayList<Strin> visitDays,
-        ArrayList<Integer> startHour,
-        ArrayList<Integer> duration
+        ArrayList<String> visitDays,
+        ArrayList<Integer> startHour, // // ArrayList<Integer>
+        ArrayList<Integer> duration   // // ArrayList<Integer>
     ) {
         this.eventName = eventName;
         this.description = description;
@@ -75,8 +74,8 @@ public class SetNewEventRequest implements RequestType
         json.put("visitType", visitType);
 
         json.put("visitDays", visitDays);
-        json.put("startHour", startHour);
-        json.put("duration", duration);
+        json.put("startHour", startHour); // // Ora sono ArrayList
+        json.put("duration", duration);   // // Ora sono ArrayList
         return json.toString(); 
     }
 }

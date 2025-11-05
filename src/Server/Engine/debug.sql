@@ -54,7 +54,7 @@ INSERT INTO daysOfWeek VALUES ('Le quattro stagioni al parco', 'dom', 2100, 80);
 
 CREATE TABLE IF NOT EXISTS eventsVoluntaries (eventName VARCHAR(64), userID VARCHAR(64));
 
-INSERT INTO eventsVoluntaries VALUES ('Cinema in Castello: la corazzata Potiomkin', 'VOLUNTARY.Arlecchino.Valcalepio.99');
+INSERT INTO eventsVoluntaries VALUES ('Cinema in Castello: la corazzata Potiomkin', 'VOLUNTARY.Arlecchino.Valcalepio.81');
 INSERT INTO eventsVoluntaries VALUES ('Cinema in Castello: il deserto rosso', 'VOLUNTARY.Balanzone.Pignoletto.83');
 
 CREATE TABLE IF NOT EXISTS closedDays (startDay INT, endDay INT, organization VARCHAR(32));

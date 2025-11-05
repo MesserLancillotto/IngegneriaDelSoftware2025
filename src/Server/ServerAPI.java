@@ -132,13 +132,18 @@ class ServerAPI extends Thread
                         dictionary.getString("description"),
                         dictionary.getString("city"),
                         dictionary.getString("address"),
+                        dictionary.getString("meetingPoint"),
                         dictionary.getInt("startDate"),
                         dictionary.getInt("endDate"),
                         dictionary.getString("organization"),
                         dictionary.getInt("minimumUsers"),
                         dictionary.getInt("maximumUsers"),
                         dictionary.getInt("maximumFriends"),
-                        dictionary.getString("visitType")
+                        dictionary.getString("visitType"),
+                        
+                        getStringArrayListFromJSON(dictionary.getJSONArray("visitDays")),
+                        getIntegerArrayListFromJSON(dictionary.getJSONArray("startHour")),
+                        getIntegerArrayListFromJSON(dictionary.getJSONArray("duration"))
                     ).handleRequest();
                 case SET_NEW_ORGANIZATION:
                     JSONArray territoriesArray = dictionary.getJSONArray("territoriesOfCompetence");
@@ -172,5 +177,24 @@ class ServerAPI extends Thread
     {
         handleUserRequest();
     }
+
+    // helper
+
+    private ArrayList<String> getStringArrayListFromJSON(JSONArray jsonArray) {
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            list.add(jsonArray.getString(i));
+        }
+        return list;
+    }
+
+    private ArrayList<Integer> getIntegerArrayListFromJSON(JSONArray jsonArray) {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            list.add(jsonArray.getInt(i));
+        }
+        return list;
+    }
+
 }
 

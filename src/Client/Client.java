@@ -59,28 +59,36 @@ public final class Client
         String description,
         String city,
         String address,
+        String meetingPoint,
         int startDate,
         int endDate,
         String organizationName,
         int minimumUsers,
         int maximumUsers,
         int maximumFriends,
-        String visitType
+        String visitType,
+        ArrayList<String> visitDays,
+        ArrayList<Integer> startHour,
+        ArrayList<Integer> duration
     ) {
         this.body = new SetNewEventRequest(
             eventName,
             description,
             city,
             address,
+            meetingPoint,
             startDate,
             endDate,
             organizationName,
             minimumUsers,
             maximumUsers,
             maximumFriends,
-            visitType
+            visitType,
+            visitDays,
+            startHour,
+            duration
         );
-        this.comunicationType = ComunicationType.SET_NEW_EVENT;
+            this.comunicationType = ComunicationType.SET_NEW_EVENT;
     }
 
     public void set_new_organization(String organizationName, ArrayList<String> territoriesOfCompetence) {
