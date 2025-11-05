@@ -32,11 +32,25 @@ INSERT INTO organizations VALUES ('Santa Cecilia', 'Brescia');
 INSERT INTO organizations VALUES ('Santa Cecilia', 'Verona');
 INSERT INTO organizations VALUES ('Santa Cecilia', 'Napoli');
 
-CREATE TABLE IF NOT EXISTS events (eventName VARCHAR(64) UNIQUE, eventDescription VARCHAR(512), city VARCHAR(16), address VARCHAR(64), startDate INT, endDate INT, organization VARCHAR(32), minUsers INT, maxUsers INT,  maxFriends INT, visitType VARCHAR(32), state VARCHAR(16));
+CREATE TABLE IF NOT EXISTS events (eventName VARCHAR(64) UNIQUE, eventDescription VARCHAR(512), city VARCHAR(16), address VARCHAR(64), meetingPoint VARCHAR(64), startDate INT, endDate INT, organization VARCHAR(32), minUsers INT, maxUsers INT,  maxFriends INT, visitType VARCHAR(32), state VARCHAR(16));
 
-INSERT INTO events VALUES ('Cinema in Castello: la corazzata Potiomkin', 'Terna di serate per ammirare i grandi capolavori cinematografici del Novecento, ore 21:00', 'Bergamo', 'Castello di Bergamo', 1770411600, 1770584400, 'San Genesio', 50, 500, 4, 'Cinema', 'PROPOSED');
-INSERT INTO events VALUES ('Cinema in Castello: il deserto rosso', 'Terna di serate per ammirare i grandi capolavori cinematografici del Novecento, ore 21:00', 'Bologna', 'Castello di Bologna', 1761944400, 1762117200, 'San Genesio', 50, 500, 4, 'Cinema', 'PROPOSED');
-INSERT INTO events VALUES ('Le quattro stagioni al parco', 'Ascoltate le quattro stagioni di Vivaldi al parco di Verona', 'Verona', 'Parco di Verona', 1, 2, 'Santa Cecilia', 25, 75, 3, 'Concerto', 'PROPOSED');
+INSERT INTO events VALUES ('Cinema in Castello: la corazzata Potiomkin', 'Terna di serate per ammirare i grandi capolavori cinematografici del Novecento, ore 21:00', 'Bergamo', 'Castello di Bergamo', 'Entrata del castello', 1770411600, 1770584400, 'San Genesio', 50, 500, 4, 'Cinema', 'PROPOSED');
+INSERT INTO events VALUES ('Cinema in Castello: il deserto rosso', 'Terna di serate per ammirare i grandi capolavori cinematografici del Novecento, ore 21:00', 'Bologna', 'Castello di Bologna', 'Entrata del castello',1761944400, 1762117200, 'San Genesio', 50, 500, 4, 'Cinema', 'PROPOSED');
+INSERT INTO events VALUES ('Le quattro stagioni al parco', 'Ascoltate le quattro stagioni di Vivaldi al parco di Verona', 'Verona', 'Parco di Verona', 'Entrata del parco', 1, 2, 'Santa Cecilia', 25, 75, 3, 'Concerto', 'PROPOSED');
+
+CREATE TABLE IF NOT EXISTS daysOfWeek (eventName VARCHAR(64), weekDay VARCHAR(3), startHour INT, duration INT);
+
+INSERT INTO daysOfWeek VALUES ('Cinema in Castello: la corazzata Potiomkin', 'ven', 2100, 80);
+INSERT INTO daysOfWeek VALUES ('Cinema in Castello: la corazzata Potiomkin', 'sab', 2100, 80);
+INSERT INTO daysOfWeek VALUES ('Cinema in Castello: la corazzata Potiomkin', 'dom', 2100, 80);
+
+INSERT INTO daysOfWeek VALUES ('Cinema in Castello: il deserto rosso', 'ven', 2100, 80);
+INSERT INTO daysOfWeek VALUES ('Cinema in Castello: il deserto rosso', 'sab', 2100, 80);
+INSERT INTO daysOfWeek VALUES ('Cinema in Castello: il deserto rosso', 'dom', 2100, 80);
+
+INSERT INTO daysOfWeek VALUES ('Le quattro stagioni al parco', 'ven', 2100, 80);
+INSERT INTO daysOfWeek VALUES ('Le quattro stagioni al parco', 'sab', 2100, 80);
+INSERT INTO daysOfWeek VALUES ('Le quattro stagioni al parco', 'dom', 2100, 80);
 
 CREATE TABLE IF NOT EXISTS eventsVoluntaries (eventName VARCHAR(64), userID VARCHAR(64));
 

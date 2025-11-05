@@ -35,6 +35,12 @@ public class EditEventRequest implements RequestType
         return this;
     }
     
+    public EditEventRequest withMeetingPoint(String point) 
+    {
+        fields.put("meetingPoint", point);
+        return this;
+    }
+
     public EditEventRequest withStartDate(int startDate) 
     {
         fields.put("startDate", startDate);
@@ -89,6 +95,7 @@ public class EditEventRequest implements RequestType
         return this;
     }
     
+
     public String toJSONString() 
     {
         if(!fields.containsKey("eventName"))

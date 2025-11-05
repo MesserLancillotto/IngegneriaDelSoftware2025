@@ -14,6 +14,7 @@ public class SetNewEventEngine extends Engine
     private String description;
     private String city;
     private String address;
+    private String meetingPoint;
     private int startDate;
     private int endDate;
     private String organization;
@@ -21,6 +22,7 @@ public class SetNewEventEngine extends Engine
     private int maximumUsers;
     private int maximumFriends;
     private String visitType;
+    private String state;
 
     public SetNewEventEngine(
         String userID,
@@ -29,13 +31,19 @@ public class SetNewEventEngine extends Engine
         String description,
         String city,
         String address,
+        String meetingPoint;
         int startDate,
         int endDate,
         String organization,
         int minimumUsers,
         int maximumUsers,
         int maximumFriends,
-        String visitType
+        String visitType,
+        String state,
+
+        ArrayList<Strin> visitDays,
+        ArrayList<Integer> startHour,
+        ArrayList<Integer> duration        
     ) {
         this.userID = userID;
         this.userPassword = userPassword;
@@ -43,6 +51,7 @@ public class SetNewEventEngine extends Engine
         this.description = description;
         this.city = city;
         this.address = address;
+        this.meetingPoint = meetingPoint;
         this.startDate = startDate;
         this.endDate = endDate;
         this.organization = organization;
@@ -50,6 +59,11 @@ public class SetNewEventEngine extends Engine
         this.maximumUsers = maximumUsers;
         this.maximumFriends = maximumFriends;
         this.visitType = visitType;
+        this.state = state;
+        
+        this.visitDays = visitDays;
+        this.startHour = startHour;
+        this.duration = duration;
     }
 
     public String handleRequest()
@@ -93,24 +107,37 @@ public class SetNewEventEngine extends Engine
                 return new SetNewEventReply(true, false, true).toJSONString();
             } 
 
-            String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, eventName);
             statement.setString(2, description);
             statement.setString(3, city); 
             statement.setString(4, address);
-            statement.setInt(5, startDate);
-            statement.setInt(6, endDate);
-            statement.setString(7, organization);
-            statement.setInt(8, minimumUsers); 
-            statement.setInt(9, maximumUsers);
-            statement.setInt(10, maximumFriends);
-            statement.setString(11, visitType); 
-            statement.setBoolean(12, true);
-            if(statement.executeUpdate() == 1)
+            statement.setString(5, meetingPoint);
+            statement.setInt(6, startDate);
+            statement.setInt(7, endDate);
+            statement.setString(8, organization);
+            statement.setInt(9, minimumUsers); 
+            statement.setInt(10, maximumUsers);
+            statement.setInt(11, maximumFriends);
+            statement.setString(12, visitType); 
+            statement.setBoolean(13, state);
+            if(!statement.executeUpdate() == 1)
             {
-                return new SetNewEventReply(true, true, false).toJSONString();
+                return new SetNewEventReply(true, false, false).toJSONString();
             }
+            for(int i = 0; i < visitDays.length(); i++)
+            {
+                query = "INSERT INTO daysOfWeek VALUES ( ?, ?, ?, ? )";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, eventName);
+                statement.setString(2, visitDays.get(i));
+                statement.setInt(3, startHour.get(i));
+                statement.setInt(4, duration.get(i));
+                int _ = statement.executeUpdate();
+            }
+            return new SetNewEventReply(true, true, false).toJSONString();
+            
         } catch(Exception e)
         {
             e.printStackTrace();
