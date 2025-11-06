@@ -9,6 +9,7 @@ public enum ComunicationType
     GET_EVENT_WITH_DISPONIBILITY, // x x x x
     GET_USER_DATA, // x x x x
     GET_VOLUNTARIES_FOR_VISIT, // x x x x
+    GET_VOLUNTARIES, // x x 
     SET_CLOSED_DAYS, // x x x x
     SET_DISPONIBILITY, // x x
     SET_NEW_EVENT, // x x x x
