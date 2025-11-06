@@ -70,6 +70,16 @@ public class GetVoluntariesEngine extends Engine
                 parameters.add(filters.get("changePasswordDue"));
             }
             
+            if (filters.containsKey("birthYear")) {
+                if((boolean)filters.get("olderThanYear"))
+                {
+                    query.append(" AND u.birthYear >= ?");
+                } else {
+                    query.append(" AND u.birthYear <= ?");
+                }
+                parameters.add(filters.get("birthYear"));
+            }
+
             PreparedStatement statement = connection.prepareStatement(query.toString());
             
             for (int i = 0; i < parameters.size(); i++) {

@@ -23,7 +23,7 @@ public class GetVoluntariesRequest implements RequestType
     private GetVoluntariesRequest withYear(int year)
     {
         // anno degli utenti ricercati
-        filters.put("year", year);
+        filters.put("birthYear", year);
         return this;        
     }
 
@@ -49,11 +49,6 @@ public class GetVoluntariesRequest implements RequestType
     public String toJSONString()
     {
         JSONObject json = new JSONObject();
-        if(eventName != null)
-        {
-            json.put("eventName", eventName);
-            return json.toString();
-        }
         for (Map.Entry<String, Object> entry : filters.entrySet()) {
             json.put(entry.getKey(), entry.getValue());
         }

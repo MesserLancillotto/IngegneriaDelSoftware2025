@@ -86,6 +86,13 @@ public class GetEventRequest implements RequestType
         return this;
     }
 
+    private GetEventRequest withPrice(float price, boolean greater)
+    {
+        filters.put("price", price);
+        filters.put("greaterThan", greater);
+        return this;
+    }
+
     public String toJSONString() {
         JSONObject json = new JSONObject(filters);
         return json.toString();

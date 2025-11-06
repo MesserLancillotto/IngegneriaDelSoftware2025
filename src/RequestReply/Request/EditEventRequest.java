@@ -83,9 +83,16 @@ public class EditEventRequest implements RequestType
         return this;
     }
     
-    public EditEventRequest withConfirmed(boolean confirmed) 
+    public EditEventRequest withState(String state) 
     {
-        fields.put("confirmed", confirmed);
+        fields.put("state", state);
+        return this;
+    }
+
+
+    public EditEventRequest withPrice(float price) 
+    {
+        fields.put("price", price);
         return this;
     }
     
