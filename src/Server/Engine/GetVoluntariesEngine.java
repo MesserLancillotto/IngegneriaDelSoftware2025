@@ -101,7 +101,6 @@ public class GetVoluntariesEngine extends Engine
                     usersResult.getBoolean("changePasswordDue"),
                     allowedVisitTypes
                 );
-                
                 visitTypesStmt.close();
             }
         } catch (Exception e) {

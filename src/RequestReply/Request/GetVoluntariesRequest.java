@@ -4,33 +4,13 @@ import java.util.*;
 import org.json.*;
 
 public class GetVoluntariesRequest implements RequestType
-{
-    
-    private String eventName;
+{    
     private Map<String, Object> filters;
 
     public GetVoluntariesRequest
     (
-        String eventName
-    ) {
-        this.eventName = eventName;
-        this.filters = null;
-    }
-
-    public GetVoluntariesRequest
-    (
         Map<String, Object> filters
     ) {
-        this.eventName = null;
-        this.filters = filters;
-    }
-
-    public GetVoluntariesRequest
-    (
-        String eventName,
-        Map<String, Object> filters
-    ) {
-        this.eventName = eventName;
         this.filters = filters;
     }
 

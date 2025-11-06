@@ -55,12 +55,16 @@ public final class Client
         this.comunicationType = ComunicationType.GET_VOLUNTARIES_FOR_VISIT;
     }
 
+    public void get_voluntaries(Map<String, Object> filters)
+    {
+        this.body = new GetVoluntariesRequest(filters);
+        this.comunicationType = ComunicationType.GET_VOLUNTARIES;
+    }
+
     public void set_closed_days(int startDate, int endDate, String organization) {
         this.body = new SetClosedDaysRequest(startDate, endDate, organization);
         this.comunicationType = ComunicationType.SET_CLOSED_DAYS;
     }
-
-
 
     public void set_new_event(
         String eventName,
