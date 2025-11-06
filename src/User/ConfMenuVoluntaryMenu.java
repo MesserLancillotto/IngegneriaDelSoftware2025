@@ -6,6 +6,7 @@ import Client.Client;
 
 public class ConfMenuVoluntaryMenu extends UserMenu
 {
+    private String organization;
     public void initialize_menu_selection ()
     {
         menuSelection.put(1, () -> view_voluntary_list());
@@ -23,9 +24,10 @@ public class ConfMenuVoluntaryMenu extends UserMenu
         
     }
 
-    public ConfMenuVoluntaryMenu ()
+    public ConfMenuVoluntaryMenu (String organization)
     {
         printCenteredTitle("MENU GESTIONE VOLONTARI");
+        this.organization = organization;
         initialize_menu_selection();
         manage_options();  
     }

@@ -32,7 +32,8 @@ public class Configurator extends User
             Client.getInstance().setUserID(userName);
             Client.getInstance().setUserPassword(password);
             set_basic_app_configuration (); // configurazione base dell'app da fare al primo accesso del configuratore
-		    new ConfiguratorMenu ();
+            new ConfiguratorMenu(true, organization);
+		    new ConfiguratorMenu (organization);
         }
         else
         {
@@ -50,7 +51,7 @@ public class Configurator extends User
 		this.roleTitle = roleTitle;
         this.organization = organization;
 		
-		new ConfiguratorMenu ();
+		new ConfiguratorMenu (organization);
 	}
 	
 	// metodo per fissare l'ambito territoriale e il numero max di persone iscrivibili dal fruitore (Vedi punto 3, Versione 1)
@@ -67,61 +68,7 @@ public class Configurator extends User
         
         int maxPeopleForSubscription = UserTui.getInteger("Quante persone un fruitore dell'applicazione può iscrivere con una sola iscrizione", 0, 100);
         JSONObjectCreator.setMaxPeopleForSubscription(maxPeopleForSubscription);
-
-        make_new_places();    // metodo per creare nuovi luoghi per le visite
 	}
-	
-    // metodo per la creazione dei posti da visitare (Vedi punto 3, Versione 1)
-	public void make_new_places ()
-	{
-        boolean addAnotherPlaceAnswer;
-        boolean addAnotherTypeVisitAnswer; 
-        //attributi usati come discriminante del ciclo
-
-        do
-        {
-            String cityName = UserTui.getStringNoTrim("Inserire la città dove si svolge questo evento");
-            String cityAddress = UserTui.getStringNoTrim("Inserisci l'indirizzo");
-            
-            do 
-            {
-                String eventName = UserTui.getStringNoTrim ("Inserisci il nome dell'evento");
-                String eventDescription = UserTui.getStringNoTrim("Inserisci una descrizione dell'evento", 500);
-                String visitType = UserTui.getString("Inserisci il tipo di visita");
-                String meetingPoint = UserTui.getStringNoTrim ("Inserisci dove è il meeting point");
-                ArrayList <String> visitDays = new ArrayList<>();
-                ArrayList <Integer> startHours = new ArrayList<>();
-                ArrayList <Integer> duration = new ArrayList<>();
-
-                do
-                {
-                    visitDays.add (DataManager.getDayOfWeekFromUser("Inserisci il giorno della settimana in cui si svolge questa visita"));
-                    startHours.add (DataManager.getAnHourFromUser("Inserisci l'orario di inizio di questa visita (formato HH:MM)"));
-                    duration.add (UserTui.getInteger("Inserisci la durata in minuti di questa visita", 1, 1440));
-                }while (UserTui.getYesNoAnswer("Vuoi inserire un altro giorno in cui si svolge questa visita"));
-
-                DataManagerPeriod date = new DataManagerPeriod();
-                int startDate = date.getStartDate();
-                int endDate = date.getEndDate();
-                int minPartecipants = UserTui.getInteger("Inserisci il numero minimo di partecipanti a questo evento", 1, 1000);
-                int maxPartecipants = UserTui.getInteger("Inserisci il numero massimo di partecipanti a questo evento", minPartecipants+1, 1000);
-                int maxPeopleForSubscription = JSONObjectCreator.getMaxPeopleForSubscription();
-                
-                Client.getInstance().set_new_event(eventName, eventDescription, cityName, cityAddress, meetingPoint, startDate, endDate, 
-                organization, minPartecipants, maxPartecipants, maxPeopleForSubscription, visitType, visitDays, startHours, duration);
-                String setNewEventReply = Client.getInstance().make_server_request();
-                JSONObject dictionary = new JSONObject(setNewEventReply);
-                UserTui.operationIsSuccessful(dictionary.getBoolean("registrationSuccesful"));
-
-                addAnotherTypeVisitAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro tipo di visita associato a questo luogo");
-            } while (addAnotherTypeVisitAnswer); // fine ciclo tipo visita
-            
-            addAnotherPlaceAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro luogo");
-        } while (addAnotherPlaceAnswer); // fine ciclo luogo
-	}
-
-  
-	
 }
 
 

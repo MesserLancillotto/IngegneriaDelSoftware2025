@@ -6,7 +6,7 @@ import org.json.*;
 
 public class ConfiguratorMenu extends UserMenu
 {
-    
+    String organization; 
 
     public void initialize_menu_selection ()
     {
@@ -22,26 +22,32 @@ public class ConfiguratorMenu extends UserMenu
     }
 
     //COSTRUTTORE
-    public ConfiguratorMenu ()
+    public ConfiguratorMenu (String organization)
     {
         printCenteredTitle("MENU PRINCIPALE CONFIGURATORE");
+        this.organization = organization;   
         initialize_menu_selection();
         manage_options();
     }
 
+    public ConfiguratorMenu (Boolean isFirstAccess, String organization)
+    {
+        new ConfMenuPlaceMenu(isFirstAccess, organization); 
+    }
+
     public void handle_voluntaries ()
     {
-        new ConfMenuVoluntaryMenu ();
+        new ConfMenuVoluntaryMenu (organization);
     }
 	
     public void handle_places ()
     {
-        new ConfMenuPlaceMenu ();
+        new ConfMenuPlaceMenu (organization);
     }
 
     public void handle_generic_stuff()
     {
-        new ConfMenuGenericOptions ();
+        new ConfMenuGenericOptions (organization);
     }
 
     private void view_visit_state ()

@@ -5,6 +5,8 @@ import org.json.*;
 
 public class ConfMenuGenericOptions extends UserMenu
 {
+    private String organization;
+
     public void initialize_menu_selection ()
     {
         menuSelection.put(1, () -> modify_max_number_per_subscription());
@@ -14,9 +16,10 @@ public class ConfMenuGenericOptions extends UserMenu
         menuOptionList.add("Modifica il numero massimo di persone iscrivibili a un'iniziativa da parte di un fruitore");
     }
     
-    public ConfMenuGenericOptions ()
+    public ConfMenuGenericOptions (String organization)
     {
         printCenteredTitle("MENU CONFIGURATORE: OPZIONI GENERICHE");        //titolo temporaneo
+        this.organization = organization;
         initialize_menu_selection();
         manage_options();  
     }

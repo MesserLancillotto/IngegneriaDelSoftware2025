@@ -6,6 +6,8 @@ import Client.Client;
 
 public class ConfMenuPlaceMenu extends UserMenu
 {
+    private String organization;
+
     public void initialize_menu_selection ()
     {
         menuSelection.put(1, () -> view_visitable_places());
@@ -20,11 +22,18 @@ public class ConfMenuPlaceMenu extends UserMenu
         menuOptionList.add("Visualizza l'elenco dei tipi di visita associati a ciascun luogo");
     }
 
-    public ConfMenuPlaceMenu ()
+    public ConfMenuPlaceMenu (String organization)
     {
         printCenteredTitle("MENU GESTIONE POSTI VISITABILI");
+        this.organization = organization;   
         initialize_menu_selection();
         manage_options();
+    }
+
+    public ConfMenuPlaceMenu (boolean isFirstAccess, String organization)
+    {
+        this.organization = organization;
+        introduce_new_place();
     }
 
     public void view_visitable_places ()
@@ -78,7 +87,50 @@ public class ConfMenuPlaceMenu extends UserMenu
 
     public void introduce_new_place()
     {
-        //DA IMPLEMENTARE
+        boolean addAnotherPlaceAnswer;
+        boolean addAnotherTypeVisitAnswer; 
+        //attributi usati come discriminante del ciclo
+
+        do
+        {
+            String cityName = UserTui.getStringNoTrim("Inserire la città dove si svolge questo evento");
+            String cityAddress = UserTui.getStringNoTrim("Inserisci l'indirizzo");
+            
+            do 
+            {
+                String eventName = UserTui.getStringNoTrim ("Inserisci il nome dell'evento");
+                String eventDescription = UserTui.getStringNoTrim("Inserisci una descrizione dell'evento", 500);
+                String visitType = UserTui.getString("Inserisci il tipo di visita");
+                String meetingPoint = UserTui.getStringNoTrim ("Inserisci dove è il meeting point");
+                ArrayList <String> visitDays = new ArrayList<>();
+                ArrayList <Integer> startHours = new ArrayList<>();
+                ArrayList <Integer> duration = new ArrayList<>();
+
+                do
+                {
+                    visitDays.add (DataManager.getDayOfWeekFromUser("Inserisci il giorno della settimana in cui si svolge questa visita"));
+                    startHours.add (DataManager.getAnHourFromUser("Inserisci l'orario di inizio di questa visita (formato HH:MM)"));
+                    duration.add (UserTui.getInteger("Inserisci la durata in minuti di questa visita", 1, 1440));
+                }while (UserTui.getYesNoAnswer("Vuoi inserire un altro giorno in cui si svolge questa visita"));
+
+                DataManagerPeriod date = new DataManagerPeriod();
+                int startDate = date.getStartDate();
+                int endDate = date.getEndDate();
+                int minPartecipants = UserTui.getInteger("Inserisci il numero minimo di partecipanti a questo evento", 1, 1000);
+                int maxPartecipants = UserTui.getInteger("Inserisci il numero massimo di partecipanti a questo evento", minPartecipants+1, 1000);
+                int maxPeopleForSubscription = JSONObjectCreator.getMaxPeopleForSubscription();
+                
+                Client.getInstance().set_new_event(eventName, eventDescription, cityName, cityAddress, meetingPoint, startDate, endDate, 
+                organization, minPartecipants, maxPartecipants, maxPeopleForSubscription, visitType, visitDays, startHours, duration);
+                String setNewEventReply = Client.getInstance().make_server_request();
+                JSONObject dictionary = new JSONObject(setNewEventReply);
+                UserTui.operationIsSuccessful(dictionary.getBoolean("registrationSuccesful"));
+
+                addAnotherTypeVisitAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro tipo di visita associato a questo luogo");
+            } while (addAnotherTypeVisitAnswer); // fine ciclo tipo visita
+            
+            addAnotherPlaceAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro luogo");
+        } while (addAnotherPlaceAnswer); // fine ciclo luogo
     }
 
     public void add_to_existing_place_new_visit()
