@@ -36,7 +36,7 @@ public class ConfMenuPlaceMenu extends UserMenu
         introduce_new_place();
     }
 
-    public void view_visitable_places ()
+    public Set<String> view_visitable_places ()
 	{
         HashMap <String, Object> filters = new HashMap<>();
         filters.put ("city", "%");
@@ -56,6 +56,7 @@ public class ConfMenuPlaceMenu extends UserMenu
             distinctPlaces.add(place.toString());
         }
 		UserTui.stamp_list ("Questi sono i posti visitabili: ", distinctPlaces);
+        return distinctPlaces;
 	}
 
     public void view_type_of_visit_by_place() 
@@ -88,15 +89,59 @@ public class ConfMenuPlaceMenu extends UserMenu
     public void introduce_new_place()
     {
         boolean addAnotherPlaceAnswer;
-        boolean addAnotherTypeVisitAnswer; 
-        //attributi usati come discriminante del ciclo
 
         do
         {
             String cityName = UserTui.getStringNoTrim("Inserire la città dove si svolge questo evento");
             String cityAddress = UserTui.getStringNoTrim("Inserisci l'indirizzo");
-            
-            do 
+            add_place_to_server(cityName, cityAddress);
+            addAnotherPlaceAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro luogo");
+        } while (addAnotherPlaceAnswer); // fine ciclo luogo
+    }
+
+    public void add_to_existing_place_new_visit()
+    {
+        Set<String> placesToChoose = view_visitable_places();
+        StringBuilder place;
+        String city = "";
+        String address = "";
+        boolean continueSearching = true;
+        boolean placeIsValid = false;
+        while (continueSearching)
+        {
+            place = new StringBuilder ();
+            city = UserTui.getStringNoTrim("Inserire la città dove si svolge questo evento");
+            place.append(city);
+            place.append(":");
+            address = UserTui.getStringNoTrim("Inserisci l'indirizzo");
+            place.append(address);
+            placeIsValid = placesToChoose.contains(place.toString());
+            if (!placeIsValid)
+                continueSearching = UserTui.getYesNoAnswer("Il luogo inserito non è valido. Vuoi riprovare?");
+        }
+        if (placeIsValid)
+        {
+            if (!city.equals("") && !address.equals(""))
+                add_place_to_server(city, address);
+        }
+    }  
+
+    public void remove_place()
+    {
+        //DA IMPLEMENTARE
+    }
+
+    public void remove_visit_type_from_place()
+    {
+        //DA IMPLEMENTARE
+    }   
+
+    //METODI GESTIONE INTERNA
+
+    private void add_place_to_server(String cityName, String cityAddress)
+    {
+        boolean addAnotherTypeVisitAnswer; 
+        do 
             {
                 String eventName = UserTui.getStringNoTrim ("Inserisci il nome dell'evento");
                 String eventDescription = UserTui.getStringNoTrim("Inserisci una descrizione dell'evento", 500);
@@ -119,6 +164,10 @@ public class ConfMenuPlaceMenu extends UserMenu
                 int minPartecipants = UserTui.getInteger("Inserisci il numero minimo di partecipanti a questo evento", 1, 1000);
                 int maxPartecipants = UserTui.getInteger("Inserisci il numero massimo di partecipanti a questo evento", minPartecipants+1, 1000);
                 int maxPeopleForSubscription = JSONObjectCreator.getMaxPeopleForSubscription();
+                // Inserisci price nella chiamata al server, gestiscilo come float
+                int price = 0;
+                if (UserTui.getYesNoAnswer("Questo evento è a pagamento?"))
+                    price = UserTui.getInteger("Inserisci il prezzo di questo evento", 0, 10000);
                 
                 Client.getInstance().set_new_event(eventName, eventDescription, cityName, cityAddress, meetingPoint, startDate, endDate, 
                 organization, minPartecipants, maxPartecipants, maxPeopleForSubscription, visitType, visitDays, startHours, duration);
@@ -128,23 +177,5 @@ public class ConfMenuPlaceMenu extends UserMenu
 
                 addAnotherTypeVisitAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro tipo di visita associato a questo luogo");
             } while (addAnotherTypeVisitAnswer); // fine ciclo tipo visita
-            
-            addAnotherPlaceAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro luogo");
-        } while (addAnotherPlaceAnswer); // fine ciclo luogo
     }
-
-    public void add_to_existing_place_new_visit()
-    {
-        //DA IMPLEMENTARE
-    }  
-
-    public void remove_place()
-    {
-        //DA IMPLEMENTARE
-    }
-
-    public void remove_visit_type_from_place()
-    {
-        //DA IMPLEMENTARE
-    }   
 }

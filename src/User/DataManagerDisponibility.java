@@ -75,6 +75,36 @@ public class DataManagerDisponibility extends DataManager
         return unaviableDay;
     }
 
+    //CONTROLLA, metodo per prendere un giorno solo
+    public int getReferenceDay (String thingToSayForDay)
+    {
+        boolean confirmDate;
+        String userMessage = thingToSayForDay+" nel mese di "+monthNumberToName.get(referenceMonth)+ " (formato: DD):";
+        
+        int loopCount = 0;
+        int unaviableDay;
+
+        do
+        {
+            if (loopCount >= 3)
+            {
+                System.out.println ("\nHai sbagliato troppe volte!");
+                return -1;
+            }
+            unaviableDay = UserTui.getInteger(userMessage, 0, daysInAMonth.get(referenceMonth)+1);
+            confirmDate = UserTui.getYesNoAnswer("Hai inserito il giorno "+unaviableDay+" confermi");
+
+            if (enteredDates.contains(unaviableDay) && confirmDate)
+            {
+                System.out.println ("Hai già inserito questa data scegline un'altra!");
+                return -1;
+            }
+            loopCount++;
+        }while (!confirmDate);
+
+        return unaviableDay;
+    }
+
     private int getIncreasedMonth (int increase, int tmpMonth)
     {
         for (int i = 0; i < increase; i++)

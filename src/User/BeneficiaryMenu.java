@@ -1,0 +1,83 @@
+package User;
+
+import org.json.*;
+import java.util.*;
+
+import Client.Client;
+
+public class BeneficiaryMenu extends UserMenu
+{
+     public void initialize_menu_selection()
+	{
+		menuSelection.put(1, () -> view_all_visits_list()); // visite allo stato proposto/confermato/cancellato
+        menuSelection.put(2, () -> register_for_visit()); // registrazione ad una visita
+        menuSelection.put(3, () -> view_registered_visits()); // visualizzazione visite a cui si è registrati
+        menuSelection.put(4, () -> cancel_registration_for_visit()); // cancellazione registrazione ad una visita
+
+        menuOptionList.add("Visualizza il tipo di visite a cui sei associato");
+        menuOptionList.add("Registrati per una visita");
+        menuOptionList.add("Visualizza le visite a cui sei registrato");
+        menuOptionList.add("Cancella la registrazione ad una visita");
+	}
+
+    public BeneficiaryMenu ()
+    {
+        printCenteredTitle("MENU PRINCIPALE");
+        initialize_menu_selection();
+        manage_options();
+    }
+
+    public void view_all_visits_list()
+    {
+        ArrayList <Visit> visitList = new ArrayList<>();
+        HashMap <String, Object> filters = new HashMap<>();
+        filters.put ("city", "%");
+        filters.put ("address", "%");
+        filters.put ("state", "%");
+        filters.put ("startDate", "%");
+        filters.put ("eventName", "%");
+        filters.put ("description", "%");
+        Client.getInstance().get_event(filters);
+        String getEventResponse = Client.getInstance().make_server_request();
+        JSONArray eventsArray = new JSONArray(getEventResponse);
+
+        for (int i = 0; i < getEventResponse.length(); i++)
+        {
+            JSONObject event = eventsArray.getJSONObject(i);
+            String tmpEventName = event.getString("eventName");
+            String tmpDescription = event.getString("description");
+            String tmpCity = event.getString("city");
+            String tmpAddress = event.getString("address");
+            String tmpState = event.getString("state");
+            int tmpStartDate = event.getInt("startDate");
+
+            visitList.add(new Visit (tmpEventName, tmpCity, tmpAddress, tmpState, tmpStartDate));
+        }
+
+        System.out.println ("\nEcco l'elenco delle visite attualmente nello stato di proposto/completato/confermato/cancellato/effettuato");
+        int cycleCount = 1;
+        for (Visit v: visitList)
+        {
+            if (v.getVisitState() == StateOfVisit.CANCELLATA || v.getVisitState() == StateOfVisit.PROPOSTA || v.getVisitState() == StateOfVisit.CONFERMATA)
+            {
+                System.out.printf ("%d.La visita %s, che si tiene a %s il %s ed è nello stato %s\n", cycleCount, v.getEventName(), v.getPlace(), v.getStartDay(),v.getVisitState().toString());
+            }
+            cycleCount++;
+        }
+    }
+
+    public void register_for_visit()
+    {
+        //da implementare
+    }
+
+    public void view_registered_visits()
+    {
+        //da implementare
+    }
+
+    public void cancel_registration_for_visit()
+    {
+        //da implementare
+    }
+}

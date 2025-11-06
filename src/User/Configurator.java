@@ -18,7 +18,7 @@ public class Configurator extends User
         userId.append(UserTui.getStringNoTrim("Inserisci il cognome: "));
         
         this.password = UserTui.getPasswordFromUser ("Inserisci la nuova password");
-        this.cityOfResidence = UserTui.getString("Inserisci la città di residenza");
+        this.cityOfResidence = UserTui.getString("Inserisci la tua città di residenza");
 		this.birthYear = UserTui.getInteger("Inserisci l'anno di nascita", 1900, 2025);
         this.roleTitle = roleTitle;
         

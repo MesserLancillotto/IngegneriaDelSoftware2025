@@ -40,9 +40,8 @@ public abstract class UserMenu
         do
         {
             visualize_options();
-
-            System.out.printf ("\nVuoi fare altro: ");
             keepUsingConfiguratorMenu = UserTui.getYesNoAnswer("\nVuoi fare altro");
+            System.out.println("==================================================");
         }while (keepUsingConfiguratorMenu);
 	}
 

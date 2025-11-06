@@ -104,6 +104,14 @@ public final class Client
         comunicationType = ComunicationType.SET_CLOSED_DAYS;
         */
     }
+
+    public void set_disponibility (
+        String event,
+        int time
+    )
+    {
+        
+    }
     public void set_new_event(
         String eventName,
         String description,

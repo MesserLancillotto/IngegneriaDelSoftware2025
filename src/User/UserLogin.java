@@ -12,12 +12,14 @@ public class UserLogin
     private static final String TEMPORARY_SYMBOL = "T";
     private static final String CONFIGURATOR_SYMBOL = "C";
     private static final String VOLUNTARY_SYMBOL = "V";
+    private static final String BENEFICIARY_SYMBOL = "B";
 
     private static void initialize_user_factory ()
     {
         userFactory.put (CONFIGURATOR_SYMBOL, (username, cityOfResidence, birthYear, password, roleTitle, organization, allowedVisitType) -> new Configurator (username, cityOfResidence, birthYear, password, roleTitle, organization, allowedVisitType));  
         userFactory.put (VOLUNTARY_SYMBOL, (username, cityOfResidence, birthYear, password, roleTitle, organization, allowedVisitType) -> new Voluntary (username, cityOfResidence, birthYear, password, roleTitle, organization, allowedVisitType));  
-        
+        userFactory.put (BENEFICIARY_SYMBOL, (username, cityOfResidence, birthYear, password, roleTitle, organization, allowedVisitType) -> new Beneficiary (username, cityOfResidence, birthYear, password, roleTitle, organization, allowedVisitType));
+
 		userFirstAccessFactory.put (CONFIGURATOR_SYMBOL, (tmpUsernName, tmpPassword, roleTitle) -> new Configurator (tmpUsernName, tmpPassword, roleTitle));
         userFirstAccessFactory.put (VOLUNTARY_SYMBOL, (tmpUsernName, tmpPassword, roleTitle) -> new Voluntary (tmpUsernName, tmpPassword, roleTitle));
     }
@@ -25,9 +27,17 @@ public class UserLogin
 	public static void main (String[] args)
 	{
         initialize_user_factory();
-		login();
+        if (UserTui.getYesNoAnswer("Vuoi eseguire il login"))
+		    login();
+        else if (UserTui.getYesNoAnswer("Vuoi creare un nuovo account"))
+            create_new_account();
 	}
 	
+    private static void create_new_account ()
+    {
+        new Beneficiary();
+    }
+
 	private static void login ()
 	{
         boolean loginSuccessfull;
