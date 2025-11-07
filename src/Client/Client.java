@@ -125,6 +125,7 @@ public final class Client
         int maximumUsers,
         int maximumFriends,
         String visitType,
+        float price,
         ArrayList<String> visitDays,
         ArrayList<Integer> startHour,
         ArrayList<Integer> duration

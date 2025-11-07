@@ -189,6 +189,38 @@ public class UserTui
         }
     }
 
+    public static float getFloat (String thingToSayToUser , float lowerBound, float upperBound)
+    {
+        while (true)
+        {
+            try
+            {
+                System.out.printf ("\n%s: ", thingToSayToUser);
+                String input = consoleIn.readLine();
+                if (input == null || input.isEmpty())
+                    System.out.println ("Errore, valore inserito non valido");
+                else
+                {
+                    input = input.replace(",", "."); // gestisce il caso in cui l'utente usa la virgola come separatore decimale
+                    String confirmInput = "Hai inserito "+input+" confermi";
+                    if (getYesNoAnswer(confirmInput))
+                    {
+                        float tmpValue = Float.parseFloat(input);
+                        if (tmpValue >= lowerBound && tmpValue <= upperBound)
+                            return tmpValue;
+                        else
+                            System.out.println ("Errore, valore inserito non valido");
+                    }
+                }
+             } 
+            catch (IOException errorDuringDigitation)
+            {
+                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("Riprova");
+            }
+        }
+    }
+
     public static int getInteger (String thingToSayToUser)
     {
         while (true)
@@ -251,6 +283,38 @@ public class UserTui
                     System.out.println ("Errore, valore inserito non valido");
                 else
                     return tmpValue;
+             } 
+            catch (IOException errorDuringDigitation)
+            {
+                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("Riprova");
+            }
+        }
+    }
+
+    //metodo di acquisizione int con con range di validità
+    public static int getInteger (String thingToSayToUser, String thingToSayToUserToConfirm, int lowerBound, int upperBound)
+    {
+        while (true)
+        {
+            try
+            {
+                System.out.printf ("\n%s: ", thingToSayToUser);
+                String input = consoleIn.readLine();
+                int tmpValue = Integer.parseInt(input);
+
+                if ((input == null || input.isEmpty()) && tmpValue < lowerBound && tmpValue > upperBound)
+                    System.out.println ("Errore, valore inserito non valido");
+                else
+                {
+                    StringBuilder confirmInput = new StringBuilder();
+                    confirmInput.append(thingToSayToUserToConfirm);
+                    confirmInput.append(input);
+                    confirmInput.append(" confermi");
+                    boolean isConfirmed = getYesNoAnswer(confirmInput.toString());
+                    if (isConfirmed)
+                        return tmpValue;
+                }
              } 
             catch (IOException errorDuringDigitation)
             {
@@ -339,6 +403,128 @@ public class UserTui
             System.out.println ("\nL'operazione ha avuto successo");
         else
             System.out.println ("\nERRORE! l'operazione non ha avuto successo");
+    }
+
+    public static HashMap <Integer, String> fromListToMap (Set <String> listToConvert)
+    {
+        HashMap <Integer, String> convertedMap = new HashMap<>();
+        int cycleCount = 1;
+        for (String element : listToConvert)
+        {
+            convertedMap.put(cycleCount, element);
+            cycleCount++;
+        }
+
+        return convertedMap;
+    }
+
+    public static String getChoiceFromMap (String thingToSayToUser, Map <Integer, String> choices)
+    {
+        int loopCount = 0;
+        while (true)
+        {
+            try
+            {
+                if (loopCount >= 3)
+                {
+                    System.out.println ("\nHai sbagliato troppe volte!");
+                    return "";
+                }
+                System.out.printf ("\n%s\n", thingToSayToUser);
+                for (Map.Entry<Integer, String> entry : choices.entrySet())
+                {
+                    System.out.printf ("%d. %s\n", entry.getKey(), entry.getValue());
+                }
+                System.out.print("Inserisci la tua scelta: ");
+                String input = consoleIn.readLine();
+                int chosenKey = Integer.parseInt(input);
+                if (choices.containsKey(chosenKey))
+                {
+                    return choices.get(chosenKey);
+                }
+                else
+                {
+                    System.out.println ("\nErrore, valore inserito non valido");
+                }
+             } 
+            catch (IOException errorDuringDigitation)
+            {
+                System.out.println ("\nErrore durante la digitazione!");
+                System.out.println ("Riprova");
+            }
+        }
+    }
+
+
+
+    // METODI PER IMPAGINAZIONE
+
+    public static void stampSeparator ()
+    {
+        System.out.println("==================================================");
+    }
+
+    public static void printExitMessage() 
+    {
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println("CHIUSURA APPLICAZIONE");
+        System.out.println("Grazie per aver utilizzato il nostro servizio!");
+        System.out.println("Alla prossima! ");
+        System.out.println("=".repeat(50));
+    }
+
+    public static void stampEventInfo (int index, String eventName, String eventDescription, String eventCity, String eventAddress, String formattedDate, StateOfVisit visitState) 
+    {
+        // Mappa gli stati a icone e colori
+        String stateIcon = UserTui.getStateIcon(visitState);
+        System.out.println("\n");
+        UserTui.stampSeparator();
+        System.out.printf("🏷️  EVENTO #%d\n", index);
+        System.out.printf("📌 %s\n", eventName);
+        System.out.printf("📝 %s\n", eventDescription);
+        System.out.printf("📍 %s - %s\n", eventCity, eventAddress);
+        System.out.printf("📅 %s\n", formattedDate);
+        System.out.printf("%s %s\n", stateIcon, UserTui.getStateDescription(visitState));
+        UserTui.stampSeparator();
+    }
+    
+    public static String getStateIcon(StateOfVisit state) 
+    {
+        return switch (state) {
+            case PROPOSTA -> "⏳";
+            case CONFERMATA -> "✅";
+            case CANCELLATA -> "❌";
+            case COMPLETA -> "📋";
+            case EFFETTUATA -> "🎯";
+            default -> "📄";
+        };
+    }
+
+    public static String getStateColor(StateOfVisit state) 
+    {
+        // Per terminali che supportano colori ANSI
+        return switch (state) 
+        {
+            case PROPOSTA -> "\u001B[33m"; // Giallo
+            case CONFERMATA -> "\u001B[32m"; // Verde
+            case CANCELLATA -> "\u001B[31m"; // Rosso
+            case COMPLETA -> "\u001B[36m"; // Ciano
+            case EFFETTUATA -> "\u001B[35m"; // Magenta
+            default -> "\u001B[0m"; // Reset
+        };
+    }
+
+    public static String getStateDescription(StateOfVisit state) 
+    {
+        return switch (state) 
+        {
+            case PROPOSTA -> "In attesa di conferma";
+            case CONFERMATA -> "Confermata - In programma";
+            case CANCELLATA -> "Cancellata";
+            case COMPLETA -> "Prenotazione al completo";
+            case EFFETTUATA -> "Effettuata";
+            default -> "Stato sconosciuto";
+        };
     }
 
 }

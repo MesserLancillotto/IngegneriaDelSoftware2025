@@ -1,6 +1,8 @@
 package User;
 
 import org.json.*;
+
+import java.lang.Thread.State;
 import java.util.*;
 
 import Client.Client;
@@ -29,7 +31,6 @@ public class BeneficiaryMenu extends UserMenu
 
     public void view_all_visits_list()
     {
-        ArrayList <Visit> visitList = new ArrayList<>();
         HashMap <String, Object> filters = new HashMap<>();
         filters.put ("city", "%");
         filters.put ("address", "%");
@@ -40,7 +41,9 @@ public class BeneficiaryMenu extends UserMenu
         Client.getInstance().get_event(filters);
         String getEventResponse = Client.getInstance().make_server_request();
         JSONArray eventsArray = new JSONArray(getEventResponse);
-
+        
+        System.out.println ("\nEcco l'elenco delle visite attualmente nello stato di proposto/confermato/cancellato");
+        int cycleCount = 1;
         for (int i = 0; i < getEventResponse.length(); i++)
         {
             JSONObject event = eventsArray.getJSONObject(i);
@@ -48,21 +51,28 @@ public class BeneficiaryMenu extends UserMenu
             String tmpDescription = event.getString("description");
             String tmpCity = event.getString("city");
             String tmpAddress = event.getString("address");
-            String tmpState = event.getString("state");
             int tmpStartDate = event.getInt("startDate");
-
-            visitList.add(new Visit (tmpEventName, tmpCity, tmpAddress, tmpState, tmpStartDate));
-        }
-
-        System.out.println ("\nEcco l'elenco delle visite attualmente nello stato di proposto/completato/confermato/cancellato/effettuato");
-        int cycleCount = 1;
-        for (Visit v: visitList)
-        {
-            if (v.getVisitState() == StateOfVisit.CANCELLATA || v.getVisitState() == StateOfVisit.PROPOSTA || v.getVisitState() == StateOfVisit.CONFERMATA)
+            StateOfVisit visitState = StateOfVisit.fromString(event.getString("state"));
+            
+            if (visitState == StateOfVisit.CANCELLATA || visitState == StateOfVisit.PROPOSTA || visitState == StateOfVisit.CONFERMATA)
             {
-                System.out.printf ("%d.La visita %s, che si tiene a %s il %s ed è nello stato %s\n", cycleCount, v.getEventName(), v.getPlace(), v.getStartDay(),v.getVisitState().toString());
+                String formattedDate = DataManager.fromUnixToNormal(tmpStartDate);
+        
+                // Mappa gli stati a icone e colori
+                String stateIcon = UserTui.getStateIcon(visitState);
+                
+                System.out.println("\n");
+                UserTui.stampSeparator();
+                System.out.printf("🏷️  VISITA #%d\n", cycleCount);
+                System.out.printf("📌 %s\n", tmpEventName);
+                System.out.printf("📝 %s\n", tmpDescription);
+                System.out.printf("📍 %s - %s\n", tmpCity, tmpAddress);
+                System.out.printf("📅 %s\n", formattedDate);
+                System.out.printf("%s %s\n", stateIcon, UserTui.getStateDescription(visitState));
+                UserTui.stampSeparator();
             }
             cycleCount++;
+            UserTui.stampSeparator();
         }
     }
 

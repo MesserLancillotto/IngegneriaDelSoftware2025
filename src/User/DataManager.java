@@ -172,4 +172,43 @@ public class DataManager
         }
     }
 
+    public static boolean isSameDay(long firstUnixDate, long secondUnixDate) 
+    {
+        // Controllo base per valori non validi
+        if (firstUnixDate < 0 || secondUnixDate < 0) 
+        {
+            //System.err.println("Timestamp non validi: " + firstUnixDate + ", " + secondUnixDate);
+            return false;
+        }
+        try 
+        {
+            LocalDate firstDate = Instant.ofEpochSecond(firstUnixDate)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+                    
+            LocalDate secondDate = Instant.ofEpochSecond(secondUnixDate)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            
+            boolean sameDay = firstDate.equals(secondDate);
+            
+            /*  Log opzionale per debug
+            if (sameDay) 
+            {
+                System.out.println("Le date appartengono allo stesso giorno: " + firstDate);
+            }*/
+            return sameDay;
+        } 
+        catch (DateTimeException e) 
+        {
+            //System.err.println("Errore di conversione date: " + e.getMessage());
+            return false;
+        } 
+        catch (Exception e) 
+        {
+            //System.err.println("Errore imprevisto: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

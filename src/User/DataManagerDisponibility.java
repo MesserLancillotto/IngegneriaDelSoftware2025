@@ -1,13 +1,7 @@
 package User;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.time.*;
+import java.time.format.*;
+import java.util.*;
 
 public class DataManagerDisponibility extends DataManager
 {
@@ -38,7 +32,11 @@ public class DataManagerDisponibility extends DataManager
     public int getReferenceDay (String thingToSayForDay, String thingToSayForDuration)
     {
         boolean confirmDate;
-        String userMessage = thingToSayForDay+" nel mese di "+monthNumberToName.get(referenceMonth)+ " (formato: DD):";
+        StringBuilder userMessage = new StringBuilder();
+        userMessage.append(thingToSayForDay);
+        userMessage.append(" nel mese di ");
+        userMessage.append(monthNumberToName.get(referenceMonth));
+        userMessage.append(" (formato: DD):");
         
         int howManyDaysClosed;
         int loopCount = 0;
@@ -51,7 +49,7 @@ public class DataManagerDisponibility extends DataManager
                 System.out.println ("\nHai sbagliato troppe volte!");
                 return -1;
             }
-            unaviableDay = UserTui.getInteger(userMessage, 0, daysInAMonth.get(referenceMonth)+1);
+            unaviableDay = UserTui.getInteger(userMessage.toString(), 0, daysInAMonth.get(referenceMonth)+1);
             confirmDate = UserTui.getYesNoAnswer("Hai inserito il giorno "+unaviableDay+" confermi");
 
             if (enteredDates.contains(unaviableDay) && confirmDate)
@@ -78,31 +76,34 @@ public class DataManagerDisponibility extends DataManager
     //CONTROLLA, metodo per prendere un giorno solo
     public int getReferenceDay (String thingToSayForDay)
     {
-        boolean confirmDate;
-        String userMessage = thingToSayForDay+" nel mese di "+monthNumberToName.get(referenceMonth)+ " (formato: DD):";
+        StringBuilder userMessage = new StringBuilder();
+        userMessage.append(thingToSayForDay);
+        userMessage.append(" nel mese di ");
+        userMessage.append(monthNumberToName.get(referenceMonth));
+        userMessage.append(" (formato: DD):");
         
         int loopCount = 0;
         int unaviableDay;
 
-        do
+        while (true)
         {
             if (loopCount >= 3)
             {
                 System.out.println ("\nHai sbagliato troppe volte!");
                 return -1;
             }
-            unaviableDay = UserTui.getInteger(userMessage, 0, daysInAMonth.get(referenceMonth)+1);
-            confirmDate = UserTui.getYesNoAnswer("Hai inserito il giorno "+unaviableDay+" confermi");
+            unaviableDay = UserTui.getInteger(userMessage.toString(), "Hai inserito il giorno ", 0, daysInAMonth.get(referenceMonth)+1);
 
-            if (enteredDates.contains(unaviableDay) && confirmDate)
+            if (enteredDates.contains(unaviableDay))
             {
                 System.out.println ("Hai già inserito questa data scegline un'altra!");
-                return -1;
             }
+            else
+                return unaviableDay;
             loopCount++;
-        }while (!confirmDate);
+        }
 
-        return unaviableDay;
+        
     }
 
     private int getIncreasedMonth (int increase, int tmpMonth)
@@ -120,10 +121,10 @@ public class DataManagerDisponibility extends DataManager
         return tmpMonth;
     }
 
-    public long getUnixDate (int tmpDay)
+    public int getUnixDate (int referenceDay)
     {
-        LocalDate date = LocalDate.of(referenceYear, referenceMonth, tmpDay);
-        return date.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+        LocalDate date = LocalDate.of(referenceYear, referenceMonth, referenceDay);
+        return (int)date.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
     }
 
 

@@ -9,6 +9,7 @@ public class Beneficiary extends User
     //COSTRUTTORE PRIMO ACCESSO
     public Beneficiary ()
     {
+        create_new_account();
         new BeneficiaryMenu();
     }
     //COSTRUTTORE BASE
@@ -35,6 +36,9 @@ public class Beneficiary extends User
         this.cityOfResidence = UserTui.getString("Inserisci la tua città di residenza");
 		this.birthYear = UserTui.getInteger("Inserisci l'anno di nascita", 1900, 2025);
 
-
+        //Client.getInstance().nome_metodo(gli passo gli attributi);
+        String newUserAnswer = Client.getInstance().make_server_request();
+        JSONObject dictionary = new JSONObject(newUserAnswer);
+        UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful")); // controlla che sia querySuccesful il campo
     }
 }

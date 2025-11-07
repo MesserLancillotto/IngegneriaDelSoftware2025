@@ -39,9 +39,10 @@ public abstract class UserMenu
         boolean keepUsingConfiguratorMenu;
         do
         {
+            UserTui.stampSeparator();
             visualize_options();
             keepUsingConfiguratorMenu = UserTui.getYesNoAnswer("\nVuoi fare altro");
-            System.out.println("==================================================");
+            UserTui.stampSeparator();
         }while (keepUsingConfiguratorMenu);
 	}
 

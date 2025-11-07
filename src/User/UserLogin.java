@@ -31,6 +31,8 @@ public class UserLogin
 		    login();
         else if (UserTui.getYesNoAnswer("Vuoi creare un nuovo account"))
             create_new_account();
+
+        UserTui.printExitMessage();
 	}
 	
     private static void create_new_account ()

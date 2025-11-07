@@ -26,12 +26,15 @@ public class ConfMenuGenericOptions extends UserMenu
 
     public void modify_max_number_per_subscription()
     {
+        UserTui.stampSeparator();
         int newMaxNumber = UserTui.getInteger("\nDefinire il nuovo numero massimo di persone che un fruitore può iscrivere in una volta sola", 0, 100);
         JSONObjectCreator.setMaxPeopleForSubscription(newMaxNumber);
+        UserTui.stampSeparator();
     }
 
      public void manage_disponibilty_dates ()
     {
+        UserTui.stampSeparator();
         boolean addAnotherDate;
         DataManagerDisponibility date = new DataManagerDisponibility(3);
         do
@@ -47,6 +50,7 @@ public class ConfMenuGenericOptions extends UserMenu
             }
             addAnotherDate = UserTui.getYesNoAnswer("Vuoi inserire un'altra data");
         }while (addAnotherDate);
+        UserTui.stampSeparator();
     }
 
 }

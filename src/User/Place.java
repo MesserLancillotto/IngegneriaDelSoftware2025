@@ -24,8 +24,8 @@ public class Place
 
 	public void stampTypeVisit()
 	{
-		Set<String> visiType = new HashSet<>(visitTypeInThisPlace);
-		for (String type: visiType)
+		Set<String> visitType = new HashSet<>(visitTypeInThisPlace);
+		for (String type: visitType)
 		{
 			System.out.println (type);
 		}
