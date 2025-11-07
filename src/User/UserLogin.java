@@ -13,6 +13,13 @@ public class UserLogin
     private static final String CONFIGURATOR_SYMBOL = "C";
     private static final String VOLUNTARY_SYMBOL = "V";
     private static final String BENEFICIARY_SYMBOL = "B";
+    private static final String WHAT_USER_DO_LOGIN = "Vuoi eseguire il login";
+    private static final String WHAT_USER_DO_CREATE_ACCOUNT = "Vuoi creare un nuovo account";
+    private static final String INSERT_USERNAME = "Inserisci username";
+    private static final String INSERT_PASSWORD = "Inserisci password";
+    private static final String MSG_LOGIN_SUCCESSFUL = "LOGIN EFFETTUATO CON SUCCESSO";
+    private static final String ERROR_LOGIN = "\nLogin fallito, username o password errati!\n";
+    private static final String ERROR_CONNECTION_SERVER = "\nErrore di connessione col server, riprova più tardi!\n";
 
     private static void initialize_user_factory ()
     {
@@ -27,9 +34,10 @@ public class UserLogin
 	public static void main (String[] args)
 	{
         initialize_user_factory();
-        if (UserTui.getYesNoAnswer("Vuoi eseguire il login"))
+        UserTui.printWelcomeMessage();
+        if (UserTui.getYesNoAnswer(WHAT_USER_DO_LOGIN))
 		    login();
-        else if (UserTui.getYesNoAnswer("Vuoi creare un nuovo account"))
+        else if (UserTui.getYesNoAnswer(WHAT_USER_DO_CREATE_ACCOUNT))
             create_new_account();
 
         UserTui.printExitMessage();
@@ -42,41 +50,52 @@ public class UserLogin
 
 	private static void login ()
 	{
-        boolean loginSuccessfull;
+        boolean loginSuccessfull = false;
         do
         {
-            String userName = UserTui.getString("Inserisci username");
-            String password = UserTui.getString("Inserisci password");
+            String userName = UserTui.getString(INSERT_USERNAME);
+            String password = UserTui.getString(INSERT_PASSWORD);
             Client.getInstance().setUserID (userName);
             Client.getInstance().setUserPassword (password);
 
             Client.getInstance().get_user_data(userName);
             String loginResult = Client.getInstance().make_server_request();
-            JSONObject dictionary = new JSONObject(loginResult);
-
-            loginSuccessfull = dictionary.getBoolean("loginSuccessful");
-            
-            if (loginSuccessfull)
+            if (loginResult.trim().isEmpty() || JSONObjectMethod.isValidJSONObject(loginResult))
+            {   
+                JSONObject dictionary = new JSONObject(loginResult);
+                loginSuccessfull = dictionary.getBoolean("loginSuccessful");
+                
+                if (loginSuccessfull)
+                {
+                    UserTui.printCenteredTitle(MSG_LOGIN_SUCCESSFUL);
+                    boolean passwordNeedsToBeChanged = dictionary.getBoolean("passwordChangeDue");
+                    String roleTitle = dictionary.getString("role");
+                    if (passwordNeedsToBeChanged)
+                    {
+                        if (userName.substring(0,1).equals (TEMPORARY_SYMBOL))
+                            userFirstAccessFactory.get(CONFIGURATOR_SYMBOL).create (userName, password, roleTitle);
+                        else
+                            userFirstAccessFactory.get(userName.substring(0,1)).create(userName, password, roleTitle);
+                    }
+                    else 
+                    {
+                        String cityOfResidence = dictionary.getString("cityOfResidence");
+                        int birthYear = dictionary.getInt("birthYear");
+                        String organization = dictionary.getString("organization");
+                        ArrayList <String> allowedVisitType = JSONObjectMethod.jsonArrayConverter(dictionary.getJSONArray("allowedVisitType"));
+                        userFactory.get(userName.substring(0,1)).create (userName, cityOfResidence, birthYear, password, roleTitle, organization, allowedVisitType);
+                    }
+                }
+                else
+                {
+                    System.out.println (ERROR_LOGIN);
+                }
+            }
+            else
             {
-                boolean passwordNeedsToBeChanged = dictionary.getBoolean("passwordChangeDue");
-                String roleTitle = dictionary.getString("role");
-                if (passwordNeedsToBeChanged)
-                {
-                    if (userName.substring(0,1).equals (TEMPORARY_SYMBOL))
-                        userFirstAccessFactory.get(CONFIGURATOR_SYMBOL).create (userName, password, roleTitle);
-                    else
-                        userFirstAccessFactory.get(userName.substring(0,1)).create(userName, password, roleTitle);
-                }
-                else 
-                {
-                    String cityOfResidence = dictionary.getString("cityOfResidence");
-                    int birthYear = dictionary.getInt("birthYear");
-                    String organization = dictionary.getString("organization");
-                    ArrayList <String> allowedVisitType = JSONObjectMethod.jsonArrayConverter(dictionary.getJSONArray("allowedVisitType"));
-                    userFactory.get(userName.substring(0,1)).create (userName, cityOfResidence, birthYear, password, roleTitle, organization, allowedVisitType);
-                }
+                System.out.println (ERROR_CONNECTION_SERVER);
+                loginSuccessfull = true;
             }
         }while (!loginSuccessfull);
 	}    
-
 }

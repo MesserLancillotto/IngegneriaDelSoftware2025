@@ -15,9 +15,10 @@ public abstract class UserMenu
         int optionCount = 1;
         for (String options : menuOptionList)
         {
-            System.out.println (optionCount+options);
+            System.out.println (optionCount+"."+options);
+            optionCount++;
         }
-        menuSelection.get(UserTui.getInteger("Cosa vuoi fare", 0, optionCount+1))
+        menuSelection.get(UserTui.getInteger("Cosa vuoi fare (Inserisci il numero dell'opzione)", 0, optionCount+1))
                             .run();
 	}
 

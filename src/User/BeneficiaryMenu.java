@@ -57,19 +57,7 @@ public class BeneficiaryMenu extends UserMenu
             if (visitState == StateOfVisit.CANCELLATA || visitState == StateOfVisit.PROPOSTA || visitState == StateOfVisit.CONFERMATA)
             {
                 String formattedDate = DataManager.fromUnixToNormal(tmpStartDate);
-        
-                // Mappa gli stati a icone e colori
-                String stateIcon = UserTui.getStateIcon(visitState);
-                
-                System.out.println("\n");
-                UserTui.stampSeparator();
-                System.out.printf("🏷️  VISITA #%d\n", cycleCount);
-                System.out.printf("📌 %s\n", tmpEventName);
-                System.out.printf("📝 %s\n", tmpDescription);
-                System.out.printf("📍 %s - %s\n", tmpCity, tmpAddress);
-                System.out.printf("📅 %s\n", formattedDate);
-                System.out.printf("%s %s\n", stateIcon, UserTui.getStateDescription(visitState));
-                UserTui.stampSeparator();
+                UserTui.stampEventInfo (cycleCount, tmpEventName, tmpDescription, tmpCity, tmpAddress, formattedDate, visitState);
             }
             cycleCount++;
             UserTui.stampSeparator();

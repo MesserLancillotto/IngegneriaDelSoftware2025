@@ -6,6 +6,12 @@ import Client.Client;
 
 public class Beneficiary extends User
 {
+    private static final String GET_DATA_NAME = "Inserisci il nome: ";
+    private static final String GET_DATA_SURNAME = "Inserisci il cognome: ";
+    private static final String GET_DATA_PASSWORD = "Inserisci la nuova password: ";
+    private static final String GET_DATA_CITY = "Inserisci la tua città di residenza";
+    private static final String GET_DATA_BIRTH_YEAR = "Inserisci l'anno di nascita";
+    private static final String ERROR_CONNECTION_SERVER = "\nErrore di connessione col server, riprova più tardi!\n";
     //COSTRUTTORE PRIMO ACCESSO
     public Beneficiary ()
     {
@@ -24,21 +30,29 @@ public class Beneficiary extends User
         new BeneficiaryMenu ();
     }
 
-    private void create_new_account ()
+    private boolean create_new_account ()
     {
         String userName = UserTui.getString("Inserisci username");      //Glielo generiamo noi????
         StringBuilder userId = new StringBuilder();
-        userId.append(UserTui.getStringNoTrim("Inserisci il nome: "));
+        userId.append(UserTui.getStringNoTrim(GET_DATA_NAME));
         userId.append (" ");
-        userId.append(UserTui.getStringNoTrim("Inserisci il cognome: "));
+        userId.append(UserTui.getStringNoTrim(GET_DATA_SURNAME));
         
-        this.password = UserTui.getPasswordFromUser ("Inserisci la nuova password");
-        this.cityOfResidence = UserTui.getString("Inserisci la tua città di residenza");
-		this.birthYear = UserTui.getInteger("Inserisci l'anno di nascita", 1900, 2025);
+        this.password = UserTui.getPasswordFromUser (GET_DATA_PASSWORD);
+        this.cityOfResidence = UserTui.getString(GET_DATA_CITY);
+		this.birthYear = UserTui.getInteger(GET_DATA_BIRTH_YEAR, 1900, 2025);
 
         //Client.getInstance().nome_metodo(gli passo gli attributi);
         String newUserAnswer = Client.getInstance().make_server_request();
-        JSONObject dictionary = new JSONObject(newUserAnswer);
-        UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful")); // controlla che sia querySuccesful il campo
+        if (newUserAnswer.trim().isEmpty() || JSONObjectMethod.isValidJSONObject(newUserAnswer))
+        {
+            JSONObject dictionary = new JSONObject(newUserAnswer);
+            return UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful")); // controlla che sia querySuccesful il campo
+        }
+        else
+        {
+            System.out.println (ERROR_CONNECTION_SERVER);
+            return false;
+        }
     }
 }

@@ -48,6 +48,7 @@ public class JSONObjectMethod
         return list;
     }
 
+    // Ritorna una lista di stringhe in maiuscolo e senza spazi bianchi per confronti
     public static ArrayList<String> jsonArrayConverterForComparisons(JSONArray jsonArray) 
     {
         ArrayList<String> list = new ArrayList<>();
@@ -77,24 +78,24 @@ public class JSONObjectMethod
             return false;
         }
     
-    String trimmed = jsonString.trim();
-    
-    // Controllo rapido sintattico
-    if (!trimmed.startsWith("{") || !trimmed.endsWith("}")) 
-    {
-        return false;
+        String trimmed = jsonString.trim();
+        
+        // Controllo rapido sintattico
+        if (!trimmed.startsWith("{") || !trimmed.endsWith("}")) 
+        {
+            return false;
+        }
+        
+        try 
+        {
+            new JSONObject(trimmed);
+            return true;
+        } 
+        catch (JSONException e) 
+        {
+            return false;
+        }
     }
-    
-    try 
-    {
-        new JSONObject(trimmed);
-        return true;
-    } 
-    catch (JSONException e) 
-    {
-        return false;
-    }
-}
 
     public static boolean isValidJSONArray(String jsonString) 
     {

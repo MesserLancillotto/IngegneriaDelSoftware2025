@@ -6,6 +6,8 @@ import org.json.*;
 
 public class ConfiguratorMenu extends UserMenu
 {
+    private static final String MENU_TITLE = "MENU PRINCIPALE CONFIGURATORE";
+    private static final String VISIT_STATE_MSG = "\nEcco l'elenco delle visite attualmente nello stato di proposto/completato/confermato/cancellato/effettuato";
     String organization; 
 
     public void initialize_menu_selection ()
@@ -24,12 +26,12 @@ public class ConfiguratorMenu extends UserMenu
     //COSTRUTTORE
     public ConfiguratorMenu (String organization)
     {
-        printCenteredTitle("MENU PRINCIPALE CONFIGURATORE");
+        printCenteredTitle(MENU_TITLE);
         this.organization = organization;   
         initialize_menu_selection();
         manage_options();
     }
-
+    // COSTRUTTORE PER IL PRIMO ACCESSO DEL CONFIGURATORE
     public ConfiguratorMenu (Boolean isFirstAccess, String organization)
     {
         new ConfMenuPlaceMenu(isFirstAccess, organization); 
@@ -52,36 +54,39 @@ public class ConfiguratorMenu extends UserMenu
 
     private void view_visit_state ()
     {
-        ArrayList <Visit> visitList = new ArrayList<>();
         HashMap <String, Object> filters = new HashMap<>();
         filters.put ("city", "%");
         filters.put ("address", "%");
         filters.put ("state", "%");
         filters.put ("startDate", "%");
         filters.put ("eventName", "%");
+        filters.put ("description", "%");
         Client.getInstance().get_event(filters);
         String getEventResponse = Client.getInstance().make_server_request();
-        JSONArray eventsArray = new JSONArray(getEventResponse);
-
-        for (int i = 0; i < getEventResponse.length(); i++)
+        if (getEventResponse.trim().isEmpty() || JSONObjectMethod.isValidJSONArray(getEventResponse))
         {
-            JSONObject event = eventsArray.getJSONObject(i);
-            String tmpEventName = event.getString("eventName");
-            String tmpCity = event.getString("city");
-            String tmpAddress = event.getString("address");
-            String tmpState = event.getString("state");
-            int tmpStartDate = event.getInt("startDate");
+            JSONArray eventsArray = new JSONArray(getEventResponse);
+            int cycleCount = 1;
 
-            visitList.add(new Visit (tmpEventName, tmpCity, tmpAddress, tmpState, tmpStartDate));
-        }
-
-        System.out.println ("\nEcco l'elenco delle visite attualmente nello stato di proposto/completato/confermato/cancellato/effettuato");
-        for (Visit v: visitList)
-        {
-            if (v.getVisitState() == StateOfVisit.CANCELLATA || v.getVisitState() == StateOfVisit.PROPOSTA ||
-                        v.getVisitState() == StateOfVisit.COMPLETA || v.getVisitState() == StateOfVisit.CONFERMATA || v.getVisitState() == StateOfVisit.EFFETTUATA)
+            System.out.println (VISIT_STATE_MSG);
+            for (int i = 0; i < eventsArray.length(); i++)
             {
-                System.out.printf ("La visita %s, che si tiene a %s il %s ed è nello stato %s\n", v.getEventName(), v.getPlace(), v.getStartDay(),v.getVisitState().toString());
+                JSONObject event = eventsArray.getJSONObject(i);
+                String tmpEventName = event.getString("eventName");
+                String tmpDescription = event.getString("description");
+                String tmpCity = event.getString("city");
+                String tmpAddress = event.getString("address");
+                int tmpStartDate = event.getInt("startDate");
+                StateOfVisit visitState = StateOfVisit.fromString(event.getString("state"));
+                String formattedDate = DataManager.fromUnixToNormal(tmpStartDate);
+
+                if (visitState == StateOfVisit.CANCELLATA || visitState == StateOfVisit.PROPOSTA || visitState == StateOfVisit.CONFERMATA
+                        || visitState == StateOfVisit.COMPLETA || visitState == StateOfVisit.EFFETTUATA)
+                {
+                    
+                    UserTui.stampEventInfo (cycleCount, tmpEventName, tmpDescription, tmpCity, tmpAddress, formattedDate, visitState);
+                } 
+                cycleCount++;  
             }
         }
     }

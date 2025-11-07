@@ -34,10 +34,7 @@ public final class Client
 
     private Client ()
     {
-        if (userID == null|| userPassword == null)
-        {
-            System.out.println ("\nErrore configurazione client non eseguita!");
-        }
+        
     }
 
     public static synchronized Client getInstance ()

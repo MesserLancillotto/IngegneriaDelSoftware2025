@@ -5,6 +5,9 @@ import Client.Client;
 
 public class Voluntary extends User
 {
+	private static final String ERROR_FIRST_ACCESS = "\nErrore nel primo accesso, riprova più tardi!\n";
+	private static final String ERROR_FAILED_LOGIN = "\nLogin fallito, username o password errati!\n";
+	private static final String ERROR_LOAD_DATA = "\nErrore nel caricamento dei dati, riprova più tardi!\n";
 	private ArrayList <String> allowedVisitType;
 
 	//COSTRUTTORE BASE
@@ -31,7 +34,7 @@ public class Voluntary extends User
 		if(first_access())
 			new VoluntaryMenu (userName, this.allowedVisitType);
 		else
-			System.out.println ("\nERRORE durantel'esecuzione dell'applicazione");
+			System.out.println (ERROR_FIRST_ACCESS);
 	}
 	
 	private boolean first_access()
@@ -39,18 +42,26 @@ public class Voluntary extends User
 		while(set_new_password());
 		Client.getInstance().get_user_data(userName);
 		String getDataResponse = Client.getInstance().make_server_request();
-		JSONObject dictionary = new JSONObject(getDataResponse);
-		if (dictionary.getBoolean("loginSuccessful"))
+		if (getDataResponse.trim().isEmpty() || JSONObjectMethod.isValidJSONObject(getDataResponse))
 		{
-			this.birthYear = dictionary.getInt("birthYear");
-			this.organization = dictionary.getString("organization");
-			this.cityOfResidence = dictionary.getString("cityOfResidence");
-			this.allowedVisitType = JSONObjectMethod.jsonArrayConverter(dictionary.getJSONArray("allowedVisitType"));
-			return true;
+			JSONObject dictionary = new JSONObject(getDataResponse);
+			if (dictionary.getBoolean("loginSuccessful"))
+			{
+				this.birthYear = dictionary.getInt("birthYear");
+				this.organization = dictionary.getString("organization");
+				this.cityOfResidence = dictionary.getString("cityOfResidence");
+				this.allowedVisitType = JSONObjectMethod.jsonArrayConverter(dictionary.getJSONArray("allowedVisitType"));
+				return true;
+			}
+			else
+			{
+				System.out.println (ERROR_FAILED_LOGIN);
+				return false;
+			}
 		}
 		else
 		{
-			System.out.println ("\nERRORE! Caricamento dati non riuscito");
+			System.out.println (ERROR_LOAD_DATA);
 			return false;
 		}
 

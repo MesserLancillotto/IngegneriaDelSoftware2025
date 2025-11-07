@@ -295,15 +295,21 @@ public class UserTui
     //metodo di acquisizione int con con range di validità
     public static int getInteger (String thingToSayToUser, String thingToSayToUserToConfirm, int lowerBound, int upperBound)
     {
+        int loopCount = 0;
         while (true)
         {
             try
             {
+                if (loopCount >= 3)
+                {
+                    System.out.println ("\nHai sbagliato troppe volte!");
+                    return -1;
+                }
                 System.out.printf ("\n%s: ", thingToSayToUser);
                 String input = consoleIn.readLine();
                 int tmpValue = Integer.parseInt(input);
 
-                if ((input == null || input.isEmpty()) && tmpValue < lowerBound && tmpValue > upperBound)
+                if ((input == null || input.isEmpty()) && tmpValue <= lowerBound && tmpValue >= upperBound)
                     System.out.println ("Errore, valore inserito non valido");
                 else
                 {
@@ -315,6 +321,7 @@ public class UserTui
                     if (isConfirmed)
                         return tmpValue;
                 }
+                loopCount++;
              } 
             catch (IOException errorDuringDigitation)
             {
@@ -397,12 +404,18 @@ public class UserTui
         }
     }
 
-    public static void operationIsSuccessful (boolean result)
+    public static boolean operationIsSuccessful (boolean result)
     {
         if (result)
+        {
             System.out.println ("\nL'operazione ha avuto successo");
+            return true;
+        }
         else
+        {
             System.out.println ("\nERRORE! l'operazione non ha avuto successo");
+            return false;
+        }
     }
 
     public static HashMap <Integer, String> fromListToMap (Set <String> listToConvert)
@@ -455,13 +468,21 @@ public class UserTui
         }
     }
 
-
+    public static Set<String> getSetForComparison (Set<String> originalSet)
+    {
+        Set<String> returnSet = new HashSet<>();
+        for (String element : originalSet)
+        {
+            returnSet.add(element.toUpperCase().trim());
+        }
+        return returnSet;
+    }
 
     // METODI PER IMPAGINAZIONE
 
     public static void stampSeparator ()
     {
-        System.out.println("==================================================");
+        System.out.println("\n==================================================\n");
     }
 
     public static void printExitMessage() 
@@ -473,6 +494,40 @@ public class UserTui
         System.out.println("=".repeat(50));
     }
 
+    public static void printWelcomeMessage() 
+    {
+        System.out.println("==========================================");
+        System.out.println("|          BENVENUTO NELL'APP            |");
+        System.out.println("==========================================");
+        System.out.println("| L'applicazione è pronta per l'uso!     |");
+        System.out.println("|                                        |");
+        System.out.println("| Funzionalità disponibili:              |");
+        System.out.println("| • Accesso                              |");
+        System.out.println("| • Creazione nuovo account              |");
+        System.out.println("|                                        |");
+        System.out.println("==========================================");
+    }
+
+    public static void stampTitle (String title)
+    {
+        stampSeparator();
+        System.out.println (title);
+        stampSeparator();
+    }
+    
+    public static void printCenteredTitle(String title) 
+    {
+        int totalWidth = 50;
+        int padding = (totalWidth - title.length() - 2) / 2;
+        
+        String border = "✽".repeat(totalWidth);
+        String paddingStr = " ".repeat(padding);
+        
+        System.out.println("\n" + border);
+        System.out.println("✽" + paddingStr + " " + title + " " + paddingStr + "✽");
+        System.out.println(border + "\n");
+    }
+    
     public static void stampEventInfo (int index, String eventName, String eventDescription, String eventCity, String eventAddress, String formattedDate, StateOfVisit visitState) 
     {
         // Mappa gli stati a icone e colori

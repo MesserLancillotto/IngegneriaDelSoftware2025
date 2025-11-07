@@ -141,6 +141,7 @@ public class DataManager
         int completeHour = tmpHours * 100+tmpMinutes;
         return completeHour;
     }
+    
     public static boolean checkSpecificHourFormat (String hour)
     {
         if (hour == null || hour.length() != 5) 

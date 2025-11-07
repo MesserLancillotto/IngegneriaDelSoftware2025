@@ -55,8 +55,7 @@ public class VoluntaryMenu extends UserMenu
             {
                 int unixDate = (int)date.getUnixDate(disponibilityDay);
                 String eventName = show_events_by_specific_day (unixDate);  //ottengo quale evento vuole
-
-                if (!eventName.isEmpty()) //controllo che non abbia sbagliato troppo
+                if (eventName.trim().isEmpty())
                 {
                     Client.getInstance().set_disponibility(eventName, unixDate);
                     String voluntaryDisponibilityResponse = Client.getInstance().make_server_request();
@@ -77,19 +76,23 @@ public class VoluntaryMenu extends UserMenu
 
         Client.getInstance().get_event(filters);
         String getEventResponse = Client.getInstance().make_server_request();
-        JSONArray eventsArray = new JSONArray(getEventResponse);
-
-        System.out.println("Ecco gli eventi che si svolgono in quella data:");
-        int loopCount = 1;
-        for (int i = 0; i < getEventResponse.length(); i++)
+        if (getEventResponse.trim().isEmpty() || JSONObjectMethod.isValidJSONArray(getEventResponse))
         {
-            JSONObject event = eventsArray.getJSONObject(i);
-            int eventDate = event.getInt("startDate");   
-            if (DataManager.isSameDay(eventDate, date))
-                validEventName.put (loopCount, event.getString("eventName"));
+            JSONArray eventsArray = new JSONArray(getEventResponse);
+
+            System.out.println("Ecco gli eventi che si svolgono in quella data:");
+            int loopCount = 1;
+            for (int i = 0; i < getEventResponse.length(); i++)
+            {
+                JSONObject event = eventsArray.getJSONObject(i);
+                int eventDate = event.getInt("startDate");   
+                if (DataManager.isSameDay(eventDate, date))
+                    validEventName.put (loopCount, event.getString("eventName"));
+            }
+            String eventToChoose = UserTui.getChoiceFromMap("Scegli l'evento a cui vuoi dare la disponibilità:", validEventName);
+            return eventToChoose;
         }
-        String eventToChoose = UserTui.getChoiceFromMap("Scegli l'evento a cui vuoi dare la disponibilità:", validEventName);
-        return eventToChoose;
+        return "";
     }
 
     public void view_confirmed_events()
@@ -103,34 +106,37 @@ public class VoluntaryMenu extends UserMenu
         filters.put ("description", "%");
         Client.getInstance().get_event(filters);
         String getEventResponse = Client.getInstance().make_server_request();
-        JSONArray eventsArray = new JSONArray(getEventResponse);
-        
-        System.out.println ("\nEcco l'elenco delle visite confermate a cui devi fare da guida:");
-        int cycleCount = 1;
-        for (int i = 0; i < getEventResponse.length(); i++)
+        if (getEventResponse.trim().isEmpty() || JSONObjectMethod.isValidJSONArray(getEventResponse))
         {
-            JSONObject event = eventsArray.getJSONObject(i);
-            String tmpEventName = event.getString("eventName");
-            String tmpDescription = event.getString("description");
-            String tmpCity = event.getString("city");
-            String tmpAddress = event.getString("address");
-            int tmpStartDate = event.getInt("startDate");
-
-            //IPOTETICO BISOGNA VEDERE SE VIENE IMPLEMENTATO COSÌ
-            JSONArray voluntArray = event.getJSONArray("voluntarys"); // voluntary è da definire 
-            ArrayList <String> voluntarysForThisEvent = JSONObjectMethod.jsonArrayConverterForComparisons(voluntArray);
-
-            StateOfVisit visitState = StateOfVisit.fromString(event.getString("state"));
-            
-            if (visitState == StateOfVisit.CONFERMATA)
+            JSONArray eventsArray = new JSONArray(getEventResponse);
+        
+            System.out.println ("\nEcco l'elenco delle visite confermate a cui devi fare da guida:");
+            int cycleCount = 1;
+            for (int i = 0; i < getEventResponse.length(); i++)
             {
-                if (voluntarysForThisEvent.contains(voluntaryUserName.toUpperCase().trim()))
+                JSONObject event = eventsArray.getJSONObject(i);
+                String tmpEventName = event.getString("eventName");
+                String tmpDescription = event.getString("description");
+                String tmpCity = event.getString("city");
+                String tmpAddress = event.getString("address");
+                int tmpStartDate = event.getInt("startDate");
+
+                //IPOTETICO BISOGNA VEDERE SE VIENE IMPLEMENTATO COSÌ
+                JSONArray voluntArray = event.getJSONArray("voluntarys"); // la key voluntary è da definire 
+                ArrayList <String> voluntarysForThisEvent = JSONObjectMethod.jsonArrayConverterForComparisons(voluntArray);
+
+                StateOfVisit visitState = StateOfVisit.fromString(event.getString("state"));
+                
+                if (visitState == StateOfVisit.CONFERMATA)
                 {
-                    String formattedDate = DataManager.fromUnixToNormal(tmpStartDate);
-                    UserTui.stampEventInfo (cycleCount, tmpEventName, tmpDescription, tmpCity, tmpAddress, formattedDate, visitState);
+                    if (voluntarysForThisEvent.contains(voluntaryUserName.toUpperCase().trim()))
+                    {
+                        String formattedDate = DataManager.fromUnixToNormal(tmpStartDate);
+                        UserTui.stampEventInfo (cycleCount, tmpEventName, tmpDescription, tmpCity, tmpAddress, formattedDate, visitState);
+                    }
                 }
+                cycleCount++;
             }
-            cycleCount++;
         }
     }
 }
