@@ -22,9 +22,9 @@ public class UserTui
 
                 System.out.println ("Valore inserito non valido, riprova!\n");
             }
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -75,9 +75,9 @@ public class UserTui
                 
                 System.out.println ("Valore inserito non valido, riprova!\n");
             }
-            catch (IOException errorDuringDigitation)
+           catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -106,10 +106,10 @@ public class UserTui
                     System.out.println("Valore inserito non valido, riprova!\n");
                 }
             }
-            catch (IOException errorDuringDigitation)
+           catch (Exception ex)
             {
-                System.out.println("\nErrore durante la digitazione: " + errorDuringDigitation.getMessage());
-                System.out.println("Riprova");
+                System.out.println ("\nErrore durante la digitazione");
+                System.out.println ("Riprova");
             }
             
         }
@@ -132,9 +132,9 @@ public class UserTui
                 else
                     System.out.println ("Valore inserito non valido, riprova!\n");
             }
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -157,9 +157,9 @@ public class UserTui
                 else
                     System.out.println ("Valore inserito non valido, riprova!\n");
             }
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -181,9 +181,9 @@ public class UserTui
                     System.out.println ("\nStringa non valida, hai superato il numero massimo di caratteri consentiti");
                 System.out.println ("\nValore inserito non valido, riprova!\n");
             }
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -213,9 +213,9 @@ public class UserTui
                     }
                 }
              } 
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -238,9 +238,9 @@ public class UserTui
                         return Integer.parseInt(input);
                 }
              } 
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -260,9 +260,9 @@ public class UserTui
                     return Integer.parseInt(input);
                 
              } 
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -279,14 +279,14 @@ public class UserTui
                 String input = consoleIn.readLine();
                 int tmpValue = Integer.parseInt(input);
 
-                if ((input == null || input.isEmpty()) && tmpValue < lowerBound && tmpValue > upperBound)
+                if (input == null || input.isEmpty() || tmpValue <= lowerBound || tmpValue >= upperBound)
                     System.out.println ("Errore, valore inserito non valido");
                 else
                     return tmpValue;
              } 
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -309,7 +309,7 @@ public class UserTui
                 String input = consoleIn.readLine();
                 int tmpValue = Integer.parseInt(input);
 
-                if ((input == null || input.isEmpty()) && tmpValue <= lowerBound && tmpValue >= upperBound)
+                if (input == null || input.isEmpty() || tmpValue <= lowerBound || tmpValue >= upperBound)
                     System.out.println ("Errore, valore inserito non valido");
                 else
                 {
@@ -323,9 +323,9 @@ public class UserTui
                 }
                 loopCount++;
              } 
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -350,9 +350,9 @@ public class UserTui
                 }
                 System.out.println ("\nErrore, valore inserito non valido");
             }
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -373,9 +373,9 @@ public class UserTui
 
                 System.out.println ("Valore inserito non valido, riprova!\n");
             }
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione" + errorDuringDigitation.getMessage());
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }
@@ -388,6 +388,22 @@ public class UserTui
 		for (String elementToStamp : listToStamp)
 		{
 			System.out.println (elementToStamp);
+		}
+	}
+
+    public static void stamp_integer_list (String title, Collection <Integer>listToStamp)
+	{
+		System.out.println ("\n"+title);
+        boolean firstElement = true;
+		for (int elementToStamp : listToStamp)
+		{
+            if (firstElement)
+			{
+                System.out.printf ("%d", elementToStamp);
+                firstElement = false;
+            }
+            else
+                System.out.printf (", %d", elementToStamp);
 		}
 	}
 
@@ -418,7 +434,7 @@ public class UserTui
         }
     }
 
-    public static HashMap <Integer, String> fromListToMap (Set <String> listToConvert)
+    public static HashMap <Integer, String> fromListToMap (Collection <String> listToConvert)
     {
         HashMap <Integer, String> convertedMap = new HashMap<>();
         int cycleCount = 1;
@@ -460,9 +476,9 @@ public class UserTui
                     System.out.println ("\nErrore, valore inserito non valido");
                 }
              } 
-            catch (IOException errorDuringDigitation)
+            catch (Exception ex)
             {
-                System.out.println ("\nErrore durante la digitazione!");
+                System.out.println ("\nErrore durante la digitazione");
                 System.out.println ("Riprova");
             }
         }

@@ -44,7 +44,7 @@ public class Beneficiary extends User
 
         //Client.getInstance().nome_metodo(gli passo gli attributi);
         String newUserAnswer = Client.getInstance().make_server_request();
-        if (newUserAnswer.trim().isEmpty() || JSONObjectMethod.isValidJSONObject(newUserAnswer))
+        if (!newUserAnswer.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(newUserAnswer))
         {
             JSONObject dictionary = new JSONObject(newUserAnswer);
             return UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful")); // controlla che sia querySuccesful il campo

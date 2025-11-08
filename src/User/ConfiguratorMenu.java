@@ -63,7 +63,7 @@ public class ConfiguratorMenu extends UserMenu
         filters.put ("description", "%");
         Client.getInstance().get_event(filters);
         String getEventResponse = Client.getInstance().make_server_request();
-        if (getEventResponse.trim().isEmpty() || JSONObjectMethod.isValidJSONArray(getEventResponse))
+        if (!getEventResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONArray(getEventResponse))
         {
             JSONArray eventsArray = new JSONArray(getEventResponse);
             int cycleCount = 1;

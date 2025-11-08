@@ -31,8 +31,7 @@ public class ConfMenuVoluntaryMenu extends UserMenu
         manage_options();  
     }
 
-    //DA SISTEMARE
-    public void view_voluntary_list()
+    public void view_voluntary_list()   // manca chiamata al server + da sistemare
     {
         Client.getInstance().get_voluntaries_for_visit("");
         String getVoluntariesResponse = Client.getInstance().make_server_request();
@@ -41,32 +40,45 @@ public class ConfMenuVoluntaryMenu extends UserMenu
         UserTui.stamp_list("Ecco l'elenco dei volontari iscritti:", voluntaryList);
     }
 
-    public void remove_voluntary()
+    public void remove_voluntary()      // manca chiamata al server
     {
-        //DA IMPLEMENTARE
+        String voluntaryToRemove = UserTui.getString("Inserire lo username del volontario da rimuovere");
+        //Client.getInstance().remove_voluntary();
+        String removeVoluntaryResponse = Client.getInstance().make_server_request();
+        if (!removeVoluntaryResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(removeVoluntaryResponse))
+        {
+            JSONObject dictionary = new JSONObject(removeVoluntaryResponse);
+            UserTui.operationIsSuccessful(dictionary.getBoolean("querySuccesful")); //CONTROLLA la key word
+        }
     }
 
-    public void close_disponibility_collection()
+    public void close_disponibility_collection()    // manca chiamata al server
     {
         boolean makeServerCall = UserTui.getYesNoAnswer("Sei sicuro di voler chiudere la raccolta delle disponibilità dei volontari");
         if (makeServerCall)
         {
             //Client.getInstance().close_voluntary_disponibility_collection(organization);
             String closeVoluntaryDisponibilityCollectionResponse = Client.getInstance().make_server_request();
-            JSONObject dictionary = new JSONObject(closeVoluntaryDisponibilityCollectionResponse);
-            UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful"));    // controlla che si effettivamente "querySuccesful" sia il campo giusto
+            if (!closeVoluntaryDisponibilityCollectionResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(closeVoluntaryDisponibilityCollectionResponse))
+            {
+                JSONObject dictionary = new JSONObject(closeVoluntaryDisponibilityCollectionResponse);
+                UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful"));    // controlla key word
+            }
         }
     }
 
-    public void open_disponibility_collection()
+    public void open_disponibility_collection()     // manca chiamata al server
     {
         boolean makeServerCall = UserTui.getYesNoAnswer("Sei sicuro di voler aprire la raccolta delle disponibilità dei volontari");
         if (makeServerCall)
         {
             //Client.getInstance().open_voluntary_disponibility_collection(organization);
             String openVoluntaryDisponibilityCollectionResponse = Client.getInstance().make_server_request();
-            JSONObject dictionary = new JSONObject(openVoluntaryDisponibilityCollectionResponse);
-            UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful"));    // controlla che si effettivamente "querySuccesful" sia il campo giusto
+            if (!openVoluntaryDisponibilityCollectionResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(openVoluntaryDisponibilityCollectionResponse))
+            {
+                JSONObject dictionary = new JSONObject(openVoluntaryDisponibilityCollectionResponse);
+                UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful"));    // controlla key word
+            }
         }
     }   
 

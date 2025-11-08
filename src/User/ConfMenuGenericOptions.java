@@ -17,8 +17,8 @@ public class ConfMenuGenericOptions extends UserMenu
         menuSelection.put(1, () -> modify_max_number_per_subscription());
         menuSelection.put(2, () -> manage_disponibilty_dates());  
 
-        menuOptionList.add("Segna date precluse alle visite");
         menuOptionList.add("Modifica il numero massimo di persone iscrivibili a un'iniziativa da parte di un fruitore");
+        menuOptionList.add("Segna date precluse alle visite");
     }
     
     public ConfMenuGenericOptions (String organization)
@@ -48,7 +48,7 @@ public class ConfMenuGenericOptions extends UserMenu
                 int unixDate = date.getUnixDate(unaviableDay);
                 Client.getInstance().set_closed_days(unixDate, date.getEndDayOfClosure(), organization);  // definisci ASSOCIAZIONE
                 String closedDaysReply = Client.getInstance().make_server_request();
-                if (closedDaysReply.trim().isEmpty() || JSONObjectMethod.isValidJSONObject(closedDaysReply))
+                if (!closedDaysReply.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(closedDaysReply))
                 {
                     JSONObject dictionary = new JSONObject(closedDaysReply);
                     UserTui.operationIsSuccessful(dictionary.getBoolean("querySuccesful"));

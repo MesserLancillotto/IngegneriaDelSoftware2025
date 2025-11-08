@@ -60,7 +60,7 @@ public class UserLogin
 
             Client.getInstance().get_user_data(userName);
             String loginResult = Client.getInstance().make_server_request();
-            if (loginResult.trim().isEmpty() || JSONObjectMethod.isValidJSONObject(loginResult))
+            if (!loginResult.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(loginResult))
             {   
                 JSONObject dictionary = new JSONObject(loginResult);
                 loginSuccessfull = dictionary.getBoolean("loginSuccessful");

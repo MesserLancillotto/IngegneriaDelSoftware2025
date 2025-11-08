@@ -5,9 +5,12 @@ import java.util.*;
 
 public class DataManagerDisponibility extends DataManager
 {
+    private static final int MAX_CONSECUTIVE_CLOSING_DAYS = 8;
     private static final String ERROR_TOO_MANY_MISTAKES = "\nErrore durante l'acquisizione !\n";
     private static final String ERROR_DATE_ALREADY_GIVEN = "\nHai già inserito questa data scegline un'altra!\n";
-    private Set <Integer> enteredDates = new HashSet<>();
+    private static final String ERROR_DATE_ALREADY_GIVEN_WHICH_ONES = "Queste sono le date che hai già inserito nel mese di ";
+    private static final String ERROR_DATE_INVALID_DATE = "\nData inserita non valida!\n";
+    private Set <Integer> enteredDates = new TreeSet<>();
 
     private int referenceYear;
     private int referenceMonth;
@@ -37,7 +40,7 @@ public class DataManagerDisponibility extends DataManager
         userMessage.append(thingToSayForDay);
         userMessage.append(" nel mese di ");
         userMessage.append(monthNumberToName.get(referenceMonth));
-        userMessage.append(" (formato: DD):");
+        userMessage.append(" (formato: DD)");
         
         int howManyDaysClosed;
         int unaviableDay;
@@ -52,12 +55,23 @@ public class DataManagerDisponibility extends DataManager
         else if (enteredDates.contains(unaviableDay))
         {
             System.out.println (ERROR_DATE_ALREADY_GIVEN);
+            UserTui.stamp_integer_list(ERROR_DATE_ALREADY_GIVEN_WHICH_ONES+monthNumberToName.get(referenceMonth), enteredDates);
             return -1;
+        }
+        else if (unaviableDay > daysInAMonth.get(referenceMonth))
+        {
+            System.out.println (ERROR_DATE_INVALID_DATE);
+            return -1;
+        }
+        else if (unaviableDay == daysInAMonth.get(referenceMonth))
+        {
+            enteredDates.add(unaviableDay);
+            endDayOfClosure = setToEndOfDay(getUnixDate(unaviableDay)); 
         }
         else
         {
             int daysToTheEndOfMonth = daysInAMonth.get(referenceMonth) - unaviableDay;
-            howManyDaysClosed = UserTui.getInteger(thingToSayForDuration, 0,Math.min(8, daysToTheEndOfMonth+1));
+            howManyDaysClosed = UserTui.getInteger(thingToSayForDuration, 0,Math.min(MAX_CONSECUTIVE_CLOSING_DAYS, daysToTheEndOfMonth+1));    
             if (howManyDaysClosed == 1)
             {
                 enteredDates.add(unaviableDay);
@@ -65,7 +79,7 @@ public class DataManagerDisponibility extends DataManager
             }
             else
             {
-                for (int i = 0; i < howManyDaysClosed; i++)
+                for (int i = 0; i < howManyDaysClosed-1; i++)
                 {
                     enteredDates.add(unaviableDay + i);
                 }

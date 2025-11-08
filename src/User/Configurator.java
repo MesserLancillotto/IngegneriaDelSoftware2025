@@ -35,7 +35,7 @@ public class Configurator extends User
         Client.getInstance().set_new_user(userId.toString(), password, cityOfResidence, birthYear);
         String newUserAnswer = Client.getInstance().make_server_request();
 
-        if (newUserAnswer.trim().isEmpty() || JSONObjectMethod.isValidJSONObject(newUserAnswer))
+        if (!newUserAnswer.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(newUserAnswer))
         {
             JSONObject dictionary = new JSONObject(newUserAnswer);
 
@@ -78,7 +78,7 @@ public class Configurator extends User
 		ArrayList <String> areaOfInterest = UserTui.getStringArray(GET_DATA_ORGANIZATION_ZONES, GET_DATA_ORGANIZATION_ZONES_LOOP_CONF);
         Client.getInstance().set_new_organization(organizationName, areaOfInterest);
         String newOrganizationResponse = Client.getInstance().make_server_request();
-        if (newOrganizationResponse.trim().isEmpty() || JSONObjectMethod.isValidJSONObject(newOrganizationResponse))
+        if (!newOrganizationResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(newOrganizationResponse))
         {
             JSONObject dictionary = new JSONObject(newOrganizationResponse);
             this.organization = organizationName;

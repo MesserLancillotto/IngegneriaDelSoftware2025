@@ -3,6 +3,9 @@ import Client.Client;
 import org.json.*;
 public abstract class User 
 {
+	private static final String PASSWORD_CHANGE_SUCCESSFUL = "La password è stata cambiata!";
+	private static final String GET_DATA_PASSWORD = "Inserisci la nuova password: ";
+	private static final String ERROR_SERVER_COMMUNICATION = "Errore, non è stato possibile cambiare la password";
     String userName;
 	String cityOfResidence;
 	int birthYear;
@@ -14,23 +17,23 @@ public abstract class User
 	// metodo per creare nuova password
 	public boolean set_new_password ()
 	{
-		String tmpPassword = UserTui.getPasswordFromUser ("Inserisci la nuova password");
+		String tmpPassword = UserTui.getPasswordFromUser (GET_DATA_PASSWORD);
 		Client.getInstance().edit_password(tmpPassword);
 		String replyChangePassword = Client.getInstance().make_server_request();
-
-		JSONObject dictionary = new JSONObject(replyChangePassword);
-		boolean changePasswordSuccessfull = dictionary.getBoolean("passwordChangeSuccessful");
-
-		if (changePasswordSuccessfull)
+		if (!replyChangePassword.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(replyChangePassword))
 		{
-			System.out.println ("La password è stata cambiata!");
-			Client.getInstance().setUserPassword(tmpPassword);
-			return true;
+			JSONObject dictionary = new JSONObject(replyChangePassword);
+			boolean changePasswordSuccessfull = dictionary.getBoolean("passwordChangeSuccessful");
+
+			if (changePasswordSuccessfull)
+			{
+				System.out.println (PASSWORD_CHANGE_SUCCESSFUL);
+				Client.getInstance().setUserPassword(tmpPassword);
+				return true;
+			}
+			else
+				System.out.println (ERROR_SERVER_COMMUNICATION);
 		}
-		else
-		{
-			System.out.println ("Errore, non è stato possibile cambiare la password");
-			return false;
-		}
+		return false;
 	}
 }

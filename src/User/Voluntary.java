@@ -42,7 +42,7 @@ public class Voluntary extends User
 		while(set_new_password());
 		Client.getInstance().get_user_data(userName);
 		String getDataResponse = Client.getInstance().make_server_request();
-		if (getDataResponse.trim().isEmpty() || JSONObjectMethod.isValidJSONObject(getDataResponse))
+		if (!getDataResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(getDataResponse))
 		{
 			JSONObject dictionary = new JSONObject(getDataResponse);
 			if (dictionary.getBoolean("loginSuccessful"))
