@@ -35,6 +35,15 @@ public final class Client
         this.comunicationType = ComunicationType.EDIT_EVENT;
     }
 
+    public void edit_allowed_visit_from_coluntary(
+        String targetID,
+        ArrayList<String> append,
+        ArrayList<String> remove
+    ) {
+        this.body = new EditAllowedVisitFromVoluntaryRequest(targetID, append, remove);
+        this.comunicationType = ComunicationType.EDIT_ALLOWED_VISIT_FROM_VOLUNTARY;
+    }
+
     public void get_event_with_disponibility()
     {
         this.body = new GetEventWithDisponibilityRequest();
