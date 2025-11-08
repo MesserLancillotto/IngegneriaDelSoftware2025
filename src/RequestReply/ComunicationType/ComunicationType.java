@@ -14,5 +14,11 @@ public enum ComunicationType
     SET_DISPONIBILITY, // x x
     SET_NEW_EVENT, // x x x x
     SET_NEW_ORGANIZATION, // x x x x
-    SET_NEW_USER // x x x x
+    SET_NEW_USER,  // x x x x
+
+    DELETE_PLACE, // x x x x
+    DELETE_ATTRIBUTE_FROM_VOLUNTARY,
+    SET_VOLUNTARIES_DISPONIBILITY_COLLECT,
+    SET_USERS_SUBSCRIPTION_COLLECT,
+    SET_VOLUNTARY_TO_EVENT,
 }

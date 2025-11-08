@@ -24,6 +24,12 @@ public final class Client
         this.userPassword = userPassword;
     }
 
+    public void delete_place(String city, String address)
+    {
+        this.body = new DeletePlaceRequest(city, address);
+        this.comunicationType = ComunicationType.DELETE_PLACE;
+    }
+
     public void edit_event(String eventName, Map<String, Object> fields) {
         this.body = new EditEventRequest(eventName, fields);
         this.comunicationType = ComunicationType.EDIT_EVENT;

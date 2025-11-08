@@ -110,7 +110,7 @@ public class SetNewEventEngine extends Engine
                 return new SetNewEventReply(true, false, true).toJSONString();
             } 
 
-            String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE, TRUE)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, eventName);
             statement.setString(2, description);
