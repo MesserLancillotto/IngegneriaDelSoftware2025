@@ -1,16 +1,15 @@
 package User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 public class DataManagerPeriod extends DataManager
 {
     private int startDate;
     private int endDate;
-
-    int hours;
-    int minutes;
 
     public DataManagerPeriod ()
     {
@@ -28,7 +27,7 @@ public class DataManagerPeriod extends DataManager
             if (endDate > startDate)    //controllo che la data sia dopo quella di inizio
                 periodIsUnvalid = false;    
             else
-                System.out.println ("Errore la data che hai inserito è prima della data di inizio dell'evento!");
+                System.out.println ("Errore la data di fine che hai inserito è prima della data di inizio dell'evento!");
         }
         
     }
@@ -45,48 +44,22 @@ public class DataManagerPeriod extends DataManager
 
     private int acquireDate (String thingToSayToUser, String thingToSayToUserAboutHour)
     {
-        String tmpDate;
-        String tmpHour;
+        String dateString;
+        String hourString;
         do
         {
-            tmpDate = UserTui.getString(thingToSayToUser);
-        }while (checkDateFormat(tmpDate));
+            dateString = UserTui.getString(thingToSayToUser);
+        }while (!checkDateFormat(dateString));  // controllo che sia nel formato DD/MM/YYYY
+        int dayReference = Integer.parseInt(dateString.substring(0, 2));
+        int monthReference = Integer.parseInt(dateString.substring(3, 5));
+        int yearReference = Integer.parseInt(dateString.substring(6, 10));
         do
         {
-            tmpHour = UserTui.getString(thingToSayToUserAboutHour);
-        }while (checkHourFormat(tmpHour));
-        return getUnixDate();
-    }
-
-    public boolean checkHourFormat(String hour)
-    {
-        if (hour == null || hour.length() != 5) 
-        {
-            return false;
-        }
-        // Verifica che il separatore sia ":"
-        if (hour.charAt(2) != ':') 
-        {
-            return false;
-        }
-        
-        try 
-        {
-            // Estrae ore e minuti
-            hours = Integer.parseInt(hour.substring(0, 2));
-            minutes = Integer.parseInt(hour.substring(3, 5));
-            
-            // Verifica i range validi
-            if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59)
-                return true;
-            System.out.println ("\nOrario inserito non valido!");
-            return false;
-            
-        } 
-        catch (NumberFormatException e) 
-        {
-            return false;
-        }
+            hourString = UserTui.getString(thingToSayToUserAboutHour);
+        }while (!checkSpecificHourFormat(hourString));  // controllo che sia nel formato HH:MM
+        int tmpHours = Integer.parseInt(hourString.substring(0, 2));
+        int tmpMinutes = Integer.parseInt(hourString.substring(3, 5));
+        return getUnixDate(dayReference, monthReference, yearReference, tmpHours, tmpMinutes);
     }
 
     public boolean checkDateFormat (String dateString)
@@ -136,11 +109,9 @@ public class DataManagerPeriod extends DataManager
         }
     }
 
-    public int getUnixDate ()
+    public static int getUnixDate(int giorno, int mese, int anno, int ora, int minuto) 
     {
-        LocalDate date = LocalDate.of (year, month, day);
-        int unixDate = (int) date.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
-
-        return unixDate;
+        LocalDateTime dateTime = LocalDateTime.of(anno, mese, giorno, ora, minuto, 0);
+        return (int)dateTime.toEpochSecond(ZoneOffset.UTC);
     }
 }

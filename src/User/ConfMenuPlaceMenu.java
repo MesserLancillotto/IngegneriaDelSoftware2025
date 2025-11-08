@@ -8,6 +8,11 @@ public class ConfMenuPlaceMenu extends UserMenu
 {
     private static final String MENU_TITLE = "MENU GESTIONE POSTI VISITABILI";
     private static final String ERROR_CONNECTION_SERVER = "Errore! Impossibile contattare il server";
+    private static final int MAX_PEOPLE_FOR_VISIT = 2000;
+    private static final int MAX_VISIT_PRICE = 10000;
+    private static final int MAX_VISIT_DURATION = 1440;
+    private static final int MIN_RANGE_VALUE = 0;
+    private static final int MIN_VISIT_DURATION = 59;
     private String organization;
 
     public void initialize_menu_selection ()
@@ -22,9 +27,9 @@ public class ConfMenuPlaceMenu extends UserMenu
 
         menuOptionList.add("Visualizza l'elenco dei luoghi visitabili");
         menuOptionList.add("Visualizza l'elenco dei tipi di visita associati a ciascun luogo");
-        menuOptionList.add("Inserisci un nuovo luogo visitabile");
-        menuOptionList.add("Aggiungi un nuovo tipo di visita a un luogo esistente");
-        menuOptionList.add("Rimuovi un luogo visitabile");
+        menuOptionList.add("Inserisci una nuova visita in un nuovo posto");
+        menuOptionList.add("Inserisci una nuova visita in un luogo esistente");
+        menuOptionList.add("Rimuovi un luogo visitabile (e le visite ad esso associate)");
         menuOptionList.add("Rimuovi un tipo di visita da un luogo visitabile");
     }
 
@@ -155,7 +160,17 @@ public class ConfMenuPlaceMenu extends UserMenu
                 if (!removePlaceReply.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(removePlaceReply))
                 {
                     JSONObject dictionary = new JSONObject(removePlaceReply);
-                    UserTui.operationIsSuccessful(dictionary.getBoolean("loginSuccessful"));
+                    boolean removeSuccess = dictionary.getBoolean("loginSuccessful");
+                    UserTui.operationIsSuccessful(removeSuccess);
+                    if (removeSuccess)
+                    {
+                        int numberOfVisitRemoved = dictionary.getInt("rowsDeleted");
+                        StringBuilder numberOfVisitRemovedCommunication = new StringBuilder();
+                        numberOfVisitRemovedCommunication.append("Hai rimosso ");
+                        numberOfVisitRemovedCommunication.append(numberOfVisitRemoved);
+                        numberOfVisitRemovedCommunication.append(" visite");
+                        System.out.println (numberOfVisitRemovedCommunication.toString());
+                    }
                 }
                 else
                     System.out.println (ERROR_CONNECTION_SERVER);
@@ -277,37 +292,48 @@ public class ConfMenuPlaceMenu extends UserMenu
         boolean addAnotherTypeVisitAnswer; 
         do 
             {
-                String eventName = UserTui.getStringNoTrim ("Inserisci il nome dell'evento");
-                String eventDescription = UserTui.getStringNoTrim("Inserisci una descrizione dell'evento", 500);
+                String eventName = UserTui.getString("Inserisci il nome dell'evento");
+                String eventDescription = UserTui.getString("Inserisci una descrizione dell'evento", 500);
                 String visitType = UserTui.getString("Inserisci il tipo di visita");
-                String meetingPoint = UserTui.getStringNoTrim ("Inserisci dove è il meeting point");
-                ArrayList <String> visitDays = new ArrayList<>();
-                ArrayList <Integer> startHours = new ArrayList<>();
-                ArrayList <Integer> duration = new ArrayList<>();
-
-                do
-                {
-                    visitDays.add (DataManager.getDayOfWeekFromUser("Inserisci il giorno della settimana in cui si svolge questa visita"));
-                    startHours.add (DataManager.getAnHourFromUser("Inserisci l'orario di inizio di questa visita (formato HH:MM)"));
-                    duration.add (UserTui.getInteger("Inserisci la durata in minuti di questa visita", 1, 1440));
-                }while (UserTui.getYesNoAnswer("Vuoi inserire un altro giorno in cui si svolge questa visita"));
-
+                String meetingPoint = UserTui.getString("Inserisci dove è il meeting point");
                 DataManagerPeriod date = new DataManagerPeriod();
                 int startDate = date.getStartDate();
                 int endDate = date.getEndDate();
-                int minPartecipants = UserTui.getInteger("Inserisci il numero minimo di partecipanti a questo evento", 1, 1000);
-                int maxPartecipants = UserTui.getInteger("Inserisci il numero massimo di partecipanti a questo evento", minPartecipants+1, 1000);
+                ArrayList <String> visitDays = new ArrayList<>();
+                ArrayList <Integer> startHours = new ArrayList<>();
+                ArrayList <Integer> duration = new ArrayList<>();
+                do
+                {
+                    String visitDay = DataManager.getDayOfWeekFromUser("Inserisci il giorno della settimana in cui si svolge questa visita");
+                    if (!visitDay.trim().isEmpty()) // controllo che sia andata bene l'acquisizione
+                    {
+                        visitDays.add(visitDay);
+                        startHours.add (DataManager.getAnHourFromUser("Inserisci l'orario di inizio di questa visita (formato HH:MM)"));
+                        duration.add (UserTui.getInteger("Inserisci la durata in minuti di questa visita (minimo 60 minuti)", MIN_VISIT_DURATION, MAX_VISIT_DURATION));
+                    }
+                }while (UserTui.getYesNoAnswer("Vuoi inserire un altro giorno in cui si svolge questa visita"));
+                int minPartecipants = UserTui.getInteger("Inserisci il numero minimo di partecipanti a questo evento", MIN_RANGE_VALUE, MAX_PEOPLE_FOR_VISIT);
+                int maxPartecipants = UserTui.getInteger("Inserisci il numero massimo di partecipanti a questo evento", minPartecipants+1, MAX_PEOPLE_FOR_VISIT);
                 int maxPeopleForSubscription = JSONObjectCreator.getMaxPeopleForSubscription();
                 float price = 0;
                 if (UserTui.getYesNoAnswer("Questo evento è a pagamento?"))
-                    price = UserTui.getFloat("Inserisci il prezzo in euro di questo evento", 0, 10000);
+                    price = UserTui.getFloat("Inserisci il prezzo in euro di questo evento", MIN_RANGE_VALUE, MAX_VISIT_PRICE);
                 
-                Client.getInstance().set_new_event(eventName, eventDescription, cityName, cityAddress, meetingPoint, startDate, endDate, 
-                organization, minPartecipants, maxPartecipants, maxPeopleForSubscription, visitType, price, visitDays, startHours, duration);
-                String setNewEventReply = Client.getInstance().make_server_request();
-                JSONObject dictionary = new JSONObject(setNewEventReply);
-                UserTui.operationIsSuccessful(dictionary.getBoolean("registrationSuccesful"));
+                UserTui.stampAllEventInfo(cityName, cityAddress, eventName, eventDescription, visitType, meetingPoint, visitDays, startHours, duration, startDate, endDate, minPartecipants, maxPartecipants, maxPeopleForSubscription, price);
+                if (UserTui.getYesNoAnswer("Confermi "))
+                {
+                    Client.getInstance().set_new_event(eventName, eventDescription, cityName, cityAddress, meetingPoint, startDate, endDate, 
+                    organization, minPartecipants, maxPartecipants, maxPeopleForSubscription, visitType, price, visitDays, startHours, duration);
+                    String setNewEventReply = Client.getInstance().make_server_request();
+                    if (!setNewEventReply.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(setNewEventReply))
+                    {
+                        JSONObject dictionary = new JSONObject(setNewEventReply);
+                        UserTui.operationIsSuccessful(dictionary.getBoolean("registrationSuccesful"));
+                    }
+                    else
+                        System.out.println (ERROR_CONNECTION_SERVER);
 
+                }
                 addAnotherTypeVisitAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro tipo di visita associato a questo luogo");
             } while (addAnotherTypeVisitAnswer); // fine ciclo tipo visita
     }

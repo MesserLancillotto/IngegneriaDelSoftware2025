@@ -12,27 +12,8 @@ public class DataManager
     
     public HashMap <Integer, String> monthNumberToName = new HashMap <>();
     public HashMap <Integer, Integer> daysInAMonth = new HashMap<>();
-    private HashMap <String, DayOfWeek> dayOfWeekName = new HashMap <>();
-    private enum DayOfWeek
-    {
-        LUNEDI, MARTEDI, MERCOLEDI, GIOVEDI, VENERDI, SABATO, DOMENICA;
-
-        public static boolean isValid(String value) 
-        {
-            if (value == null) 
-                return false;
-        
-            try 
-            {
-                DayOfWeek.valueOf(value.toUpperCase());
-                return true;
-            } 
-            catch (IllegalArgumentException e) 
-            {
-                return false;
-            }
-        }
-    };
+    public static Set <DayOfWeek> daysAlreadyInserted = new HashSet<>();
+    
 
     public void initialize_month_association (int toCheckLeapYear)
     {
@@ -67,7 +48,7 @@ public class DataManager
 
     }
 
-    public static int setToEndOfDay(long unixTimestamp)
+    public static int setToEndOfDay(long unixTimestamp) //OK
     {
         Instant instant = Instant.ofEpochSecond(unixTimestamp);
         ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
@@ -78,7 +59,7 @@ public class DataManager
         return endOfDayDate;
     }
 
-    public static String fromUnixToNormal(int value) 
+    public static String fromUnixToNormal(int value) //OK
     {
         try 
         {
@@ -105,39 +86,62 @@ public class DataManager
         }
     }
 
-    public static String getDayOfWeekFromUser (String thingToSayToUser)
+    public static String getDayOfWeekFromUser (String thingToSayToUser) //OK
     {
-        String tmp;
+        String dayFromUser;
         boolean dayIsValid;
+        boolean continueSearching = true;
         do
         {
-            tmp = UserTui.getString(thingToSayToUser);
-            dayIsValid = DayOfWeek.isValid(tmp.toUpperCase());
+            dayFromUser = UserTui.getString(thingToSayToUser+ " (Lunedi, Martedi, Mercoledi, Giovedi, Venerdi, Sabato, Domenica)");
+            dayIsValid = DayOfWeek.isValid(dayFromUser.replaceAll("ì", "i").toUpperCase());
             if (!dayIsValid)
             {
-                System.out.println ("Il giorno inserito non è valido, riprova!");
+                System.out.println ("Il giorno inserito non è valido");
                 System.out.println ("I giorni validi sono: Lunedi, Martedi, Mercoledi, Giovedi, Venerdi, Sabato, Domenica");
+                dayFromUser = "";
+                continueSearching = UserTui.getYesNoAnswer("Vuoi riprovare ");
             }
-        }while (!dayIsValid);
-        StringBuilder sb = new StringBuilder();
-        sb.append(tmp.substring(0,1).toUpperCase());
-        sb.append(tmp.substring(1, 3));
-        return sb.toString();
+            else
+            {
+                DayOfWeek dayInsertedFromUser = DayOfWeek.valueOf(dayFromUser.toUpperCase());
+                if (daysAlreadyInserted.contains(dayInsertedFromUser))
+                {
+                    System.out.println ("Hai già inserito questo giorno scegline un'altro!");
+                    dayFromUser = "";
+                    continueSearching = UserTui.getYesNoAnswer("Vuoi riprovare ");
+                }
+                else
+                {
+                    continueSearching = false;
+                    daysAlreadyInserted.add(dayInsertedFromUser);
+                }
+            }
+        }while (continueSearching);
+        if (!dayFromUser.trim().isEmpty())
+        {
+            StringBuilder returnValue = new StringBuilder();
+            returnValue.append(dayFromUser.substring(0,1).toUpperCase());
+            returnValue.append(dayFromUser.substring(1, 3));
+            return returnValue.toString();   // ritorno come Lun,Mar,Mer ecc...
+        }
+        else
+            return "";
     }
 
     public static int getAnHourFromUser (String thingToSayToUser)
     {
-        String tmpHour;
+        String hourFromUser;
         boolean hourIsValid;
         do
         {
-            tmpHour = UserTui.getString(thingToSayToUser);
-            hourIsValid = checkSpecificHourFormat(tmpHour);
+            hourFromUser = UserTui.getString(thingToSayToUser);
+            hourIsValid = checkSpecificHourFormat(hourFromUser);
             if (!hourIsValid)
                 System.out.println ("\nOrario inserito non valido!");
         }while (!hourIsValid);
-        int tmpHours = Integer.parseInt(tmpHour.substring(0, 2));
-        int tmpMinutes = Integer.parseInt(tmpHour.substring(3, 5));
+        int tmpHours = Integer.parseInt(hourFromUser.substring(0, 2));
+        int tmpMinutes = Integer.parseInt(hourFromUser.substring(3, 5));
         int completeHour = tmpHours * 100+tmpMinutes;
         return completeHour;
     }
@@ -167,7 +171,7 @@ public class DataManager
             return false;
             
         } 
-        catch (NumberFormatException e) 
+        catch (Exception e) 
         {
             return false;
         }

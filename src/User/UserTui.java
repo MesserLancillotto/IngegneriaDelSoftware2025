@@ -165,8 +165,8 @@ public class UserTui
         }
     }
 
-    //acquisizione tenendo gli spazi con un num. max di caratteri
-    public static String getStringNoTrim (String thingToSayToUser, int maxCharacters)
+    //con un num. max di caratteri
+    public static String getString (String thingToSayToUser, int maxCharacters)
     {
         while (true)
         {
@@ -176,7 +176,7 @@ public class UserTui
                 String value = consoleIn.readLine();
                 
                 if (value != null && !value.isEmpty())
-                    return value;
+                    return value.trim();
                 else if (value.length() > maxCharacters)
                     System.out.println ("\nStringa non valida, hai superato il numero massimo di caratteri consentiti");
                 System.out.println ("\nValore inserito non valido, riprova!\n");
@@ -202,7 +202,7 @@ public class UserTui
                 else
                 {
                     input = input.replace(",", "."); // gestisce il caso in cui l'utente usa la virgola come separatore decimale
-                    String confirmInput = "Hai inserito "+input+" confermi";
+                    String confirmInput = "Hai inserito "+input+" confermi ";
                     if (getYesNoAnswer(confirmInput))
                     {
                         float tmpValue = Float.parseFloat(input);
@@ -424,12 +424,12 @@ public class UserTui
     {
         if (result)
         {
-            System.out.println ("\nL'operazione ha avuto successo");
+            System.out.println ("\nL'operazione ha avuto successo\n");
             return true;
         }
         else
         {
-            System.out.println ("\nERRORE! l'operazione non ha avuto successo");
+            System.out.println ("\nERRORE! l'operazione non ha avuto successo\n");
             return false;
         }
     }
@@ -596,6 +596,65 @@ public class UserTui
             case EFFETTUATA -> "Effettuata";
             default -> "Stato sconosciuto";
         };
+    }
+
+    public static void stampAllEventInfo(
+        String city,
+        String address,
+        String eventName,
+        String eventDescription,
+        String visitType,
+        String meetingPoint,
+        ArrayList<String> visitDays,
+        ArrayList<Integer> startHours,
+        ArrayList<Integer> duration,
+        int startDate,
+        int endDate,
+        int minPartecipants,
+        int maxPartecipants,
+        int maxPeopleForSubscription,
+        float price) 
+    {
+        System.out.println("=============================================");
+        System.out.println("          RIEPILOGO DATI EVENTO");
+        System.out.println("=============================================");
+        System.out.println("NOME EVENTO: " + eventName);
+        System.out.println("DESCRIZIONE: " + eventDescription);
+        System.out.println("CITTA: " + city);
+        System.out.println("INDRIZZO: " + address);
+        System.out.println("TIPO DI VISITA: " + visitType);
+        System.out.println("MEETING POINT: " + meetingPoint);
+        System.out.println("PERIODO: dal " + DataManager.fromUnixToNormal(startDate) + " al " + DataManager.fromUnixToNormal(endDate));
+        System.out.println("PARTECIPANTI: min " + minPartecipants + " - max " + maxPartecipants);
+        System.out.println("MASSIMO ISCRIZIONI: " + maxPeopleForSubscription);
+        System.out.println("PREZZO: " + (price > 0 ? price + " €" : "Gratuito"));
+        
+        System.out.println("\n--- GIORNI E ORARI DELLE VISITE ---");
+        for (int i = 0; i < visitDays.size(); i++) 
+        {
+            String tmpHour = Integer.toString(startHours.get(i));
+            StringBuilder hourToStamp = new StringBuilder();
+            if (tmpHour.length() == 3)
+            {
+                hourToStamp.append(tmpHour.substring(0, 1));
+                hourToStamp.append(":");
+                hourToStamp.append(tmpHour.substring(1));
+            }
+            else if (tmpHour.length() == 4)
+            {
+                hourToStamp.append(tmpHour.substring(0, 2));
+                hourToStamp.append(":");
+                hourToStamp.append(tmpHour.substring(2));
+            }
+            else
+                hourToStamp.append("ERRORE");
+            System.out.println("Visita " + (i + 1) + ":");
+            System.out.println("  • Giorno: " + visitDays.get(i));
+            System.out.println("  • Orario inizio: " + hourToStamp.toString());
+            System.out.println("  • Durata: " + duration.get(i) + " minuti");
+        }
+        
+        System.out.println("=============================================");
     }
 
 }

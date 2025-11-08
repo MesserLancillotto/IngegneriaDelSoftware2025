@@ -8,6 +8,7 @@ import Client.Client;
 public class VoluntaryMenu extends UserMenu
 {
     private static final String MENU_TITLE = "MENU PRINCIPALE VOLONTARI";
+    private static final String ERROR_NO_VISIT_TYPE_ASSOCIATED = "Non ci sono tipi di visita associati a te";
     private String voluntaryUserName;
     private ArrayList <String> associatedVisitType;
 
@@ -37,11 +38,18 @@ public class VoluntaryMenu extends UserMenu
     {
         UserTui.stampSeparator();
         Set <String> visitType = new HashSet<>(associatedVisitType);
-        StringBuilder msg = new StringBuilder();
-        msg.append("Ecco i tipi di visita a cui sei associato (");
-        msg.append(voluntaryUserName);
-        msg.append (")");
-        UserTui.stamp_list(msg.toString(), visitType);
+        if (!visitType.isEmpty() && visitType != null)
+        {
+            StringBuilder msg = new StringBuilder();
+            msg.append("Ecco i tipi di visita a cui sei associato (");
+            msg.append(voluntaryUserName);
+            msg.append (")");
+            UserTui.stamp_list(msg.toString(), visitType);
+        }
+        else
+        {
+            System.out.println(ERROR_NO_VISIT_TYPE_ASSOCIATED);
+        }
         UserTui.stampSeparator();
     }
 
