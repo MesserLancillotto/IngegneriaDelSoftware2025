@@ -4,7 +4,6 @@ import org.json.*;
 
 public class DeletePlaceRequest implements RequestType 
 {
-
     private String city;
     private String address;
 
