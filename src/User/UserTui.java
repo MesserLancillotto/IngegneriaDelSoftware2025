@@ -8,6 +8,9 @@ public class UserTui
 
     public static String getPasswordFromUser (String thingToSayToUser)
     {
+        stampSeparator();
+        System.out.println("CAMBIO PASSWORD");
+        stampSeparator();
         while (true)
         {
             try

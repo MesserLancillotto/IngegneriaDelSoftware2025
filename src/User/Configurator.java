@@ -19,13 +19,14 @@ public class Configurator extends User
     private static final String BASIC_CONF_MSG = "Configurazione base dell'applicazione";
     private static final String ERROR_CREATING_ACCOUNT = "\nErrore nella creazione dell'account, riprova più tardi!\n";
     private static final String ERROR_CONNECTION_SERVER = "\nErrore di connessione col server, riprova più tardi!\n";
+
     // costruttore per primo accesso del configuratore
     public Configurator (String tmpUserName, String tmpPassword, String roleTitle)
     {
         StringBuilder userId = new StringBuilder();
-        userId.append(UserTui.getStringNoTrim(GET_DATA_NAME));
+        userId.append(UserTui.getString(GET_DATA_NAME));
         userId.append (" ");
-        userId.append(UserTui.getStringNoTrim(GET_DATA_SURNAME));
+        userId.append(UserTui.getString(GET_DATA_SURNAME));
         
         this.password = UserTui.getPasswordFromUser (GET_DATA_PASSWORD);
         this.cityOfResidence = UserTui.getString(GET_DATA_CITY);
@@ -39,13 +40,14 @@ public class Configurator extends User
         {
             JSONObject dictionary = new JSONObject(newUserAnswer);
 
-            if (dictionary.getBoolean("loginSuccessful"))
+            if (dictionary.getBoolean("accessSuccesful"))
             {
                 userName = dictionary.getString("userID");
                 Client.getInstance().setUserID(userName);
                 Client.getInstance().setUserPassword(password);
                 if (set_basic_app_configuration ()) // configurazione base dell'app da fare al primo accesso del configuratore
                 {
+                    UserTui.stampTitle("INSERIMENTO PRIME VISITE");
                     new ConfiguratorMenu(true, organization);   // chiamo il metodo in MenuConf -> MenuConfPlace per settare i primi posti
                     new ConfiguratorMenu (organization);
                 }

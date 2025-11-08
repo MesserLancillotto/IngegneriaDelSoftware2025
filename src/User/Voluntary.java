@@ -39,7 +39,7 @@ public class Voluntary extends User
 	
 	private boolean first_access()
 	{
-		while(set_new_password());
+		while(!set_new_password());
 		Client.getInstance().get_user_data(userName);
 		String getDataResponse = Client.getInstance().make_server_request();
 		if (!getDataResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(getDataResponse))

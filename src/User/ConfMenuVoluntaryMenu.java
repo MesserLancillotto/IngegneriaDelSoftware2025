@@ -86,6 +86,34 @@ public class ConfMenuVoluntaryMenu extends UserMenu
 
     public void add_voluntary_to_existing_visit()
     {
-        //DA IMPLEMENTARE
+        Set <String> eventNameList = get_event_name_list();
+        if (eventNameList != null && !eventNameList.isEmpty())
+        {
+            HashMap <Integer, String> eventToChooseMap = UserTui.fromListToMap(eventNameList);
+            String targetEvent = UserTui.getChoiceFromMap("Scegli a quale evento aggiungere un volontario", eventToChooseMap);
+
+            // CONTINUA IMPLEMENTAZIONE
+        }
+    }
+
+    // metodi per GESTIONE INTERNA
+
+    private Set<String> get_event_name_list ()
+    {
+        HashMap <String, Object> filters = new HashMap<>();
+        Set <String> eventNameList = new HashSet<>();
+        filters.put ("eventName", "%");
+        Client.getInstance().get_event(filters);
+        String getEventResponse = Client.getInstance().make_server_request();
+        if (!getEventResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONArray(getEventResponse))
+        {
+            JSONArray eventsArray = new JSONArray(getEventResponse);
+            for (int i = 0; i < eventsArray.length(); i++)
+            {
+                JSONObject event = eventsArray.getJSONObject(i);
+                eventNameList.add(event.getString("eventName"));
+            }
+        }
+        return eventNameList;
     }
 }
