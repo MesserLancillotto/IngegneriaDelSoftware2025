@@ -55,6 +55,14 @@ public final class Client
         userPassword = tmpUserPassword;
     }
 
+    public void delete_place(String city, String address)
+    {
+        /* 
+        this.body = new DeletePlaceRequest(city, address);
+        this.comunicationType = ComunicationType.DELETE_PLACE;
+        */
+    }
+
     public void edit_event(String eventName, Map<String, Object> fields)
     {
         /*

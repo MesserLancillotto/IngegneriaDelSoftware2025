@@ -6,6 +6,7 @@ import Client.Client;
 
 public class ConfMenuVoluntaryMenu extends UserMenu
 {
+    private static final String MENU_TITLE = "MENU GESTIONE VOLONTARI";
     private String organization;
     public void initialize_menu_selection ()
     {
@@ -25,10 +26,11 @@ public class ConfMenuVoluntaryMenu extends UserMenu
 
     public ConfMenuVoluntaryMenu (String organization)
     {
-        printCenteredTitle("MENU GESTIONE VOLONTARI");
+        printCenteredTitle(MENU_TITLE);
         this.organization = organization;
         initialize_menu_selection();
-        manage_options();  
+        UserTui.stampSeparator();
+        manage_options(MENU_TITLE);  
     }
 
     public void view_voluntary_list()   // manca chiamata al server + da sistemare

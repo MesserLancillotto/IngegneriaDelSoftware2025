@@ -27,7 +27,7 @@ public class ConfMenuGenericOptions extends UserMenu
         this.organization = organization;
         initialize_menu_selection();
         UserTui.stampSeparator();
-        manage_options();  
+        manage_options(MENU_TITLE);  
     }
 
     public void modify_max_number_per_subscription()

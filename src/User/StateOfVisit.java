@@ -1,7 +1,5 @@
 package User;
 
-import java.util.Arrays;
-
 public enum StateOfVisit 
 {
     PROPOSTA, COMPLETA, CONFERMATA, CANCELLATA, EFFETTUATA;

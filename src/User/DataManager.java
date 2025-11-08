@@ -12,6 +12,7 @@ public class DataManager
     
     public HashMap <Integer, String> monthNumberToName = new HashMap <>();
     public HashMap <Integer, Integer> daysInAMonth = new HashMap<>();
+    private HashMap <String, DayOfWeek> dayOfWeekName = new HashMap <>();
     private enum DayOfWeek
     {
         LUNEDI, MARTEDI, MERCOLEDI, GIOVEDI, VENERDI, SABATO, DOMENICA;
@@ -32,7 +33,6 @@ public class DataManager
             }
         }
     };
-    private HashMap <String, DayOfWeek> dayOfWeekName = new HashMap <>();
 
     public void initialize_month_association (int toCheckLeapYear)
     {

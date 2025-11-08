@@ -1,5 +1,4 @@
 package User;
-import java.util.*;
 
 public class Visit 
 {

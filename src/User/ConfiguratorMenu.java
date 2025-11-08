@@ -29,7 +29,7 @@ public class ConfiguratorMenu extends UserMenu
         printCenteredTitle(MENU_TITLE);
         this.organization = organization;   
         initialize_menu_selection();
-        manage_options();
+        manage_options(MENU_TITLE);
     }
     // COSTRUTTORE PER IL PRIMO ACCESSO DEL CONFIGURATORE
     public ConfiguratorMenu (Boolean isFirstAccess, String organization)

@@ -35,14 +35,14 @@ public abstract class UserMenu
         System.out.println(border + "\n");
     }
     
-    public void manage_options ()
+    public void manage_options (String msg)
 	{
         boolean keepUsingConfiguratorMenu;
         do
         {
             UserTui.stampSeparator();
             visualize_options();
-            keepUsingConfiguratorMenu = UserTui.getYesNoAnswer("\nVuoi fare altro");
+            keepUsingConfiguratorMenu = UserTui.getYesNoAnswer("\nVuoi fare altro nel "+msg+" ");
             UserTui.stampSeparator();
         }while (keepUsingConfiguratorMenu);
 	}

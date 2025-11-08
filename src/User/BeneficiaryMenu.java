@@ -9,6 +9,7 @@ import Client.Client;
 
 public class BeneficiaryMenu extends UserMenu
 {
+    private static final String MENU_TITLE = "MENU PRINCIPALE";
      public void initialize_menu_selection()
 	{
 		menuSelection.put(1, () -> view_all_visits_list()); // visite allo stato proposto/confermato/cancellato
@@ -24,9 +25,9 @@ public class BeneficiaryMenu extends UserMenu
 
     public BeneficiaryMenu ()
     {
-        printCenteredTitle("MENU PRINCIPALE");
+        printCenteredTitle(MENU_TITLE);
         initialize_menu_selection();
-        manage_options();
+        manage_options(MENU_TITLE);
     }
 
     public void view_all_visits_list()

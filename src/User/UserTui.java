@@ -464,7 +464,7 @@ public class UserTui
                 {
                     System.out.printf ("%d. %s\n", entry.getKey(), entry.getValue());
                 }
-                System.out.print("Inserisci la tua scelta: ");
+                System.out.print("Inserisci il numero della tua scelta: ");
                 String input = consoleIn.readLine();
                 int chosenKey = Integer.parseInt(input);
                 if (choices.containsKey(chosenKey))

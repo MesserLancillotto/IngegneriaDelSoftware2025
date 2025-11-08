@@ -7,6 +7,7 @@ import Client.Client;
 
 public class VoluntaryMenu extends UserMenu
 {
+    private static final String MENU_TITLE = "MENU PRINCIPALE VOLONTARI";
     private String voluntaryUserName;
     private ArrayList <String> associatedVisitType;
 
@@ -25,11 +26,11 @@ public class VoluntaryMenu extends UserMenu
     //COSTRUTTORE
     public VoluntaryMenu (String voluntaryUserName, ArrayList <String> associatedVisitType)
     {
-        printCenteredTitle("MENU PRINCIPALE VOLONTARI");
+        printCenteredTitle(MENU_TITLE);
         this.voluntaryUserName = voluntaryUserName;
         this.associatedVisitType = associatedVisitType;
         initialize_menu_selection();
-        manage_options();
+        manage_options(MENU_TITLE);
     }
 
     private void view_associated_visit_type ()
