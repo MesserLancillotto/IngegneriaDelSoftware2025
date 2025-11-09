@@ -9,6 +9,7 @@ public class VoluntaryMenu extends UserMenu
 {
     private static final String MENU_TITLE = "MENU PRINCIPALE VOLONTARI";
     private static final String ERROR_NO_VISIT_TYPE_ASSOCIATED = "Non ci sono tipi di visita associati a te";
+    private static final String ERROR_EMPTY_EVENT_LIST = "Non ci sono eventi in quel giorno";
     private String voluntaryUserName;
     private ArrayList <String> associatedVisitType;
 
@@ -27,7 +28,7 @@ public class VoluntaryMenu extends UserMenu
     //COSTRUTTORE
     public VoluntaryMenu (String voluntaryUserName, ArrayList <String> associatedVisitType)
     {
-        printCenteredTitle(MENU_TITLE);
+        UserTui.printCenteredTitle(MENU_TITLE);
         this.voluntaryUserName = voluntaryUserName;
         this.associatedVisitType = associatedVisitType;
         initialize_menu_selection();
@@ -50,7 +51,6 @@ public class VoluntaryMenu extends UserMenu
         {
             System.out.println(ERROR_NO_VISIT_TYPE_ASSOCIATED);
         }
-        UserTui.stampSeparator();
     }
 
     private void give_disponibility()
@@ -62,14 +62,17 @@ public class VoluntaryMenu extends UserMenu
             int disponibilityDay = date.getReferenceDay("Inserire il giorno dove puoi lavorare");
             if (disponibilityDay > 0)   // -1 indica errore durante l'acquisizione
             {
-                int unixDate = (int)date.getUnixDate(disponibilityDay);
+                int unixDate = date.getUnixDate(disponibilityDay);
                 String eventName = show_events_by_specific_day (unixDate);  //ottengo quale evento vuole
-                if (eventName.trim().isEmpty())
+                if (!eventName.trim().isEmpty())
                 {
                     Client.getInstance().set_disponibility(eventName, unixDate);
                     String voluntaryDisponibilityResponse = Client.getInstance().make_server_request();
-                    JSONObject dictionary = new JSONObject(voluntaryDisponibilityResponse);
-                    UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful"));
+                    if (!voluntaryDisponibilityResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(voluntaryDisponibilityResponse))
+                    {
+                        JSONObject dictionary = new JSONObject(voluntaryDisponibilityResponse);
+                        UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful"));
+                    }
                 } 
             }
             addAnotherDate = UserTui.getYesNoAnswer("Vuoi inserire un'altra data");
@@ -85,21 +88,25 @@ public class VoluntaryMenu extends UserMenu
 
         Client.getInstance().get_event(filters);
         String getEventResponse = Client.getInstance().make_server_request();
-        if (getEventResponse.trim().isEmpty() || JSONObjectMethod.isValidJSONArray(getEventResponse))
+
+        if (!getEventResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONArray(getEventResponse))
         {
             JSONArray eventsArray = new JSONArray(getEventResponse);
-
-            System.out.println("Ecco gli eventi che si svolgono in quella data:");
             int loopCount = 1;
-            for (int i = 0; i < getEventResponse.length(); i++)
+            for (int i = 0; i < eventsArray.length(); i++)
             {
                 JSONObject event = eventsArray.getJSONObject(i);
                 int eventDate = event.getInt("startDate");   
                 if (DataManager.isSameDay(eventDate, date))
-                    validEventName.put (loopCount, event.getString("eventName"));
+                    validEventName.put (loopCount, event.getString("eventName"));   // CONTROLLA potrebbero esserci duplicati di eventName nella mappa
             }
-            String eventToChoose = UserTui.getChoiceFromMap("Scegli l'evento a cui vuoi dare la disponibilità:", validEventName);
-            return eventToChoose;
+            if (!validEventName.isEmpty())
+                return UserTui.getChoiceFromMap("Scegli l'evento a cui vuoi dare la disponibilità:", validEventName);
+            else
+            {
+                System.out.println (ERROR_EMPTY_EVENT_LIST);
+                return "";
+            }
         }
         return "";
     }

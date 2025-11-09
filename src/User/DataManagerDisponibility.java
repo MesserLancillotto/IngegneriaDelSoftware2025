@@ -96,7 +96,7 @@ public class DataManagerDisponibility extends DataManager
         userMessage.append(thingToSayForDay);
         userMessage.append(" nel mese di ");
         userMessage.append(monthNumberToName.get(referenceMonth));
-        userMessage.append(" (formato: DD):");
+        userMessage.append(" (formato: DD)");
         
         int unaviableDay;
         unaviableDay = UserTui.getInteger(userMessage.toString(), "Hai inserito il giorno ", 0, daysInAMonth.get(referenceMonth)+1);

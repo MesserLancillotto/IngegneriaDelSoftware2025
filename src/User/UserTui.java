@@ -205,10 +205,10 @@ public class UserTui
                 else
                 {
                     input = input.replace(",", "."); // gestisce il caso in cui l'utente usa la virgola come separatore decimale
+                    float tmpValue = Float.parseFloat(input);
                     String confirmInput = "Hai inserito "+input+" confermi ";
                     if (getYesNoAnswer(confirmInput))
                     {
-                        float tmpValue = Float.parseFloat(input);
                         if (tmpValue >= lowerBound && tmpValue <= upperBound)
                             return tmpValue;
                         else
@@ -659,6 +659,5 @@ public class UserTui
         
         System.out.println("=============================================");
     }
-
 }
 

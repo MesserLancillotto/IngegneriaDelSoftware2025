@@ -16,9 +16,15 @@ public class Configurator extends User
     private static final String GET_DATA_ORGANIZATION_ZONES = "In che zona opera questa associazione (Inserire un luogo alla volta)";
     private static final String GET_DATA_ORGANIZATION_ZONES_LOOP_CONF = "Vuoi inserire un'altra zona";
     private static final String GET_DATA_MAX_SUBCRIPTION = "Quante persone un fruitore dell'applicazione può iscrivere con una sola iscrizione";
+    private static final String MSG_INSERT_FIRST_VISITS = "INSERIMENTO PRIME VISITE";
     private static final String BASIC_CONF_MSG = "Configurazione base dell'applicazione";
     private static final String ERROR_CREATING_ACCOUNT = "\nErrore nella creazione dell'account, riprova più tardi!\n";
     private static final String ERROR_CONNECTION_SERVER = "\nErrore di connessione col server, riprova più tardi!\n";
+
+    private static final int MAXPEOPLEFORSUBCRIPTION_MIN_VALUE = 0;
+    private static final int MAXPEOPLEFORSUBCRIPTION_MAX_VALUE = 100;
+    private static final int MIN_BIRTHYEAR = 1900;
+    private static final int MAX_BIRTHYEAR = 2025;
 
     // costruttore per primo accesso del configuratore
     public Configurator (String tmpUserName, String tmpPassword, String roleTitle)
@@ -30,7 +36,7 @@ public class Configurator extends User
         
         this.password = UserTui.getPasswordFromUser (GET_DATA_PASSWORD);
         this.cityOfResidence = UserTui.getString(GET_DATA_CITY);
-		this.birthYear = UserTui.getInteger(GET_DATA_BIRTH_YEAR, 1900, 2025);
+		this.birthYear = UserTui.getInteger(GET_DATA_BIRTH_YEAR, MIN_BIRTHYEAR, MAX_BIRTHYEAR);
         this.roleTitle = roleTitle;
         
         Client.getInstance().set_new_user(userId.toString(), password, cityOfResidence, birthYear);
@@ -42,12 +48,12 @@ public class Configurator extends User
 
             if (dictionary.getBoolean("accessSuccesful"))
             {
-                userName = dictionary.getString("userID");
+                this.userName = dictionary.getString("userID");
                 Client.getInstance().setUserID(userName);
                 Client.getInstance().setUserPassword(password);
                 if (set_basic_app_configuration ()) // configurazione base dell'app da fare al primo accesso del configuratore
                 {
-                    UserTui.stampTitle("INSERIMENTO PRIME VISITE");
+                    UserTui.stampTitle(MSG_INSERT_FIRST_VISITS);
                     new ConfiguratorMenu(true, organization);   // chiamo il metodo in MenuConf -> MenuConfPlace per settare i primi posti
                     new ConfiguratorMenu (organization);
                 }
@@ -93,7 +99,7 @@ public class Configurator extends User
             return false;
         }
         
-        int maxPeopleForSubscription = UserTui.getInteger(GET_DATA_MAX_SUBCRIPTION, 0, 100);
+        int maxPeopleForSubscription = UserTui.getInteger(GET_DATA_MAX_SUBCRIPTION, MAXPEOPLEFORSUBCRIPTION_MIN_VALUE, MAXPEOPLEFORSUBCRIPTION_MAX_VALUE);
         JSONObjectCreator.setMaxPeopleForSubscription(maxPeopleForSubscription);
 
         return true;    // se tutto è andato a buon fine allora si continua con l'applicazione

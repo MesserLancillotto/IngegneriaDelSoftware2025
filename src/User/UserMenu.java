@@ -5,6 +5,11 @@ import java.util.HashMap;
 
 public abstract class UserMenu 
 {
+    private static final String ERROR_INVALID_INPUT = "\nErrore valore inserito non valido\n";
+    private static final String GET_DATA_MENU_DECISION = "Cosa vuoi fare (Inserisci il numero dell'opzione)";
+
+    private static final int MIN_MENU_DECISION = 0;
+
     HashMap <Integer, Runnable> menuSelection = new HashMap <>();
     ArrayList <String> menuOptionList = new ArrayList<>();
 
@@ -18,31 +23,30 @@ public abstract class UserMenu
             System.out.println (optionCount+"."+options);
             optionCount++;
         }
-        menuSelection.get(UserTui.getInteger("Cosa vuoi fare (Inserisci il numero dell'opzione)", 0, optionCount+1))
-                            .run();
+        int userDecision;
+        boolean validMenuDecision;
+        do 
+        {
+            userDecision = UserTui.getInteger(GET_DATA_MENU_DECISION, MIN_MENU_DECISION, optionCount);
+            validMenuDecision = menuSelection.containsKey(userDecision);
+            if (!validMenuDecision)
+                System.out.println (ERROR_INVALID_INPUT);
+        }while (!validMenuDecision);
+        menuSelection.get(userDecision).run();
 	}
-
-    public static void printCenteredTitle(String title) 
-    {
-        int totalWidth = 50;
-        int padding = (totalWidth - title.length() - 2) / 2;
-        
-        String border = "✽".repeat(totalWidth);
-        String paddingStr = " ".repeat(padding);
-        
-        System.out.println("\n" + border);
-        System.out.println("✽" + paddingStr + " " + title + " " + paddingStr + "✽");
-        System.out.println(border + "\n");
-    }
     
-    public void manage_options (String msg)
+    public void manage_options (String whichMenu)
 	{
         boolean keepUsingConfiguratorMenu;
         do
         {
             UserTui.stampSeparator();
             visualize_options();
-            keepUsingConfiguratorMenu = UserTui.getYesNoAnswer("\nVuoi fare altro nel "+msg+" ");
+            StringBuilder msgKeepUsingMenu  = new StringBuilder();
+            msgKeepUsingMenu.append("\nVuoi fare altro nel ");
+            msgKeepUsingMenu.append(whichMenu);
+            msgKeepUsingMenu.append(" ");
+            keepUsingConfiguratorMenu = UserTui.getYesNoAnswer(msgKeepUsingMenu.toString());
             UserTui.stampSeparator();
         }while (keepUsingConfiguratorMenu);
 	}

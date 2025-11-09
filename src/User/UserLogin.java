@@ -19,6 +19,7 @@ public class UserLogin
     private static final String INSERT_PASSWORD = "Inserisci password";
     private static final String MSG_LOGIN_SUCCESSFUL = "LOGIN EFFETTUATO CON SUCCESSO";
     private static final String ERROR_LOGIN = "\nLogin fallito, username o password errati!\n";
+    private static final String ERROR_USER_TYPE_NOT_FOUND = "\nERRORE! Login fallito";
     private static final String ERROR_CONNECTION_SERVER = "\nErrore di connessione col server, riprova più tardi!\n";
 
     private static void initialize_user_factory ()
@@ -75,7 +76,14 @@ public class UserLogin
                         if (userName.substring(0,1).equals (TEMPORARY_SYMBOL))
                             userFirstAccessFactory.get(CONFIGURATOR_SYMBOL).create (userName, password, roleTitle);
                         else
-                            userFirstAccessFactory.get(userName.substring(0,1)).create(userName, password, roleTitle);
+                        {
+                            if (userFirstAccessFactory.containsKey(userName.substring(0,1)))
+                            {
+                                userFirstAccessFactory.get(userName.substring(0,1)).create(userName, password, roleTitle);
+                            }
+                            else
+                                System.out.println (ERROR_USER_TYPE_NOT_FOUND);
+                        }
                     }
                     else 
                     {
@@ -83,7 +91,12 @@ public class UserLogin
                         int birthYear = dictionary.getInt("birthYear");
                         String organization = dictionary.getString("organization");
                         ArrayList <String> allowedVisitType = JSONObjectMethod.jsonArrayConverter(dictionary.getJSONArray("allowedVisitType"));
-                        userFactory.get(userName.substring(0,1)).create (userName, cityOfResidence, birthYear, password, roleTitle, organization, allowedVisitType);
+                        if (userFirstAccessFactory.containsKey(userName.substring(0,1)))
+                        {
+                            userFactory.get(userName.substring(0,1)).create (userName, cityOfResidence, birthYear, password, roleTitle, organization, allowedVisitType);
+                        }
+                        else
+                            System.out.println (ERROR_USER_TYPE_NOT_FOUND);
                     }
                 }
                 else

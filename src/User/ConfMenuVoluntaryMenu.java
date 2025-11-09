@@ -7,6 +7,10 @@ import Client.Client;
 public class ConfMenuVoluntaryMenu extends UserMenu
 {
     private static final String MENU_TITLE = "MENU GESTIONE VOLONTARI";
+    private static final String ERROR_VOLUNTARY_LIST_EMPTY = "\nERRORE! Lista volontari vuota";
+    private static final String ERROR_DURING_ACQUISITION = "\nERRORE! Acquisizione non riuscita\n";
+    private static final String ERROR_EVENT_LIST_EMPTY = "\nERRORE! Lista eventi vuota";
+    private static final String ERROR_SERVER = "\nERRORE! Connessione col server non riuscita\n";
     private String organization;
     public void initialize_menu_selection ()
     {
@@ -26,32 +30,51 @@ public class ConfMenuVoluntaryMenu extends UserMenu
 
     public ConfMenuVoluntaryMenu (String organization)
     {
-        printCenteredTitle(MENU_TITLE);
+        UserTui.printCenteredTitle(MENU_TITLE);
         this.organization = organization;
         initialize_menu_selection();
         UserTui.stampSeparator();
         manage_options(MENU_TITLE);  
     }
 
-    public void view_voluntary_list()   // manca chiamata al server + da sistemare
+    public void view_voluntary_list()   
     {
-        Client.getInstance().get_voluntaries_for_visit("");
-        String getVoluntariesResponse = Client.getInstance().make_server_request();
-        Set <String> voluntaryList; //= new HashSet <>(JSONObjectMethod.extractArray(getVoluntariesResponse, "userID"));
-        voluntaryList = new HashSet<>();
-        UserTui.stamp_list("Ecco l'elenco dei volontari iscritti:", voluntaryList);
+        Set<String> voluntaryList =  get_voluntary_list();
+        if (voluntaryList != null && !voluntaryList.isEmpty())
+        {
+            UserTui.stamp_list("Ecco l'elenco dei volontari iscritti:", voluntaryList);
+        }
+        else
+            System.out.println (ERROR_VOLUNTARY_LIST_EMPTY);
     }
 
-    public void remove_voluntary()      // manca chiamata al server
+    public void remove_voluntary()      // manca chiamata al SERVER + controlla key word
     {
-        String voluntaryToRemove = UserTui.getString("Inserire lo username del volontario da rimuovere");
-        //Client.getInstance().remove_voluntary();
-        String removeVoluntaryResponse = Client.getInstance().make_server_request();
-        if (!removeVoluntaryResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(removeVoluntaryResponse))
+        Set<String> voluntaryList =  get_voluntary_list();
+        if (voluntaryList != null && !voluntaryList.isEmpty())
         {
-            JSONObject dictionary = new JSONObject(removeVoluntaryResponse);
-            UserTui.operationIsSuccessful(dictionary.getBoolean("querySuccesful")); //CONTROLLA la key word
+            HashMap <Integer, String> voluntaryToChooseMap = UserTui.fromListToMap(voluntaryList);
+            String voluntaryID = UserTui.getChoiceFromMap("Scegli in che luogo aggiungere una nuova visita", voluntaryToChooseMap);
+            boolean confirmDecisionForVoluntary = UserTui.getYesNoAnswer ("Hai scelto "+ voluntaryID+ " confermi ");
+            if (!voluntaryID.trim().isEmpty() && confirmDecisionForVoluntary)
+            {
+                //Client.getInstance().remove_voluntary(voluntaryID);
+                String removeVoluntaryResponse = Client.getInstance().make_server_request();
+                if (!removeVoluntaryResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(removeVoluntaryResponse))
+                {
+                     JSONObject dictionary = new JSONObject(removeVoluntaryResponse);
+                    UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful"));    // controlla key word
+                }
+                else
+                    System.out.println (ERROR_SERVER);
+            }
+            else
+            {
+                System.out.println (ERROR_DURING_ACQUISITION);
+            }
         }
+        else
+            System.out.println (ERROR_VOLUNTARY_LIST_EMPTY);
     }
 
     public void close_disponibility_collection()    // manca chiamata al server
@@ -87,13 +110,39 @@ public class ConfMenuVoluntaryMenu extends UserMenu
     public void add_voluntary_to_existing_visit()
     {
         Set <String> eventNameList = get_event_name_list();
+        Set <String> voluntaryList = get_voluntary_list();
         if (eventNameList != null && !eventNameList.isEmpty())
         {
             HashMap <Integer, String> eventToChooseMap = UserTui.fromListToMap(eventNameList);
             String targetEvent = UserTui.getChoiceFromMap("Scegli a quale evento aggiungere un volontario", eventToChooseMap);
-
-            // CONTINUA IMPLEMENTAZIONE
+            boolean confirmDecisionForEvent = UserTui.getYesNoAnswer ("Hai scelto "+ targetEvent+ " confermi ");
+            if (!targetEvent.trim().isEmpty() && confirmDecisionForEvent)
+            {
+                HashMap <Integer, String> voluntaryToChooseMap = UserTui.fromListToMap(voluntaryList);
+                String targetVoluntary = UserTui.getChoiceFromMap("Scegli quale volontario aggiungere all'evento", voluntaryToChooseMap);
+                boolean confirmDecisionForVoluntary = UserTui.getYesNoAnswer ("Hai scelto "+ targetVoluntary+ " confermi ");
+                if (!targetVoluntary.trim().isEmpty() && confirmDecisionForVoluntary)
+                {
+                    StringBuilder thingToSayForDay = new StringBuilder();
+                    thingToSayForDay.append("Inserisci il giorno in cui ");
+                    thingToSayForDay.append(targetVoluntary);
+                    thingToSayForDay.append(" si aggiunge all'evento ");
+                    thingToSayForDay.append(targetEvent);
+                    thingToSayForDay.append(" (formato: DD/MM/YYYY):");
+                    int unixDate = DataManager.acquireDateFromUser(thingToSayForDay.toString());
+                    Client.getInstance().set_voluntary_to_event(targetEvent, targetVoluntary, unixDate);
+                    String setVoluntaryToEventResponse = Client.getInstance().make_server_request();
+                    if (!setVoluntaryToEventResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(setVoluntaryToEventResponse))
+                    {
+                        JSONObject dictionary = new JSONObject(setVoluntaryToEventResponse);
+                        boolean operationWasSuccessful = dictionary.getBoolean("accessSuccesful") && dictionary.getBoolean("querySuccessful");
+                        UserTui.operationIsSuccessful (operationWasSuccessful); 
+                    }
+                }
+            }
         }
+        else
+            System.out.println (ERROR_EVENT_LIST_EMPTY);
     }
 
     // metodi per GESTIONE INTERNA
@@ -115,5 +164,26 @@ public class ConfMenuVoluntaryMenu extends UserMenu
             }
         }
         return eventNameList;
+    }
+
+    private Set<String> get_voluntary_list()   
+    {
+        Set <String> voluntaryList = new HashSet<>();
+
+        Client.getInstance().get_voluntaries(new HashMap<>());
+        String getVoluntariesResponse = Client.getInstance().make_server_request();
+        if (!getVoluntariesResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONArray(getVoluntariesResponse))
+        {
+            JSONArray voluntariesArray = new JSONArray(getVoluntariesResponse);
+            for (int i = 0; i < voluntariesArray.length(); i++)
+            {
+                JSONObject voluntary = voluntariesArray.getJSONObject(i);
+                String voluntaryID = voluntary.getString("userName");
+                voluntaryList.add(voluntaryID);
+            }
+            return voluntaryList;
+        }
+        else
+            return null;
     }
 }

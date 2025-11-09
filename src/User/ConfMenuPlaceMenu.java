@@ -8,6 +8,12 @@ public class ConfMenuPlaceMenu extends UserMenu
 {
     private static final String MENU_TITLE = "MENU GESTIONE POSTI VISITABILI";
     private static final String ERROR_CONNECTION_SERVER = "Errore! Impossibile contattare il server";
+    private static final String MSG_EVENTS_BY_PLACE = "Ecco gli eventi associati a ciascun luogo";
+    private static final String MSG_CHOOSE_PLACE = "Scegli in che luogo aggiungere una nuova visita";
+    private static final String MSG_SHOW_PLACES = "Questi sono i posti visitabili: ";
+    private static final String GET_DATA_CITY = "Inserire la città dove si svolge questo evento";
+    private static final String GET_DATA_ADDRESS = "Inserisci l'indirizzo";
+    private static final String GET_DATA_PLACE_LOOP_CONF = "Vuoi inserire un'altro luogo";
     private static final int MAX_PEOPLE_FOR_VISIT = 2000;
     private static final int MAX_VISIT_PRICE = 10000;
     private static final int MAX_VISIT_DURATION = 1440;
@@ -35,7 +41,7 @@ public class ConfMenuPlaceMenu extends UserMenu
 
     public ConfMenuPlaceMenu (String organization)
     {
-        printCenteredTitle(MENU_TITLE);
+        UserTui.printCenteredTitle(MENU_TITLE);
         this.organization = organization;   
         initialize_menu_selection();
         UserTui.stampSeparator();
@@ -69,7 +75,7 @@ public class ConfMenuPlaceMenu extends UserMenu
                 String formattedPlace = place.toString().toUpperCase().trim().replaceAll(" ", "");
                 distinctPlaces.putIfAbsent(formattedPlace, place.toString());
             }
-            UserTui.stamp_list ("Questi sono i posti visitabili: ", distinctPlaces.values());
+            UserTui.stamp_list (MSG_SHOW_PLACES, distinctPlaces.values());
             return distinctPlaces;
         }
         return null;
@@ -96,12 +102,13 @@ public class ConfMenuPlaceMenu extends UserMenu
                 place.append(event.getString("city"));
                 place.append (":");
                 place.append(event.getString("address"));
-                String formattedPlace = place.toString().toUpperCase().trim().replaceAll(" ", "");   // normalizzo formato per evitare duplicati
-                
-                placeMap.putIfAbsent(formattedPlace, new Place (place.toString())); // creo una nuova istanza di Place se non esiste già con combo città+indirizzo in maisucolo e trim
+                String formattedPlace = place.toString().toUpperCase().trim().replaceAll(" ", "");   
+                // normalizzo formato per evitare duplicati
+                placeMap.putIfAbsent(formattedPlace, new Place (place.toString())); 
+                // creo una nuova istanza di Place se non esiste già con combo città+indirizzo in maisucolo e trim
                 placeMap.get(formattedPlace).addVisitType(event.getString("visitType"));
             }
-            UserTui.stamp_list("Ecco gli eventi associati a ciascun luogo", placeMap);
+            UserTui.stamp_list(MSG_EVENTS_BY_PLACE, placeMap);
             return placeMap;
         }
         else
@@ -114,10 +121,10 @@ public class ConfMenuPlaceMenu extends UserMenu
         boolean addAnotherPlaceAnswer;
         do
         {
-            String cityName = UserTui.getString("Inserire la città dove si svolge questo evento");
-            String cityAddress = UserTui.getString("Inserisci l'indirizzo");
+            String cityName = UserTui.getString(GET_DATA_CITY);
+            String cityAddress = UserTui.getString(GET_DATA_ADDRESS);
             add_place_to_server(cityName, cityAddress);
-            addAnotherPlaceAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro luogo");
+            addAnotherPlaceAnswer = UserTui.getYesNoAnswer(GET_DATA_PLACE_LOOP_CONF);
         } while (addAnotherPlaceAnswer); 
     }
 
@@ -127,8 +134,12 @@ public class ConfMenuPlaceMenu extends UserMenu
         if (placesToChoose != null && !placesToChoose.isEmpty())
         {
             HashMap <Integer, String> placesToChooseMap = UserTui.fromListToMap(placesToChoose.values());
-            String place = UserTui.getChoiceFromMap("Scegli in che luogo aggiungere una nuova visita", placesToChooseMap);
-            boolean confirmDecision = UserTui.getYesNoAnswer ("Hai scelto "+ place+ " confermi ");
+            String place = UserTui.getChoiceFromMap(MSG_CHOOSE_PLACE, placesToChooseMap);
+            StringBuilder msgToConfirmPlaceDecision = new StringBuilder();
+            msgToConfirmPlaceDecision.append ("Hai scelto ");
+            msgToConfirmPlaceDecision.append(place);
+            msgToConfirmPlaceDecision.append(" confermi ");
+            boolean confirmDecision = UserTui.getYesNoAnswer (msgToConfirmPlaceDecision.toString());
             if (!place.trim().isEmpty() && confirmDecision)
             {
                 int commaPlace = place.indexOf(":");

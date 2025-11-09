@@ -23,7 +23,7 @@ public class ConfMenuGenericOptions extends UserMenu
     
     public ConfMenuGenericOptions (String organization)
     {
-        printCenteredTitle(MENU_TITLE);        //titolo temporaneo
+        UserTui.printCenteredTitle(MENU_TITLE);        //titolo temporaneo
         this.organization = organization;
         initialize_menu_selection();
         UserTui.stampSeparator();

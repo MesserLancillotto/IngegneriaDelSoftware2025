@@ -26,7 +26,7 @@ public class ConfiguratorMenu extends UserMenu
     //COSTRUTTORE
     public ConfiguratorMenu (String organization)
     {
-        printCenteredTitle(MENU_TITLE);
+        UserTui.printCenteredTitle(MENU_TITLE);
         this.organization = organization;   
         initialize_menu_selection();
         manage_options(MENU_TITLE);

@@ -41,7 +41,7 @@ public class DataManagerPeriod extends DataManager
         return endDate;
     }
 
-    private int acquireDate (String thingToSayToUser, String thingToSayToUserAboutHour)
+    public int acquireDate (String thingToSayToUser, String thingToSayToUserAboutHour)
     {
         String dateString;
         String hourString;
@@ -61,7 +61,20 @@ public class DataManagerPeriod extends DataManager
         return getUnixDate(dayReference, monthReference, yearReference, tmpHours, tmpMinutes);
     }
 
-    public boolean checkDateFormat (String dateString)
+    public static int acquireDate(String thingToSayToUser)
+    {
+        String dateString;
+        do
+        {
+            dateString = UserTui.getString(thingToSayToUser);
+        }while (!checkDateFormat(dateString));  // controllo che sia nel formato DD/MM/YYYY
+        int dayReference = Integer.parseInt(dateString.substring(0, 2));
+        int monthReference = Integer.parseInt(dateString.substring(3, 5));
+        int yearReference = Integer.parseInt(dateString.substring(6, 10));
+        return getUnixDate(dayReference, monthReference, yearReference, 0, 0);
+    }    
+    
+    public static boolean checkDateFormat (String dateString)
     {
         if (dateString == null || dateString.length() != 10) 
         {
@@ -77,9 +90,9 @@ public class DataManagerPeriod extends DataManager
         try 
         {
             // Estrae giorno, mese e anno
-            day = Integer.parseInt(dateString.substring(0, 2));
-            month = Integer.parseInt(dateString.substring(3, 5));
-            year = Integer.parseInt(dateString.substring(6, 10));
+            int day = Integer.parseInt(dateString.substring(0, 2));
+            int month = Integer.parseInt(dateString.substring(3, 5));
+            int year = Integer.parseInt(dateString.substring(6, 10));
             
             // Verifica i range base
             if (year < 2025 || year > 2030) 

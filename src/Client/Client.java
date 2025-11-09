@@ -99,6 +99,15 @@ public final class Client
         comunicationType = ComunicationType.GET_VOLUNTARIES_FOR_VISIT;
         */
     }
+
+    public void get_voluntaries(Map<String, Object> filters)
+    {
+        /* 
+        this.body = new GetVoluntariesRequest(filters);
+        this.comunicationType = ComunicationType.GET_VOLUNTARIES;
+        */
+    }
+
     public void set_closed_days(
         int startDate, 
         int endDate,
@@ -177,6 +186,22 @@ public final class Client
         comunicationType = ComunicationType.SET_NEW_USER;
         */
     }
+
+     public void set_voluntary_to_event(
+        String event,
+        String targetID,
+        int time
+    ) {
+        /* 
+        this.body = new SetVoluntaryToEventRequest(
+            event,
+            targetID,
+            time
+        );
+        this.comunicationType = ComunicationType.SET_VOLUNTARY_TO_EVENT;
+        */
+    }
+
     public String make_server_request()
     {
         /*

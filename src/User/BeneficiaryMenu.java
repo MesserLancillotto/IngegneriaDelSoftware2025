@@ -1,8 +1,6 @@
 package User;
 
 import org.json.*;
-
-import java.lang.Thread.State;
 import java.util.*;
 
 import Client.Client;
@@ -12,6 +10,7 @@ public class BeneficiaryMenu extends UserMenu
     private static final String MENU_TITLE = "MENU PRINCIPALE";
      public void initialize_menu_selection()
 	{
+        // PROVA
 		menuSelection.put(1, () -> view_all_visits_list()); // visite allo stato proposto/confermato/cancellato
         menuSelection.put(2, () -> register_for_visit()); // registrazione ad una visita
         menuSelection.put(3, () -> view_registered_visits()); // visualizzazione visite a cui si è registrati
@@ -25,7 +24,7 @@ public class BeneficiaryMenu extends UserMenu
 
     public BeneficiaryMenu ()
     {
-        printCenteredTitle(MENU_TITLE);
+        UserTui.printCenteredTitle(MENU_TITLE);
         initialize_menu_selection();
         manage_options(MENU_TITLE);
     }

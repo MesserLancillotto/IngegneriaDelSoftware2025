@@ -5,7 +5,9 @@ public abstract class User
 {
 	private static final String PASSWORD_CHANGE_SUCCESSFUL = "La password è stata cambiata!";
 	private static final String GET_DATA_PASSWORD = "Inserisci la nuova password: ";
+	private static final String ERROR_SERVER = "\nERRORE! Non è stato possibile comunicare col server";
 	private static final String ERROR_SERVER_COMMUNICATION = "Errore, non è stato possibile cambiare la password";
+	
     String userName;
 	String cityOfResidence;
 	int birthYear;
@@ -34,6 +36,8 @@ public abstract class User
 			else
 				System.out.println (ERROR_SERVER_COMMUNICATION);
 		}
+		else
+			System.out.println (ERROR_SERVER);
 		return false;
 	}
 }
