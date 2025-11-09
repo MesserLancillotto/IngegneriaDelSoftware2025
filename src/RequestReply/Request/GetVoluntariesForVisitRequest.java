@@ -65,7 +65,7 @@ public class GetVoluntariesForVisitRequest implements RequestType
         filters.put("organization", organization);
         return this;        
     }
-    
+
     public String toJSONString()
     {
         JSONObject json = new JSONObject();

@@ -1,5 +1,7 @@
 package RequestReply.Request;
 
+import org.json.*;
+
 public class EditPasswordRequest implements RequestType 
 {
 
@@ -14,7 +16,8 @@ public class EditPasswordRequest implements RequestType
 
     public String toJSONString()
     {
-        String template = "\"newPassword\":\"%s\"";
-        return String.format(template, newPassword);
+        JSONObject json = new JSONObject();
+        json.put("newPassword", newPassword);
+        return json.toString();
     }
 }

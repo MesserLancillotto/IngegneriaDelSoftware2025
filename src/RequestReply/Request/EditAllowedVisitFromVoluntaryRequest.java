@@ -24,8 +24,8 @@ public class EditAllowedVisitFromVoluntaryRequest implements RequestType
     {
         JSONObject json = new JSONObject();
         json.put("targetID", targetID);
-        json.put("append", append);
-        json.put("remove", remove);
+        json.put("append", append); 
+        json.put("remove", remove); 
         return json.toString();
     }
 }

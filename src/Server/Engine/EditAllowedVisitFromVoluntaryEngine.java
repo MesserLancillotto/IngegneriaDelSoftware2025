@@ -50,7 +50,6 @@ public class EditAllowedVisitFromVoluntaryEngine extends Engine
             }
             String userOrganization = userResult.getString("organization");
 
-            // Verifica che targetID appartenga alla stessa organization
             String checkTargetQuery = "SELECT 1 FROM users WHERE userID = ? AND organization = ?";
             PreparedStatement checkTargetStmt = connection.prepareStatement(checkTargetQuery);
             checkTargetStmt.setString(1, targetID);
@@ -59,7 +58,6 @@ public class EditAllowedVisitFromVoluntaryEngine extends Engine
                 return new EditAllowedVisitFromVoluntaryReply(true, 0, 0).toJSONString();
             }
 
-            // Rimuovi visitType
             for(String visitType : remove) {
                 String query = """
                     DELETE FROM allowedVisits 
@@ -70,7 +68,7 @@ public class EditAllowedVisitFromVoluntaryEngine extends Engine
                         WHERE users.userID = allowedVisits.userID 
                         AND users.organization = ?
                     )
-                    """; // // Query corretta per DELETE
+                    """;
                 PreparedStatement statement = connection.prepareStatement(query);
                 statement.setString(1, targetID);
                 statement.setString(2, visitType);
@@ -78,7 +76,6 @@ public class EditAllowedVisitFromVoluntaryEngine extends Engine
                 removedVisits += statement.executeUpdate(); 
             }
 
-            // Aggiungi visitType
             for(String visitType : append) {
                 String query = """
                     INSERT INTO allowedVisits (userID, visitType)
@@ -92,7 +89,7 @@ public class EditAllowedVisitFromVoluntaryEngine extends Engine
                         SELECT 1 FROM allowedVisits av 
                         WHERE av.userID = ? AND av.visitType = ?
                     )
-                    """; // // Aggiunto controllo organization
+                    """;
 
                 PreparedStatement statement = connection.prepareStatement(query);
                 statement.setString(1, targetID); 
