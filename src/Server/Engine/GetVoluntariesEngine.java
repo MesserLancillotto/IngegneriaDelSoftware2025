@@ -35,7 +35,7 @@ public class GetVoluntariesEngine extends Engine
                 return new GetVoluntarieReply(false).toJSONString(); 
             }
 
-            String organization = result.getString("organization"); // // result, non ResultSet
+            String organization = result.getString("organization"); 
             
             StringBuilder query = new StringBuilder("""
                 SELECT u.userName, u.cityOfResidence, u.birthYear, u.userID, u.role, u.organization, u.changePasswordDue 
