@@ -171,4 +171,10 @@ public final class Client
         }
         return response;
     }
+
+    public String get_voluntary_disponibility(String targetID)
+    {
+        this.body = new GetVoluntaryDisponibilityRequest(targetID);
+        this.comunicationType = ComunicationType.GET_VOLUNTARY_DISPONIBILITY;
+    }
 }

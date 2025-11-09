@@ -22,7 +22,7 @@ public enum ComunicationType
     SET_USERS_SUBSCRIPTION_COLLECT, // x x x x // Edit event
     SET_VOLUNTARY_TO_EVENT, // x x x x
 
-    GET_VOLUNTARY_DISPONIBILITY // 
+    GET_VOLUNTARY_DISPONIBILITY // x x x 
 
 }
 // DAEMON_ENGINE
