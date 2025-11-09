@@ -96,6 +96,18 @@ public class EditEventRequest implements RequestType
         return this;
     }
     
+    public EditEventRequest witVoluntariesDisponibilityCollect(boolean x)
+    {
+        fields.put("voluntariesCanSubmit", x);
+        return this;
+    }   
+    
+    public EditEventRequest witUserSubscriptionCollect(boolean x)
+    {
+        fields.put("usersCanSubmit", x);
+        return this;
+    }   
+
     public EditEventRequest withField(String fieldName, Object value) 
     {
         fields.put(fieldName, value);

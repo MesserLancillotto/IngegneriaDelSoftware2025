@@ -140,6 +140,19 @@ public final class Client
         this.comunicationType = ComunicationType.SET_NEW_USER;
     }
 
+    public void set_voluntary_to_event(
+        String event,
+        String targetID,
+        int time
+    ) {
+        this.body = new SetVoluntaryToEventRequest(
+            event,
+            targetID,
+            time
+        );
+        this.comunicationType = ComunicationType.SET_VOLUNTARY_TO_EVENT;
+    }
+
     public String make_server_request() {
         String request = new Request(comunicationType, userID, userPassword, body).toJSONString();
         String response = "";
