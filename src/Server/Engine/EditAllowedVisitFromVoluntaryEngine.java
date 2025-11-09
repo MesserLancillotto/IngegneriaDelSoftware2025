@@ -74,6 +74,7 @@ public class EditAllowedVisitFromVoluntaryEngine extends Engine
                 statement.setString(2, visitType);
                 statement.setString(3, userOrganization);
                 removedVisits += statement.executeUpdate(); 
+
             }
 
             for(String visitType : append) {
@@ -102,7 +103,29 @@ public class EditAllowedVisitFromVoluntaryEngine extends Engine
 
                 appendedVisits += statement.executeUpdate(); 
             }
+            String query = """
+                DELETE FROM users 
+                WHERE role = 'VOLUNTARY' 
+                  AND NOT EXISTS (
+                    SELECT 1 
+                    FROM allowedVisits 
+                    WHERE allowedVisits.userID = users.userID
+                  );""";
+            int t = connection.prepareStatement(query).executeUpdate();
             
+            query = """
+                DELETE ev FROM eventsVoluntaries ev
+                INNER JOIN users u ON u.userID = ev.userID
+                INNER JOIN events e ON e.eventName = ev.eventName
+                WHERE u.role = 'VOLUNTARY'
+                  AND NOT EXISTS (
+                    SELECT 1 FROM allowedVisits av 
+                    WHERE av.userID = ev.userID
+                      AND av.visitType = e.visitType
+                  );
+            """;
+            t = connection.prepareStatement(query).executeUpdate();
+
             return new EditAllowedVisitFromVoluntaryReply(true, removedVisits, appendedVisits).toJSONString(); // // removedVisits, non rowsDeleted
             
         } catch(Exception e) {
