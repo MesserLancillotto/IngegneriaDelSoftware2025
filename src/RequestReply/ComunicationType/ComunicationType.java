@@ -24,7 +24,7 @@ public enum ComunicationType
 
     GET_VOLUNTARY_DISPONIBILITY, // x x x x
     SET_USER_TO_EVENT, // x x x x 
-    GET_SUBSCRIBED_VISITS //  // uso un get_event_request, ritorno un get_event_reply, ma cambio il tipo di comunicazione
-
+    GET_SUBSCRIBED_VISITS, // x x x x // uso un get_event_request, ritorno un get_event_reply, ma cambio il tipo di comunicazione
+    DElETE_SUBSCRIBED_VISIT
 }
 // DAEMON_ENGINE
