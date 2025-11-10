@@ -13,6 +13,7 @@ public class UserLogin
     private static final String CONFIGURATOR_SYMBOL = "C";
     private static final String VOLUNTARY_SYMBOL = "V";
     private static final String BENEFICIARY_SYMBOL = "B";
+    private static final String APP_NAME = "Apollo V1.0";
     private static final String WHAT_USER_DO_LOGIN = "Vuoi eseguire il login";
     private static final String WHAT_USER_DO_CREATE_ACCOUNT = "Vuoi creare un nuovo account";
     private static final String INSERT_USERNAME = "Inserisci username";
@@ -36,6 +37,7 @@ public class UserLogin
 	{
         initialize_user_factory();
         UserTui.printWelcomeMessage();
+        UserTui.printCenteredTitle(APP_NAME);
         if (UserTui.getYesNoAnswer(WHAT_USER_DO_LOGIN))
 		    login();
         else if (UserTui.getYesNoAnswer(WHAT_USER_DO_CREATE_ACCOUNT))

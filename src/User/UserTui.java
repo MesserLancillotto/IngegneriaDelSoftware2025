@@ -369,8 +369,6 @@ public class UserTui
             {
                 System.out.printf ("\n%s: ", thingToSayToUser);
                 String value = consoleIn.readLine();
-                
-                boolean isADate;
                 if (value != null && !value.isEmpty())
                     return value;
 

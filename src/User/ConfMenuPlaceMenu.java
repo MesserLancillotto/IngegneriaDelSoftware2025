@@ -9,11 +9,26 @@ public class ConfMenuPlaceMenu extends UserMenu
     private static final String MENU_TITLE = "MENU GESTIONE POSTI VISITABILI";
     private static final String ERROR_CONNECTION_SERVER = "Errore! Impossibile contattare il server";
     private static final String MSG_EVENTS_BY_PLACE = "Ecco gli eventi associati a ciascun luogo";
+    private static final String MSG_REMOVEPLACE_CHOOSEPLACE = "Scegli il luogo da rimuovere";
+    private static final String MSG_REMOVEVISIT_CHOOSEPLACE = "Scegli da quale luogo rimuovere il tipo di visita";
     private static final String MSG_CHOOSE_PLACE = "Scegli in che luogo aggiungere una nuova visita";
+    private static final String MSG_ADD_ANOTHERVISIT_SAME_PLACE = "Vuoi inserire un'altro tipo di visita associato a questo luogo";
     private static final String MSG_SHOW_PLACES = "Questi sono i posti visitabili: ";
+    private static final String GET_DATA_EVENT_NAME_EVENT = "Inserisci il nome dell'evento";
+    private static final String GET_DATA_EVENT_DESCRIPTION = "Inserisci una descrizione dell'evento";
+    private static final String GET_DATA_EVENT_EVENT_TYPE = "Inserisci il tipo di visita";
+    private static final String GET_DATA_EVENT_MEETING_POINT = "Inserisci dove è il meeting point";
     private static final String GET_DATA_CITY = "Inserire la città dove si svolge questo evento";
     private static final String GET_DATA_ADDRESS = "Inserisci l'indirizzo";
+    private static final String GET_DATA_DAY_WHICH_DAY = "Inserisci il giorno della settimana in cui si svolge questa visita";
+    private static final String GET_DATA_DAY_START_HOUR = "Inserisci l'orario di inizio di questa visita (formato HH:MM)";
+    private static final String GET_DATA_DAY_HOW_TIME = "Inserisci la durata in minuti di questa visita (minimo 60 minuti)";
     private static final String GET_DATA_PLACE_LOOP_CONF = "Vuoi inserire un'altro luogo";
+    private static final String GET_DATA_DAY_LOOP_CONFIRM = "Vuoi inserire un altro giorno in cui si svolge questa visita";
+    private static final String GET_DATA_MIN_PARTECIPANTS = "Inserisci il numero minimo di partecipanti a questo evento";
+    private static final String GET_DATA_MAX_PARTECIPANTS  = "Inserisci il numero massimo di partecipanti a questo evento";
+    private static final String GET_DATA_IS_PAY = "Questo evento è a pagamento?";
+    private static final String GET_DAY_IS_PAY_HOW_MUCH = "Inserisci il prezzo in euro di questo evento";
     private static final int MAX_PEOPLE_FOR_VISIT = 2000;
     private static final int MAX_VISIT_PRICE = 10000;
     private static final int MAX_VISIT_DURATION = 1440;
@@ -159,7 +174,7 @@ public class ConfMenuPlaceMenu extends UserMenu
         if (placesToChoose != null && !placesToChoose.isEmpty())
         {
             HashMap <Integer, String> placesToChooseMap = UserTui.fromListToMap(placesToChoose.values());
-            String placeToRemove = UserTui.getChoiceFromMap("Scegli il luogo da rimuovere", placesToChooseMap);
+            String placeToRemove = UserTui.getChoiceFromMap(MSG_REMOVEPLACE_CHOOSEPLACE, placesToChooseMap);
             boolean confirmDecision = UserTui.getYesNoAnswer ("Hai scelto "+ placeToRemove+ " confermi ");
             if (!placeToRemove.trim().isEmpty() && confirmDecision)
             {
@@ -191,13 +206,13 @@ public class ConfMenuPlaceMenu extends UserMenu
             System.out.println (ERROR_CONNECTION_SERVER);
     }
 
-    public void remove_visit_type_from_place()  //manca solo chiamata al server
+    public void remove_visit_type_from_place()  //manca solo chiamata al server + controlla key
     {
         Map<String, String> placesToChoose = view_visitable_places();
         if (placesToChoose != null && !placesToChoose.isEmpty())
         {
             HashMap <Integer, String> placesToChooseMap = UserTui.fromListToMap(placesToChoose.values());
-            String placeToRemove = UserTui.getChoiceFromMap("Scegli da quale luogo rimuovere il tipo di visita", placesToChooseMap);
+            String placeToRemove = UserTui.getChoiceFromMap(MSG_REMOVEVISIT_CHOOSEPLACE, placesToChooseMap);
             boolean confirmDecision = UserTui.getYesNoAnswer ("Hai scelto "+ placeToRemove+ " confermi ");
             if (!placeToRemove.trim().isEmpty() && confirmDecision)
             {
@@ -269,7 +284,8 @@ public class ConfMenuPlaceMenu extends UserMenu
                 place.append(event.getString("address"));
                 String formattedPlace = place.toString().toUpperCase().trim().replaceAll(" ", "");   // normalizzo formato per evitare duplicati
                 
-                placeMap.putIfAbsent(formattedPlace, new Place (place.toString())); // creo una nuova istanza di Place se non esiste già con combo città+indirizzo in maisucolo e trim
+                placeMap.putIfAbsent(formattedPlace, new Place (place.toString())); 
+                // creo una nuova istanza di Place se non esiste già con combo città+indirizzo in maisucolo e trim
                 placeMap.get(formattedPlace).addVisitType(event.getString("visitType"));
             }
             return placeMap;
@@ -303,10 +319,10 @@ public class ConfMenuPlaceMenu extends UserMenu
         boolean addAnotherTypeVisitAnswer; 
         do 
             {
-                String eventName = UserTui.getString("Inserisci il nome dell'evento");
-                String eventDescription = UserTui.getString("Inserisci una descrizione dell'evento", 500);
-                String visitType = UserTui.getString("Inserisci il tipo di visita");
-                String meetingPoint = UserTui.getString("Inserisci dove è il meeting point");
+                String eventName = UserTui.getString(GET_DATA_EVENT_NAME_EVENT);
+                String eventDescription = UserTui.getString(GET_DATA_EVENT_DESCRIPTION, 500);
+                String visitType = UserTui.getString(GET_DATA_EVENT_EVENT_TYPE);
+                String meetingPoint = UserTui.getString(GET_DATA_EVENT_MEETING_POINT);
                 DataManagerPeriod date = new DataManagerPeriod();
                 int startDate = date.getStartDate();
                 int endDate = date.getEndDate();
@@ -315,22 +331,23 @@ public class ConfMenuPlaceMenu extends UserMenu
                 ArrayList <Integer> duration = new ArrayList<>();
                 do
                 {
-                    String visitDay = DataManager.getDayOfWeekFromUser("Inserisci il giorno della settimana in cui si svolge questa visita");
+                    String visitDay = DataManager.getDayOfWeekFromUser(GET_DATA_DAY_WHICH_DAY);
                     if (!visitDay.trim().isEmpty()) // controllo che sia andata bene l'acquisizione
                     {
                         visitDays.add(visitDay);
-                        startHours.add (DataManager.getAnHourFromUser("Inserisci l'orario di inizio di questa visita (formato HH:MM)"));
-                        duration.add (UserTui.getInteger("Inserisci la durata in minuti di questa visita (minimo 60 minuti)", MIN_VISIT_DURATION, MAX_VISIT_DURATION));
+                        startHours.add (DataManager.getAnHourFromUser(GET_DATA_DAY_START_HOUR));
+                        duration.add (UserTui.getInteger(GET_DATA_DAY_HOW_TIME, MIN_VISIT_DURATION, MAX_VISIT_DURATION));
                     }
-                }while (UserTui.getYesNoAnswer("Vuoi inserire un altro giorno in cui si svolge questa visita"));
-                int minPartecipants = UserTui.getInteger("Inserisci il numero minimo di partecipanti a questo evento", MIN_RANGE_VALUE, MAX_PEOPLE_FOR_VISIT);
-                int maxPartecipants = UserTui.getInteger("Inserisci il numero massimo di partecipanti a questo evento", minPartecipants+1, MAX_PEOPLE_FOR_VISIT);
+                }while (UserTui.getYesNoAnswer(GET_DATA_DAY_LOOP_CONFIRM));
+                int minPartecipants = UserTui.getInteger(GET_DATA_MIN_PARTECIPANTS, MIN_RANGE_VALUE, MAX_PEOPLE_FOR_VISIT);
+                int maxPartecipants = UserTui.getInteger(GET_DATA_MAX_PARTECIPANTS, minPartecipants+1, MAX_PEOPLE_FOR_VISIT);
                 int maxPeopleForSubscription = JSONObjectCreator.getMaxPeopleForSubscription();
                 float price = 0;
-                if (UserTui.getYesNoAnswer("Questo evento è a pagamento?"))
-                    price = UserTui.getFloat("Inserisci il prezzo in euro di questo evento", MIN_RANGE_VALUE, MAX_VISIT_PRICE);
+                if (UserTui.getYesNoAnswer(GET_DATA_IS_PAY))
+                    price = UserTui.getFloat(GET_DAY_IS_PAY_HOW_MUCH, MIN_RANGE_VALUE, MAX_VISIT_PRICE);
                 
-                UserTui.stampAllEventInfo(cityName, cityAddress, eventName, eventDescription, visitType, meetingPoint, visitDays, startHours, duration, startDate, endDate, minPartecipants, maxPartecipants, maxPeopleForSubscription, price);
+                UserTui.stampAllEventInfo(cityName, cityAddress, eventName, eventDescription, visitType, meetingPoint, 
+                visitDays, startHours, duration, startDate, endDate, minPartecipants, maxPartecipants, maxPeopleForSubscription, price);
                 if (UserTui.getYesNoAnswer("Confermi "))
                 {
                     Client.getInstance().set_new_event(eventName, eventDescription, cityName, cityAddress, meetingPoint, startDate, endDate, 
@@ -345,7 +362,7 @@ public class ConfMenuPlaceMenu extends UserMenu
                         System.out.println (ERROR_CONNECTION_SERVER);
 
                 }
-                addAnotherTypeVisitAnswer = UserTui.getYesNoAnswer("Vuoi inserire un'altro tipo di visita associato a questo luogo");
+                addAnotherTypeVisitAnswer = UserTui.getYesNoAnswer(MSG_ADD_ANOTHERVISIT_SAME_PLACE);
             } while (addAnotherTypeVisitAnswer); // fine ciclo tipo visita
     }
 }

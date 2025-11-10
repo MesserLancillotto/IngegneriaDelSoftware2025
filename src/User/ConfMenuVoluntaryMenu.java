@@ -7,11 +7,18 @@ import Client.Client;
 public class ConfMenuVoluntaryMenu extends UserMenu
 {
     private static final String MENU_TITLE = "MENU GESTIONE VOLONTARI";
+    private static final String GET_DATA_REMOVE_WHICHVOLUNTARY = "Scegli l'ID di quale volontario rimuovere";
+    private static final String MSG_SHOW_VOLUNTARY_LIST = "Ecco l'elenco dei volontari iscritti:";
+    private static final String MSG_ADDVOLTOEXVISIT_CHOOSE_EVENT = "Scegli a quale evento aggiungere un volontario";
+    private static final String MSG_ADDVOLTOEXVISIT_CHOOSE_VOLUNTARY = "Scegli quale volontario aggiungere all'evento";
+    private static final String MSG_CLOSE_DISP_COLLECTION = "Sei sicuro di voler chiudere la raccolta delle disponibilità dei volontari";
+    private static final String MSG_OPEN_DISP_COLLECTION = "Sei sicuro di voler aprire la raccolta delle disponibilità dei volontari";
     private static final String ERROR_VOLUNTARY_LIST_EMPTY = "\nERRORE! Lista volontari vuota";
     private static final String ERROR_DURING_ACQUISITION = "\nERRORE! Acquisizione non riuscita\n";
     private static final String ERROR_EVENT_LIST_EMPTY = "\nERRORE! Lista eventi vuota";
     private static final String ERROR_SERVER = "\nERRORE! Connessione col server non riuscita\n";
     private String organization;
+    
     public void initialize_menu_selection ()
     {
         menuSelection.put(1, () -> view_voluntary_list());
@@ -42,7 +49,7 @@ public class ConfMenuVoluntaryMenu extends UserMenu
         Set<String> voluntaryList =  get_voluntary_list();
         if (voluntaryList != null && !voluntaryList.isEmpty())
         {
-            UserTui.stamp_list("Ecco l'elenco dei volontari iscritti:", voluntaryList);
+            UserTui.stamp_list(MSG_SHOW_VOLUNTARY_LIST, voluntaryList);
         }
         else
             System.out.println (ERROR_VOLUNTARY_LIST_EMPTY);
@@ -54,8 +61,12 @@ public class ConfMenuVoluntaryMenu extends UserMenu
         if (voluntaryList != null && !voluntaryList.isEmpty())
         {
             HashMap <Integer, String> voluntaryToChooseMap = UserTui.fromListToMap(voluntaryList);
-            String voluntaryID = UserTui.getChoiceFromMap("Scegli in che luogo aggiungere una nuova visita", voluntaryToChooseMap);
-            boolean confirmDecisionForVoluntary = UserTui.getYesNoAnswer ("Hai scelto "+ voluntaryID+ " confermi ");
+            String voluntaryID = UserTui.getChoiceFromMap(GET_DATA_REMOVE_WHICHVOLUNTARY, voluntaryToChooseMap);
+            StringBuilder msgToDecisionForVoluntary = new StringBuilder();
+            msgToDecisionForVoluntary.append("Hai scelto ");
+            msgToDecisionForVoluntary.append(voluntaryID);
+            msgToDecisionForVoluntary.append(" confermi ");
+            boolean confirmDecisionForVoluntary = UserTui.getYesNoAnswer (msgToDecisionForVoluntary.toString());
             if (!voluntaryID.trim().isEmpty() && confirmDecisionForVoluntary)
             {
                 //Client.getInstance().remove_voluntary(voluntaryID);
@@ -79,7 +90,7 @@ public class ConfMenuVoluntaryMenu extends UserMenu
 
     public void close_disponibility_collection()    // manca chiamata al server
     {
-        boolean makeServerCall = UserTui.getYesNoAnswer("Sei sicuro di voler chiudere la raccolta delle disponibilità dei volontari");
+        boolean makeServerCall = UserTui.getYesNoAnswer(MSG_CLOSE_DISP_COLLECTION);
         if (makeServerCall)
         {
             //Client.getInstance().close_voluntary_disponibility_collection(organization);
@@ -94,7 +105,7 @@ public class ConfMenuVoluntaryMenu extends UserMenu
 
     public void open_disponibility_collection()     // manca chiamata al server
     {
-        boolean makeServerCall = UserTui.getYesNoAnswer("Sei sicuro di voler aprire la raccolta delle disponibilità dei volontari");
+        boolean makeServerCall = UserTui.getYesNoAnswer(MSG_OPEN_DISP_COLLECTION);
         if (makeServerCall)
         {
             //Client.getInstance().open_voluntary_disponibility_collection(organization);
@@ -114,12 +125,12 @@ public class ConfMenuVoluntaryMenu extends UserMenu
         if (eventNameList != null && !eventNameList.isEmpty())
         {
             HashMap <Integer, String> eventToChooseMap = UserTui.fromListToMap(eventNameList);
-            String targetEvent = UserTui.getChoiceFromMap("Scegli a quale evento aggiungere un volontario", eventToChooseMap);
+            String targetEvent = UserTui.getChoiceFromMap(MSG_ADDVOLTOEXVISIT_CHOOSE_EVENT, eventToChooseMap);
             boolean confirmDecisionForEvent = UserTui.getYesNoAnswer ("Hai scelto "+ targetEvent+ " confermi ");
             if (!targetEvent.trim().isEmpty() && confirmDecisionForEvent)
             {
                 HashMap <Integer, String> voluntaryToChooseMap = UserTui.fromListToMap(voluntaryList);
-                String targetVoluntary = UserTui.getChoiceFromMap("Scegli quale volontario aggiungere all'evento", voluntaryToChooseMap);
+                String targetVoluntary = UserTui.getChoiceFromMap(MSG_ADDVOLTOEXVISIT_CHOOSE_VOLUNTARY, voluntaryToChooseMap);
                 boolean confirmDecisionForVoluntary = UserTui.getYesNoAnswer ("Hai scelto "+ targetVoluntary+ " confermi ");
                 if (!targetVoluntary.trim().isEmpty() && confirmDecisionForVoluntary)
                 {
