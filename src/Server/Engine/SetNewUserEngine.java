@@ -22,7 +22,8 @@ public class SetNewUserEngine extends Engine
                 String userName,
                 String newPassword,
                 String cityOfResidence,
-                int birthYear
+                int birthYear,
+                UserRoleTitle role
         ) {
                 this.userID = userID;
                 this.userPassword = userPassword;
@@ -30,6 +31,7 @@ public class SetNewUserEngine extends Engine
                 this.newPassword = newPassword;
                 this.cityOfResidence = cityOfResidence;
                 this.birthYear = birthYear;
+                this.role = role;
         }
 
         public String handleRequest()

@@ -40,7 +40,7 @@ public class SetVoluntaryToEventEngine extends Engine
                 return new SetVoluntaryToEventReply(false, false).toJSONString(); 
             }
             
-            if(!userResult.getString("role").equals("CONFIGURATOR")) {
+            if(!userResult.getString("role").equals("CONFIGURATOR") || !userID.equals(targetID)) {
                 return new SetVoluntaryToEventReply(true, false).toJSONString();
             }
             String userOrganization = userResult.getString("organization");

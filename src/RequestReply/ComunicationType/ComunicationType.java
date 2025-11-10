@@ -22,7 +22,9 @@ public enum ComunicationType
     SET_USERS_SUBSCRIPTION_COLLECT, // x x x x // Edit event
     SET_VOLUNTARY_TO_EVENT, // x x x x
 
-    GET_VOLUNTARY_DISPONIBILITY // x x x x
+    GET_VOLUNTARY_DISPONIBILITY, // x x x x
+    SET_USER_TO_EVENT, // x x x x 
+    GET_SUBSCRIBED_VISITS //  // uso un get_event_request, ritorno un get_event_reply, ma cambio il tipo di comunicazione
 
 }
 // DAEMON_ENGINE

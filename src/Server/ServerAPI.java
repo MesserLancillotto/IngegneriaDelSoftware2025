@@ -162,7 +162,8 @@ class ServerAPI extends Thread
                         dictionary.getString("userName"),
                         dictionary.getString("newPassword"),
                         dictionary.getString("cityOfResidence"),
-                        dictionary.getInt("birthYear")
+                        dictionary.getInt("birthYear"),
+                        UserRoleTitle.USER
                     ).handleRequest();
             }
         } catch(Exception e)

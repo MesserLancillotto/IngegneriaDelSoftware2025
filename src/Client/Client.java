@@ -172,9 +172,18 @@ public final class Client
         return response;
     }
 
-    public String get_voluntary_disponibility(String targetID)
+    public void get_voluntary_disponibility(String targetID)
     {
         this.body = new GetVoluntaryDisponibilityRequest(targetID);
         this.comunicationType = ComunicationType.GET_VOLUNTARY_DISPONIBILITY;
+    }
+
+    public void set_user_to_event(
+        ArrayList<String> friends,
+        String event,
+        int time
+    ) {
+        this.body = new SetUserToEventRequest(friends, event, time);
+        this.comunicationType = ComunicationType.SET_USER_TO_EVENT;
     }
 }

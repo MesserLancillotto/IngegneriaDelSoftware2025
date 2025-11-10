@@ -38,6 +38,10 @@ public class DaemonEngine extends Engine
         ) {
             statement = connection.prepareStatement(query);
             x = statement.executeUpdate();
+        } catch(Exception e)
+        {
+            e.printStackTrace();
         }
+        return "";
     }
 }
