@@ -206,7 +206,7 @@ public class ConfMenuPlaceMenu extends UserMenu
             System.out.println (ERROR_CONNECTION_SERVER);
     }
 
-    public void remove_visit_type_from_place()  //manca solo chiamata al server + controlla key
+    public void remove_visit_type_from_place()  //manca solo chiamata al server 
     {
         Map<String, String> placesToChoose = view_visitable_places();
         if (placesToChoose != null && !placesToChoose.isEmpty())
@@ -224,7 +224,16 @@ public class ConfMenuPlaceMenu extends UserMenu
                     if (!removeVisitTypeReply.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(removeVisitTypeReply))
                     {
                         JSONObject dictionary = new JSONObject(removeVisitTypeReply);
-                        UserTui.operationIsSuccessful(dictionary.getBoolean("querySuccesful")); // CONTROLLA key
+                        boolean visitRemovalWasSuccessful = dictionary.getBoolean("loginSuccessful");
+                        UserTui.operationIsSuccessful(visitRemovalWasSuccessful); 
+                        if (visitRemovalWasSuccessful)
+                        {
+                            StringBuilder msgToShowHowManyVisitRemoved = new StringBuilder();
+                            msgToShowHowManyVisitRemoved.append("Hai rimosso ");
+                            msgToShowHowManyVisitRemoved.append(dictionary.getInt("rowsDeleted"));
+                            msgToShowHowManyVisitRemoved.append(" visite");
+                        }
+
                     }
                 }
             }

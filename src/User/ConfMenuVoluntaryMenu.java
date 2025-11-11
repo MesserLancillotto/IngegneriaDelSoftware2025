@@ -69,12 +69,12 @@ public class ConfMenuVoluntaryMenu extends UserMenu
             boolean confirmDecisionForVoluntary = UserTui.getYesNoAnswer (msgToDecisionForVoluntary.toString());
             if (!voluntaryID.trim().isEmpty() && confirmDecisionForVoluntary)
             {
-                //Client.getInstance().remove_voluntary(voluntaryID);
+                //Client.getInstance().delete_voluntary(voluntaryID);
                 String removeVoluntaryResponse = Client.getInstance().make_server_request();
                 if (!removeVoluntaryResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(removeVoluntaryResponse))
                 {
-                     JSONObject dictionary = new JSONObject(removeVoluntaryResponse);
-                    UserTui.operationIsSuccessful (dictionary.getBoolean("querySuccesful"));    // controlla key word
+                    JSONObject dictionary = new JSONObject(removeVoluntaryResponse);
+                    UserTui.operationIsSuccessful (dictionary.getBoolean("loginSuccessful"));    // controlla key word
                 }
                 else
                     System.out.println (ERROR_SERVER);
