@@ -16,7 +16,7 @@ public class BeneficiaryMenu extends UserMenu
         menuSelection.put(3, () -> view_registered_visits()); // visualizzazione visite a cui si è registrati
         menuSelection.put(4, () -> cancel_registration_for_visit()); // cancellazione registrazione ad una visita
 
-        menuOptionList.add("Visualizza il tipo di visite a cui sei associato");
+        menuOptionList.add("Visualizza le visite in stato in stato PROPOSTO/CONFERMATO/CANCELLATO");
         menuOptionList.add("Registrati per una visita");
         menuOptionList.add("Visualizza le visite a cui sei registrato");
         menuOptionList.add("Cancella la registrazione ad una visita");
@@ -44,7 +44,7 @@ public class BeneficiaryMenu extends UserMenu
         
         System.out.println ("\nEcco l'elenco delle visite attualmente nello stato di proposto/confermato/cancellato");
         int cycleCount = 1;
-        for (int i = 0; i < getEventResponse.length(); i++)
+        for (int i = 0; i < eventsArray.length(); i++)
         {
             JSONObject event = eventsArray.getJSONObject(i);
             String tmpEventName = event.getString("eventName");

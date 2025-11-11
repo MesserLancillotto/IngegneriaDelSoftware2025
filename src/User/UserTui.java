@@ -392,6 +392,22 @@ public class UserTui
 		}
 	}
 
+    public static void stamp_list (String title, HashMap <String, VoluntaryData> voluntaryMap)
+	{
+		System.out.println ("\n"+title);
+		for (Map.Entry<String, VoluntaryData> entry : voluntaryMap.entrySet())
+		{
+			VoluntaryData voluntary = entry.getValue();
+            System.out.printf ("%s e gestisce i seguenti tipi di visita:\n", voluntary.getUserName());
+            int loopCount = 1;
+            for (String visitType : voluntary.getAllowedVisitTypes())
+            {
+                System.out.printf ("%d. %s\n", loopCount, visitType);
+                loopCount++;
+            }
+		}
+	}
+
     public static void stamp_integer_list (String title, Collection <Integer>listToStamp)
 	{
 		System.out.println ("\n"+title);

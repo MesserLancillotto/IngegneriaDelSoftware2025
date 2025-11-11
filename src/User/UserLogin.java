@@ -93,7 +93,7 @@ public class UserLogin
                         int birthYear = dictionary.getInt("birthYear");
                         String organization = dictionary.getString("organization");
                         ArrayList <String> allowedVisitType = JSONObjectMethod.jsonArrayConverter(dictionary.getJSONArray("allowedVisitType"));
-                        if (userFirstAccessFactory.containsKey(userName.substring(0,1)))
+                        if (userFactory.containsKey(userName.substring(0,1)))
                         {
                             userFactory.get(userName.substring(0,1)).create (userName, cityOfResidence, birthYear, password, roleTitle, organization, allowedVisitType);
                         }

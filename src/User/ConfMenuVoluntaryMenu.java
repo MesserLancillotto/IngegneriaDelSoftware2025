@@ -8,7 +8,7 @@ public class ConfMenuVoluntaryMenu extends UserMenu
 {
     private static final String MENU_TITLE = "MENU GESTIONE VOLONTARI";
     private static final String GET_DATA_REMOVE_WHICHVOLUNTARY = "Scegli l'ID di quale volontario rimuovere";
-    private static final String MSG_SHOW_VOLUNTARY_LIST = "Ecco l'elenco dei volontari iscritti:";
+    private static final String MSG_SHOW_VOLUNTARY_LIST = "Ecco l'elenco dei volontari iscritti e le visite ad essi associate:";
     private static final String MSG_ADDVOLTOEXVISIT_CHOOSE_EVENT = "Scegli a quale evento aggiungere un volontario";
     private static final String MSG_ADDVOLTOEXVISIT_CHOOSE_VOLUNTARY = "Scegli quale volontario aggiungere all'evento";
     private static final String MSG_CLOSE_DISP_COLLECTION = "Sei sicuro di voler chiudere la raccolta delle disponibilità dei volontari";
@@ -46,10 +46,10 @@ public class ConfMenuVoluntaryMenu extends UserMenu
 
     public void view_voluntary_list()   
     {
-        Set<String> voluntaryList =  get_voluntary_list();
-        if (voluntaryList != null && !voluntaryList.isEmpty())
+        HashMap <String, VoluntaryData> voluntaryMap = get_voluntary_list_with_associated_events();
+        if (voluntaryMap != null && !voluntaryMap.isEmpty())
         {
-            UserTui.stamp_list(MSG_SHOW_VOLUNTARY_LIST, voluntaryList);
+            UserTui.stamp_list (MSG_SHOW_VOLUNTARY_LIST, voluntaryMap);
         }
         else
             System.out.println (ERROR_VOLUNTARY_LIST_EMPTY);
@@ -197,6 +197,29 @@ public class ConfMenuVoluntaryMenu extends UserMenu
                 voluntaryList.add(voluntaryID);
             }
             return voluntaryList;
+        }
+        else
+            return null;
+    }
+
+    private HashMap<String, VoluntaryData> get_voluntary_list_with_associated_events()   
+    {
+        HashMap <String, VoluntaryData> voluntaryMap = new HashMap<>();
+
+        Client.getInstance().get_voluntaries(new HashMap<>());
+        String getVoluntariesResponse = Client.getInstance().make_server_request();
+        if (!getVoluntariesResponse.trim().isEmpty() && JSONObjectMethod.isValidJSONArray(getVoluntariesResponse))
+        {
+            JSONArray voluntariesArray = new JSONArray(getVoluntariesResponse);
+            for (int i = 0; i < voluntariesArray.length(); i++)
+            {
+                JSONObject voluntary = voluntariesArray.getJSONObject(i);
+                String voluntaryID = voluntary.getString("userName");
+                String voluntaryIDForComparison = voluntaryID.toUpperCase();
+                ArrayList <String> allowedVisitType = JSONObjectMethod.jsonArrayConverter(voluntary.getJSONArray("allowedVisitType"));
+                voluntaryMap.putIfAbsent(voluntaryIDForComparison, new VoluntaryData(voluntaryID, allowedVisitType));
+            }
+            return voluntaryMap;
         }
         else
             return null;

@@ -20,7 +20,7 @@ public class ConfiguratorMenu extends UserMenu
         menuOptionList.add("Apri menu gestione volontari");
         menuOptionList.add("Apri menu gestione luoghi visitabili");
         menuOptionList.add("Apri menu gestione opzioni generiche");
-        menuOptionList.add("Visualizza le visite in stato di visita");	
+        menuOptionList.add("Visualizza le visite in stato in stato PROPOSTO/CONFERMATO/COMPLETO/CANCELLATO/EFFETTUATO");
     }
 
     //COSTRUTTORE
