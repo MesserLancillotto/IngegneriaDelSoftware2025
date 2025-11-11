@@ -219,7 +219,10 @@ public class ConfMenuPlaceMenu extends UserMenu
                 String visitTypeToRemove = get_visit_type_from_place(placeToRemove);
                 if (!placeToRemove.trim().isEmpty() && !visitTypeToRemove.trim().isEmpty())
                 {
-                    //Client.getInstance().remove_visit_type_from_place(placeToRemove, visitTypeToRemove);
+                    int commaPlace = placeToRemove.indexOf(":");
+                    String city = placeToRemove.substring(0, commaPlace);
+                    String address = placeToRemove.substring(commaPlace+1);
+                    Client.getInstance().delete_visit_type_from_place(city, address, visitTypeToRemove);
                     String removeVisitTypeReply = Client.getInstance().make_server_request();
                     if (!removeVisitTypeReply.trim().isEmpty() && JSONObjectMethod.isValidJSONObject(removeVisitTypeReply))
                     {
@@ -232,6 +235,7 @@ public class ConfMenuPlaceMenu extends UserMenu
                             msgToShowHowManyVisitRemoved.append("Hai rimosso ");
                             msgToShowHowManyVisitRemoved.append(dictionary.getInt("rowsDeleted"));
                             msgToShowHowManyVisitRemoved.append(" visite");
+                            System.out.println (msgToShowHowManyVisitRemoved);
                         }
 
                     }
